@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Perfil do Usuário</title>   <link href="style/perfil.css" rel="stylesheet">
+
+</head>
+<body>
+    <header>
+        <h1>Perfil do Usuário</h1>
+    </header>
+
+    <main>
+        <div class="profile-container">
+            <img src="https://github.com/Giuseph66.png" alt="Foto do Usuário">
+            <h2>Editar Perfil</h2>
+            <form>
+                <div class="form-group">
+                    <label for="name">Nome Completo</label>
+                    <input type="text" id="name" placeholder="Digite seu nome" value="Usuário Exemplo" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" placeholder="Digite seu e-mail" value="usuario@exemplo.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Número de Celular</label>
+                    <input type="tel" id="phone" placeholder="Digite seu número de celular" value="(11) 99999-9999" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" placeholder="Digite sua senha">
+                    <button type="button" class="toggle-password" onclick="togglePassword()">👁</button>
+                </div>
+                <button type="submit">Salvar Alterações</button>
+            </form>
+            <div class="buttons-container">
+                <button type="button" onclick="openModal('fingerprint-modal')">Cadastrar <br> Impressão Digital</button>
+                <button type="button" onclick="openModal('facial-modal')">Cadastrar Reconhecimento Facial</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="fingerprint-modal" class="modal" onclick="closeModalOnOutsideClick(event, 'fingerprint-modal')">
+        <div class="modal-content">
+            <h2>Cadastrar Impressão Digital</h2>
+            <p>Deseja realmente cadastrar sua biometria?</p>
+            <div>
+                <button class="confirm-modal" onclick="confirmFingerprint()">Sim</button>
+                <button class="close-modal" onclick="closeModal('fingerprint-modal')">Não</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="facial-modal" class="modal" onclick="closeModalOnOutsideClick(event, 'facial-modal')">
+        <div class="modal-content">
+            <h2>Cadastrar Reconhecimento Facial</h2>
+            <p>
+                Certifique-se de estar em um ambiente iluminado, sem óculos, sozinho e com o rosto bem visível.
+            </p>
+            <div style="position: relative; text-align: center;">
+                <video id="camera" autoplay style="border-radius: 10px; width: 100%;transform: scaleX(-1);"></video>
+                <div style="position: absolute; top: 10px; right: 10px; display: flex; align-items: center;">
+                    <input type="checkbox" id="toggle-camera" onchange="toggleCamera()" style="display: none;">
+                    <label for="toggle-camera" class="custom-checkbox">
+                        <span id="checkbox-label">Ligar Câmera</span>
+                    </label>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 10px; margin-top: 15px;">
+                <button class="action-button start-register" onclick="startRegister()">Começar a Registrar</button>
+                <button class="action-button stop-register" onclick="stopRegister()">Parar de Registrar</button>
+            </div>
+            <button class="close-modal" onclick="closeModal('facial-modal')" style="margin-top: 20px;">Sair</button>
+        </div>
+    </div>
+
+    <footer>
+        © 2024 Laboratório de Hardware. Todos os direitos reservados.
+    </footer>
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const toggleButton = document.querySelector(".toggle-password");
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                toggleButton.textContent = "🙈";
+            } else {
+                passwordInput.type = "password";
+                toggleButton.textContent = "👁";
+            }
+        }
+
+        
+        function confirmFingerprint() {
+            alert("Biometria cadastrada com sucesso!");
+            closeModal('fingerprint-modal');
+        }
+
+        // Abrir Modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "flex";
+            if (modalId === "facial-modal") startCamera();
+        }
+
+        // Fechar Modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+            if (modalId === "facial-modal") stopCamera();
+        }
+
+        // Fechar Modal ao Clicar Fora
+        function closeModalOnOutsideClick(event, modalId) {
+            if (event.target.id === modalId) closeModal(modalId);
+        }
+        let stream
+        // Iniciar e parar câmera
+        async function toggleCamera() {
+            const cameraCheckbox = document.getElementById("toggle-camera");
+            const videoElement = document.getElementById("camera");
+            const checkboxLabel = document.getElementById("checkbox-label");
+
+            if (cameraCheckbox.checked) {
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    videoElement.srcObject = stream;
+                    checkboxLabel.textContent = "Desligar Câmera";
+                } catch (err) {
+                    console.error("Erro ao acessar a câmera:", err);
+                }
+            } else {
+                stopCamera();
+                checkboxLabel.textContent = "Ligar Câmera";
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                document.getElementById("camera").srcObject = null;
+                document.getElementById("toggle-camera").checked = false;
+                document.getElementById("checkbox-label").textContent = "Ligar Câmera";
+            }
+        }
+
+        // Registrar início e parada de cadastro facial
+        function startRegister() {
+            alert("Iniciando registro facial...");
+        }
+
+        function stopRegister() {
+            alert("Parando registro facial...");
+        }
+
+    </script>
+</body>
+</html>

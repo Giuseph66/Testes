@@ -1,0 +1,61 @@
+## 1. Comandos Básicos
+mongod                  # Inicia o servidor do MongoDB
+mongosh                 # Inicia o shell do MongoDB
+mongo --version         # Mostra a versão do MongoDB
+mongod --shutdown       # Para o servidor do MongoDB
+
+## 2. Conectando ao Banco de Dados
+mongosh "mongodb://localhost:27017/"  # Conecta ao servidor local do MongoDB
+mongosh "mongodb://user:password@host:port/dbname"  # Conecta ao MongoDB remoto com autenticação
+
+## 3. Listar Bancos de Dados
+show dbs               # Lista todos os bancos de dados
+use <nome_banco>       # Alterna para um banco de dados específico
+
+## 4. Gerenciamento de Coleções
+show collections       # Lista todas as coleções no banco de dados atual
+db.createCollection("minha_colecao")  # Cria uma nova coleção
+db.minha_colecao.drop()  # Remove uma coleção
+
+## 5. Inserção de Dados
+db.minha_colecao.insertOne({ "nome": "João", "idade": 30 })  # Insere um único documento
+db.minha_colecao.insertMany([{ "nome": "Maria", "idade": 25 }, { "nome": "Carlos", "idade": 40 }])  # Insere vários documentos
+
+## 6. Consulta de Dados
+db.minha_colecao.find()  # Lista todos os documentos da coleção
+db.minha_colecao.findOne()  # Retorna um único documento
+db.minha_colecao.find({ "nome": "João" })  # Filtra documentos por nome
+db.minha_colecao.find({ "idade": { "$gt": 25 } })  # Retorna documentos onde idade > 25
+db.minha_colecao.find().limit(5)  # Retorna apenas os 5 primeiros documentos
+db.minha_colecao.find().sort({ "idade": 1 })  # Ordena os documentos pela idade (ascendente)
+
+## 7. Atualização de Dados
+db.minha_colecao.updateOne({ "nome": "João" }, { "$set": { "idade": 31 } })  # Atualiza um único documento
+db.minha_colecao.updateMany({ "idade": { "$lt": 30 } }, { "$set": { "status": "jovem" } })  # Atualiza vários documentos
+
+## 8. Remoção de Dados
+db.minha_colecao.deleteOne({ "nome": "Carlos" })  # Remove um único documento
+db.minha_colecao.deleteMany({ "idade": { "$gt": 40 } })  # Remove todos os documentos onde idade > 40
+
+## 9. Índices
+db.minha_colecao.createIndex({ "nome": 1 })  # Cria um índice no campo "nome"
+db.minha_colecao.getIndexes()  # Lista os índices existentes
+db.minha_colecao.dropIndex("nome_1")  # Remove um índice específico
+
+## 10. Backup e Restauração
+mongodump --out /backup/mongo  # Faz backup de todos os bancos de dados
+mongodump --db meu_banco --out /backup/mongo  # Faz backup de um banco específico
+mongorestore /backup/mongo  # Restaura um backup
+
+## 11. Gerenciamento de Usuários
+db.createUser({
+  user: "admin",
+  pwd: "admin123",
+  roles: [{ role: "readWrite", db: "meu_banco" }]
+})  # Cria um usuário com permissões de leitura e escrita
+
+db.updateUser("admin", { roles: [{ role: "dbAdmin", db: "meu_banco" }] })  # Atualiza permissões de um usuário
+db.dropUser("admin")  # Remove um usuário
+
+## 12. Encerrando o MongoDB
+exit  # Sai do shell do MongoDB

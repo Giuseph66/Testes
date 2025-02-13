@@ -1,0 +1,152 @@
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1b1f3b;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+
+header {
+    background-color: #000000;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ffa500;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #ffa500;
+    margin: 0;
+}
+
+header .profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+header .profile img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border: 2px solid #ffa500;
+}
+
+header .profile span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+main {
+    padding: 20px;
+}
+
+.device-control {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.device-control button {
+    background-color: #000000;
+    border: 2px solid #ffa500;
+    border-radius: 10px;
+    color: #fff;
+    padding: 15px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.device-control button:hover {
+    background-color: #ffa500;
+    color: #000;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+}
+.hidden {
+    display: none;
+}
+
+.section-content {
+    margin-top: 20px ;
+    border-radius: 3px;
+    background-color: #00000030;
+    text-align: center;
+    padding: 20px;
+    animation: fadeIn 0.3s ease-in-out;
+}
+.section-content button{
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #010101;
+    color: #ffa500;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.section-content button:hover{
+    background-color: #41414164;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.login-outline_outro {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: transparent;
+    color: #ffa500;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.login-outline_outro svg {
+    width: 20px;
+    height: 20px;
+    fill: #ffa500;
+    transition: fill 0.3s;
+}
+
+.login-outline_outro:hover {
+    background-color: #ffa500;
+    color: #000;
+}
+
+.login-outline_outro:hover svg {
+    fill: #000;
+}

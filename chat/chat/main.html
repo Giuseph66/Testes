@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Botão de Copiar</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    #texto {
+      background: #f0f0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Texto que será copiado -->
+  <p id="texto">Este é o texto que será copiado para a área de transferência.</p>
+  <!-- Botão para copiar o texto -->
+  <button id="copyBtn">Copiar Texto</button>
+
+  <script>
+    // Seleciona os elementos
+    const copyBtn = document.getElementById('copyBtn');
+    const texto = document.getElementById('texto').innerText;
+
+    // Adiciona o evento de clique ao botão
+    copyBtn.addEventListener('click', function() {
+      // Utiliza a Clipboard API para copiar o texto
+      navigator.clipboard.writeText(texto)
+        .then(() => {
+          // Feedback de sucesso (opcional)
+          alert('Texto copiado com sucesso!');
+        })
+        .catch(err => {
+          console.error('Erro ao copiar o texto: ', err);
+        });
+    });
+  </script>
+</body>
+</html>

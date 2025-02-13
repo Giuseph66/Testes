@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Início</title>
+    <link href="style/inicio.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <button class="login-outline_outro" onclick="login('outline')">
+            Login
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M14 12l-4-4v3H2v2h8v3l4-4zM20 20H10v2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H10v2h10v16z"/>
+            </svg>
+        </button>
+        <h1>Laboratório de Hardware</h1>
+
+        <div class="profile" onclick="goToProfile()">
+            <img src="https://github.com/Giuseph66.png" alt="Foto do Usuário">
+            <span>Usuário</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="main-content">
+            <h2>Controle</h2>
+            <div class="device-control">
+                <button onclick="showSection('printer')">Impressoras</button>
+                <button onclick="showSection('camera')">Câmeras</button>
+                <button onclick="showSection('door')">Portas</button>
+                <button onclick="showSection('info')">Informações</button>
+            </div>
+        </div>
+
+        <div id="printer-section" class="hidden section-content">
+            <h3>Controle de Impressoras</h3>
+            <p>Aqui você pode gerenciar todas as impressoras do laboratório.</p>
+            <p>(Em desenvolvimento)</p>
+            <button onclick=" showSection('info')">Voltar</button>
+        </div>
+        <div id="camera-section" class="hidden section-content">
+            <h3>Controle de Câmeras</h3>
+            <p>Aqui você pode gerenciar todas as câmeras do laboratório.</p>
+            <p>(Em desenvolvimento)</p>
+            <button onclick=" showSection('info')">Voltar</button>
+        </div>
+        <div id="door-section" class="hidden section-content">
+            <h3>Controle de Portas</h3>
+            <p>Aqui você pode gerenciar todas as portas do laboratório.</p>
+            <p>(Em desenvolvimento)</p>
+            <button onclick=" showSection('info')">Voltar</button>
+        </div>
+        <div id="info-section" class="hidden section-content">
+            <h3>Informações </h3>
+            <p style="font-size: 20px;text-align:justify;">A **página inicial do Laboratório de Hardware** é projetada para oferecer uma interface centralizada e intuitiva para o gerenciamento de dispositivos do laboratório. Ao acessar a página, o usuário é recebido com um cabeçalho que exibe o nome do laboratório, reforçando a identidade do ambiente, e uma área de perfil localizada no canto superior direito, onde é possível visualizar o nome e a foto do usuário. Essa área também é interativa e permite que o usuário clique para acessar informações adicionais ou gerenciar seu perfil.<br>
+
+                Logo abaixo do cabeçalho, encontra-se a área principal da página, intitulada "Controle". Nessa seção, são apresentados três botões principais, cada um com uma função específica: **"Impressoras"**, **"Câmeras"** e **"Portas"**. Esses botões funcionam como atalhos diretos para que o usuário possa acessar ferramentas ou informações relacionadas a esses dispositivos. Por exemplo, ao clicar no botão "Impressoras", o usuário será redirecionado para uma interface onde poderá monitorar ou controlar o estado das impressoras do laboratório. O mesmo ocorre com as câmeras, permitindo visualizar ou gerenciar dispositivos de segurança, e com as portas, que possibilitam controlar acessos.</p>
+            <button onclick="goBack()">Voltar</button>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 Laboratório de Hardware. Todos os direitos reservados.
+    </footer>
+
+    <script>
+        function goToProfile() {
+            alert("Indo para a página de perfil...");
+        }
+
+        function showSection(section) {
+            const sections = document.querySelectorAll(".section-content");
+            sections.forEach(sec => sec.classList.add("hidden"));
+
+            document.getElementById(`${section}-section`).classList.remove("hidden");
+        }
+        function goBack() {
+            document.getElementById("main-content").classList.remove("hidden");
+
+            const sections = document.querySelectorAll(".section-content");
+            sections.forEach(sec => sec.classList.add("hidden"));
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            showSection("info");
+        });
+    </script>
+</body>
+</html>

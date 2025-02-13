@@ -1,0 +1,262 @@
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1b1f3b;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #000000;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ffa500;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #ffa500;
+    margin: 0;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-container {
+    background-color: #000000;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+.profile-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 2px solid #ffa500;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 95%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1b1f3b;
+    color: #fff;
+    font-size: 16px;
+}
+
+.form-group .toggle-password {
+    position: absolute;
+    width: 10%;
+    top: 70%;
+    right: 0%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.profile-container button {
+    width: 100%;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffa500;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.profile-container button:hover {
+    background-color: #cc8400;
+}
+
+.profile-container a {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #ffa500;
+    text-decoration: none;
+}
+
+.profile-container a:hover {
+    text-decoration: underline;
+}
+
+.buttons-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.buttons-container button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #ffa500;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttons-container button:hover {
+    background-color: #cc8400;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #1b1f3b;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+}
+
+.modal-content video {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-content button {
+    width: auto;
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.confirm-modal {
+    background-color: #ffa500;
+    color: #000000;
+}
+
+.confirm-modal:hover {
+    background-color: #ffbb3c;
+}
+
+
+.custom-checkbox {
+    background-color: #ffa500;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s;
+}
+
+.custom-checkbox:hover {
+    background-color: #cc8400;
+}
+
+#toggle-camera:checked+.custom-checkbox {
+    background-color: #00cc66;
+    color: #fff;
+}
+
+#checkbox-label {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+.action-button {
+    width: auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500;
+    color: #fff;
+}
+
+.start-register {
+    background-color: #ffa500;
+}
+
+.start-register:hover {
+    background-color: #cc8400;
+}
+
+.stop-register {
+    background-color: #000000;
+    color: #cc8400;
+}
+
+.stop-register:hover {
+    background-color: #1d1d1d;
+}
+
+.close-modal {
+    background-color: #000000;
+    color: #ffa500;
+    border: 2px solid #ffa500;
+    width: 100%;
+    padding: 10px 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.close-modal:hover {
+    background-color: #ffa500;
+    color: #000000;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+}

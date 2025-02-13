@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel do ADM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #1b1f3b;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #000000;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ffa500;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #ffa500;
+            margin: 0;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .admin-options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .admin-options button {
+            background-color: #ffa500;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .admin-options button:hover {
+            background-color: #cc8400;
+        }
+
+        .user-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #000;
+            color: #fff;
+            text-align: left;
+        }
+
+        .user-table th, .user-table td {
+            border: 1px solid #ffa500;
+            padding: 10px;
+        }
+
+        .user-table th {
+            background-color: #ffa500;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .user-table tr:nth-child(even) {
+            background-color: #2b2f4b;
+        }
+
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .chart-container {
+            margin: 20px auto;
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Painel do Administrador</h1>
+    </header>
+
+    <main>
+        <div class="admin-options">
+            <button onclick="toggleView('users')">Gerenciar Usuários</button>
+            <button onclick="toggleView('logs')">Histórico de Atividades</button>
+            <button onclick="toggleView('stats')">Estatísticas</button>
+        </div>
+
+        <!-- Tabela de Usuários -->
+        <div id="users-view" class="view">
+            <h2>Usuários</h2>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>E-mail</th>
+                        <th>Permissões</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="user-list">
+                    <!-- Dados gerados dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Histórico de Atividades -->
+        <div id="logs-view" class="view" style="display: none;">
+            <h2>Histórico de Atividades</h2>
+            <table class="user-table" id="log-table">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Hora</th>
+                        <th>Usuário</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Logs gerados dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Estatísticas -->
+        <div id="stats-view" class="view" style="display: none;">
+            <h2>Estatísticas do Sistema</h2>
+            <div class="chart-container">
+                <canvas id="usageChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        © 2024 Laboratório de Hardware. Todos os direitos reservados.
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const users = [
+            { id: 1, nome: 'João Silva', email: 'joao@example.com', isAdm: true },
+            { id: 2, nome: 'Maria Oliveira', email: 'maria@example.com', isAdm: false },
+            { id: 3, nome: 'Carlos Mendes', email: 'carlos@example.com', isAdm: false }
+        ];
+
+        const logs = [
+            { date: '07/12/2024', time: '10:00', user: 'João Silva', action: 'Login realizado' },
+            { date: '07/12/2024', time: '10:05', user: 'Maria Oliveira', action: 'Porta 1 aberta' }
+        ];
+
+        function toggleView(view) {
+            document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            document.getElementById(`${view}-view`).style.display = 'block';
+        }
+
+        function renderUserTable() {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.nome}</td>
+                    <td>${user.email}</td>
+                    <td>${user.isAdm ? 'Administrador' : 'Usuário'}</td>
+                    <td>
+                        <button onclick="toggleAdm(${user.id})">${user.isAdm ? 'Remover ADM' : 'Tornar ADM'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderLogTable() {
+            const logTable = document.getElementById('log-table').querySelector('tbody');
+            logTable.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${log.date}</td>
+                    <td>${log.time}</td>
+                    <td>${log.user}</td>
+                    <td>${log.action}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('usageChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Logins', 'Acessos a Portas', 'Configurações'],
+                    datasets: [{
+                        label: 'Atividades',
+                        data: [5, 8, 3],
+                        backgroundColor: ['#ffa500', '#cc8400', '#ff5c5c']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleAdm(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.isAdm = !user.isAdm;
+                alert(`${user.nome} agora é ${user.isAdm ? 'Administrador' : 'Usuário Comum'}`);
+                renderUserTable();
+            }
+        }
+
+        renderUserTable();
+        renderLogTable();
+        renderChart();
+    </script>
+</body>
+</html>

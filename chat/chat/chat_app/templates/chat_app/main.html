@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Interface</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h2>Chat
+                <button class="novo-chat-btn" id="abrir_modal" style="float: right;">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 20h9" />
+                      <path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
+                    </svg>
+                    <span class="tooltip">Novo chat</span>
+                  </button>
+            </h2>
+            <ul>
+                {% for contato in cont %}
+                <li onclick="loadChat('{{ contato }}')" id="{{ contato }}">{{ contato }}
+                    <span class="tooltip">{{ contato }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+        <main class="chat-area">
+        <div class="chat-title" id="chatTitle">
+          <div class="modelo" style="float: left;">
+            <label for="modelo">Modelo:</label>
+            <select name="modelo" id="modelo" value="3b" class="select-modelo">
+              <option value="3b">3b</option>
+              {% for model in modelos %}
+              <option value="{{ model }}">{{ model }}</option>
+              {% endfor %}
+            </select>
+          </div>
+            <label for="chat" id="chatLabel"></label>
+            <div class="Personalidade" style="float: right;">
+              <label for="personalidade">Personalidade:</label>
+              <select name="personalidade" id="personalidade" value="Simples" class="select-personalidade">
+                <option value="{{ personalidade }}">{{ personalidade }}</option>
+              </select>
+            </div>
+        </div>
+        <div class="messages" id="messages">              
+            </div>
+                <div id="loadingContainer" class="loading" ><span class="dot">.</span><span class="dot">.</span><span
+                    class="dot">.</span><span id="counter" style="font-size: 12px;"><b>0</b></span></div>
+            <div class="input-area" id="input-area" style="display: none;">
+                <input type="text" id="messageInput" placeholder="Envie uma mensagem...">
+                <button onclick="sendMessage()">Enviar
+                    <span class="tooltip">Conversa 1</span>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+          <button class="modal-close" id="modalClose">&times;</button>
+          <h2>Iniciar um novo chat ? </h2>
+          <label for="campo" style="font-size: 15px;"><b>Nome:</b></label>
+          <form action="{% url 'chat_app:novo_chat' %}" method="post">
+            {% csrf_token %}
+              <input type="text" id="nome" name="nome" placeholder="Digite um nome para seu chat...">
+              <button id="Iniciar">Iniciar</button>
+            </form>
+        </div>
+      </div>
+      {% if atu %}
+      <script>
+          document.addEventListener('DOMContentLoaded', function() {
+              loadChat('{{ contato|escapejs }}');
+          });
+      </script>
+     {% endif %}
+  
+    <script>
+        let lastIndex = 0;
+        let currentContato = '';
+        let loadingInterval;
+        let count = 0;
+        let leaderLineInstance ;
+        function showLoading() {
+          const container = document.getElementById('loadingContainer');
+          container.style.display = 'block';
+          count = 0;
+          document.getElementById('counter').textContent = count;
+          loadingInterval = setInterval(() => {
+            count++;
+            document.getElementById('counter').textContent = count;
+          }, 1000);
+        }
+        function hideLoading() {
+          const container = document.getElementById('loadingContainer');
+          container.style.display = 'none'; 
+          clearInterval(loadingInterval);
+        }
+        function sendMessage() {
+            const csrftoken = getCookie('csrftoken');
+            const input = document.getElementById("messageInput");
+            const message = input.value.trim();
+            const contato = document.getElementById("chatLabel").innerText;
+            if (message) {
+                const messagesDiv = document.getElementById("messages");
+                const userMessage = document.createElement("div");
+                const modelo = document.getElementById("modelo").value;
+                const personalidade = document.getElementById("personalidade").value;
+                
+                showLoading();
+                fetch(`/mensagem`, {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken 
+                    },
+                    body: JSON.stringify({ mesagem: message,
+                    contato:contato ,
+                    modelo:modelo,
+                    personalidade:personalidade
+                    })
+                })
+                  .then(response => {
+                    if (response.status === 200){
+                      console.log("response retornados:", response);
+                      console.log("Mensagem enviada com sucesso!");
+                      return response.json();
+                    } else {
+                      throw new Error("Erro ao enviar mensagem. Status: " + response.status);
+                    }
+                  })
+                  .then(data => {
+                    console.log("Dados retornados:", data);
+                    if (data.doc && data.doc.pessoa === "bot") {
+                      hideLoading();
+                      loadChat(contato);
+                    }
+                  })
+                  .catch(error => {
+                    console.error("Erro:", error);
+                  });
+                    
+                
+                userMessage.classList.add("message", "user");
+                userMessage.textContent = message;
+                messagesDiv.appendChild(userMessage);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                input.value = "";
+                
+                // Aqui você pode enviar a mensagem para o back-end via fetch POST,
+                // para que ela seja registrada e, assim, o polling traga a resposta do bot.
+                // Exemplo:
+                /*
+                fetch(`/chat/${encodeURIComponent(currentContato)}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pessoa: 'user', dialogo: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Mensagem enviada com sucesso!', data);
+                })
+                .catch(error => console.error('Erro ao enviar mensagem:', error));
+                */
+            }
+        }
+
+        // Permite enviar mensagem pressionando a tecla Enter
+        document.getElementById('messageInput').addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Função de polling para verificar novas mensagens a cada 5 segundos
+        function pollChat(contato) {
+            const url = `/chat/${encodeURIComponent(contato)}`;
+            document.getElementById("chatLabel").textContent = contato;
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar os dados da conversa.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Supondo que os dados retornados tenham a estrutura: { conversa: [ ... ] }
+                    const messages = data;
+                    // Se houver mensagens novas (ou seja, se o array tiver mais itens do que já exibimos)
+                    if (messages && messages.length > lastIndex) {
+                        const messagesDiv = document.getElementById("messages");
+                        for (let i = lastIndex; i < messages.length; i++) {
+                            const msg = messages[i];
+                            const messageDiv = document.createElement("div");
+                            messageDiv.classList.add("message", msg.pessoa);
+                            messageDiv.id = msg._id;
+                            messageDiv.textContent = msg.dialogo;
+                            if (msg.pessoa === "bot") {
+                                messageDiv.addEventListener("dblclick", function() {
+                                    createLeaderLine(msg._id,msg.id_referente);
+                                });
+                            }
+                            messagesDiv.appendChild(messageDiv);
+                        }
+                        lastIndex = messages.length;
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    }
+                })
+                .catch(error => console.error('Erro no poll:', error))
+                .finally(() => {
+                    setTimeout(() => console.log(currentContato));//pollChat(currentContato), 1500);
+                });
+        }
+
+        function loadChat(contato) {
+            const lis = document.querySelectorAll("ul li");
+            lis.forEach(function(item) {
+              item.style.backgroundColor = ""; 
+            });
+            createLeaderLine('chatTitle','chatLabel');
+            const liClicado = document.getElementById(contato);
+            liClicado.style.backgroundColor = "#494949";
+            currentContato = contato;
+            document.getElementById("messages").innerHTML = "";
+            document.getElementById("input-area").style="display: flex";
+            lastIndex = 0;
+            pollChat(contato);
+        }
+        
+        function createLeaderLine(sourceId, targetId) {
+          if (leaderLineInstance) {
+            leaderLineInstance.remove();
+          }
+          
+          leaderLineInstance = new LeaderLine(
+            document.getElementById(sourceId),
+            document.getElementById(targetId),
+            {
+              color: '#1e1e1e',         
+              path: 'fluid',         // Opções: 'straight', 'grid', 'fluid', 'arc'
+              endPlug: 'arrow',     
+              startPlug: 'disc'  
+            }
+          );
+          
+          return leaderLineInstance;
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let cookie of cookies) {
+                cookie = cookie.trim();
+                // Verifica se o cookie começa com o nome desejado
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+                }
+              }
+            }
+            return cookieValue;
+          }
+    const openModal = document.getElementById('abrir_modal');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalClose = document.getElementById('modalClose');
+    openModal.addEventListener('click', () => {
+      modalOverlay.style.display = 'flex';
+    });
+    modalClose.addEventListener('click', () => {
+      modalOverlay.style.display = 'none';
+    });
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.style.display = 'none';
+      }
+    });
+
+    const scrollableDiv = document.getElementById('messages');
+    scrollableDiv.addEventListener('scroll', function() {
+        leaderLineInstance.position();
+    });
+    </script>
+</body>
+</html>

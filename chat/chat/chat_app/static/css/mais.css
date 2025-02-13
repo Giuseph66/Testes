@@ -1,0 +1,259 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #1e1e1e;
+  color: white;
+  display: flex;
+  height: 100vh;
+}
+
+.container {
+  display: flex;
+  width: 100%;
+  z-index: 1;
+}
+
+.sidebar {
+  width: 250px;
+  background-color: #2c2c2c;
+  padding: 15px;
+}
+
+.sidebar h2 {
+  margin: 0 0 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  position: relative;
+  padding: 10px;
+  border: 1px solid #000000;
+  cursor: pointer;
+  margin-top: 5px;
+  border-radius: 50px;
+}
+
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  z-index: 10;
+}
+
+.messages {
+  background-color: #525151;
+  border-radius: 10px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 70%;
+}
+
+.message.bot {
+  background-color: #1b1b1b;
+  align-self: flex-start; /* Mensagem do bot à esquerda */
+}
+
+.message.user {
+  background-color: #333333;
+  color: white;
+  align-self: flex-end; /* Mensagem do usuário à direita */
+}
+.messages::-webkit-scrollbar {
+  width: 8px; /* Largura da barra de scroll */
+}
+.input-area {
+  position: relative; /* Necessário para que o z-index seja aplicado */
+  display: flex;
+  border-top: 1px solid #444;
+  padding: 10px;
+  z-index: 10000;
+}
+
+.leader-line {
+  position: relative; /* ou absolute, se for necessário */
+  z-index: 1;
+}
+
+.input-area input {
+  flex: 1;
+  position: relative; /* Garante que o z-index seja considerado */
+  z-index: 10000;
+  padding: 10px;
+  background-color: #2c2c2c;
+  border: none;
+  color: white;
+}
+
+
+.input-area button {
+  position: relative;
+  padding: 10px;
+  margin-left: 5px;
+  background-color: #4CAF50;
+  border-radius: 5px;
+  border: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+.chat-title {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+.novo-chat-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 8px;
+}
+
+.novo-chat-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+  .tooltip {
+  position: absolute;
+  bottom: -20%; 
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  font-size: 12px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 9999;
+}
+.novo-chat-btn:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+li:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  color: #0d0d0d;
+  background: rgba(0, 0, 0, 0.5);
+  display: none; 
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+  max-width: 90%;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal input[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal button {
+  padding: 8px 12px;
+  background: #0d0d0d;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal button:hover {
+  background: #424242;
+}
+
+
+.loading {
+  font-size: 200%;
+  font-family: sans-serif;
+  color: #333;
+  text-align: center;
+  margin-top: 50px;
+  display: none;
+}
+
+.loading .dot {
+  display: inline-block;
+  animation: blink 1.4s infinite;
+}
+
+.loading .dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading .dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading .dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

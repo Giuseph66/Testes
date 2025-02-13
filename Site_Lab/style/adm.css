@@ -1,0 +1,95 @@
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    background-color: #1b1f3b;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    background-color: #000000;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #ffa500;
+}
+
+header h1 {
+    font-size: 24px;
+    color: #ffa500;
+    margin: 0;
+}
+
+header .profile {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+}
+
+header .profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffa500;
+}
+
+header .profile span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
+h2 {
+    color: #ffa500;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.user-table {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    background-color: #000;
+    color: #fff;
+    text-align: left;
+}
+
+.user-table th, .user-table td {
+    border: 1px solid #ffa500;
+    padding: 10px;
+}
+
+.user-table th {
+    background-color: #ffa500;
+    color: #000;
+    font-weight: bold;
+}
+
+.user-table tr:nth-child(even) {
+    background-color: #2b2f4b;
+}
+
+button {
+    background-color: #ffa500;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    color: #000;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #cc8400;
+}
