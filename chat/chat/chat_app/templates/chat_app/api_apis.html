@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  {% load static %}
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{% static 'css/api.css' %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API</title>
+</head>
+<body>
+  <header class="header">
+    <h1>API</h1>
+  </header>
+  <div class="opcoes">
+    <a href="{% url 'chat_app:configs' %}">
+      <img src="{% static 'imgs/configuracoes.png' %}" alt="configurações">
+      <span class="tooltip">Configurações</span>
+    </a>          
+    <a href="{% url 'chat_app:imag' %}">
+      <img src="{% static 'imgs/confy.png' %}" alt="Comfyui">
+      <span class="tooltip">Confg gerador de imagens</span>
+    </a>
+    <a href="{% url 'chat_app:index' %}">
+      <img src="{% static 'imgs/home.png' %}" alt="home">
+      <span class="tooltip">Inicio</span>
+    </a>
+    <a href="{% url 'chat_app:treinamento' %}">
+      <img src="{% static 'imgs/cerebro.png' %}" alt="treinamento">
+      <span class="tooltip">Treinamento modelo em especifico</span>
+    </a>
+    <a href="{% url 'chat_app:api_apis' %}">
+      <img src="{% static 'imgs/api.png' %}" alt="api">
+      <span class="tooltip">API</span>
+    </a>
+  </div>   
+  <main class="content">
+    <p>Documentação e informações sobre a API.</p>
+  </main>
+  <footer class="footer">
+    <p>&copy; 2025 IA-chat</p>
+  </footer>
+</body>
+</html>
