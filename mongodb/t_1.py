@@ -16,7 +16,8 @@ documento = {
 #print("Documento inserido com ID:", resultado.inserted_id)
 #print(colecao.list_indexes())
 #colecao.distinct("conversa")
-colecao.delete_many({"contato": "test"})
+colecao.delete_many({"data": {"$exists": False}})
+#colecao.delete_many({"data": ""})
 """ret=colecao.distinct("contato")
 print(ret)
 for r in ret:

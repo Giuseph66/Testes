@@ -1,4 +1,5 @@
 import requests
+import json
 """
 from pymongo import MongoClient
 
@@ -104,17 +105,24 @@ dados={
 }
 dadus={
   "message": "Gostaria de saber como melhorar a segurança do meu computador.",
-  "historico": [
+  "historico": json.dumps([
     { "pessoa": "user", "dialogo": "Bom dia, tudo bem?" },
     { "pessoa": "bot", "dialogo": "Bom dia! Tudo bem, e com você?" },
     { "pessoa": "user", "dialogo": "Estou bem, obrigado! Gostaria de saber como posso melhorar a segurança do meu computador." },
     { "pessoa": "bot", "dialogo": "Claro! Aqui estão algumas dicas para melhorar a segurança do seu computador: 1) Use senhas fortes, 2) Mantenha seu sistema operacional e softwares atualizados, 3) Instale um bom antivírus." },
     { "pessoa": "user", "dialogo": "E se eu quiser proteger minha rede Wi-Fi?" }
-  ],
+  ]),
   "personality": "respostas curtas",
   "modelo": "1b"
 }
-response=requests.post('https://a2e6-168-90-211-194.ngrok-free.app/chat',json=dados)
+
+caminho="chat_app/static/imgs/cerebro.png"
+with open(caminho, "rb") as file:
+    files = {"file": file}
+    response=requests.post('https://0ffc-168-90-211-194.ngrok-free.app/chat',data=dadus,files=files)
+
 print(response.status_code)
 
-print(response.json()['response'])
+print(response.json())
+
+

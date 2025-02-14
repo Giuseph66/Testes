@@ -1,55 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Exemplo com LeaderLine</title>
+  <title>Rotacionar com Scroll</title>
   <style>
     body {
-      position: relative;
+      height: 2000px; /* Para permitir rolagem */
       margin: 0;
-      padding: 50px;
       font-family: sans-serif;
-      background: #f7f7f7;
     }
-    .block {
-      width: 120px;
-      height: 80px;
-      background: lightblue;
-      border: 2px solid #333;
-      border-radius: 8px;
+    #rotateElement {
+      width: 200px;
+      height: 200px;
+      background: #4caf50;
+      margin: 50px auto;
       display: flex;
-      align-items: center;
       justify-content: center;
-      position: absolute;
-    }
-    #block1 {
-      top: 50px;
-      left: 50px;
-    }
-    #block2 {
-      top: 500px;
-      left: 600px;
+      align-items: center;
+      color: #fff;
+      font-size: 24px;
+      transition: transform 0.2s;
     }
   </style>
-  <!-- Carrega a biblioteca LeaderLine via CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
 </head>
 <body>
-  <div id="block1" class="block">Bloco 1</div>
-  <div id="block2" class="block">Bloco 2</div>
+  <div id="rotateElement">Gira</div>
 
   <script>
-    window.addEventListener('load', function() {
-      const line = new LeaderLine(
-        document.getElementById('block1'),
-        document.getElementById('block2'),
-        {
-          color: 'red',         // cor da linha
-          path: 'grid',        // caminho fluido (pode ser 'straight', 'grid','fluid', 'arc' etc.)
-          startPlug: 'disc',    // plug de início (opcional)
-          endPlug: 'arrow'      // plug final em forma de seta
-        }
-      );
+    window.addEventListener('scroll', function() {
+      // Pega a posição do scroll vertical
+      var scrollY = window.scrollY;
+      // Calcula um ângulo; aqui, 1 grau para cada pixel rolado (ajuste conforme necessário)
+      var angle = scrollY % 360;
+      document.getElementById('rotateElement').style.transform = 'rotate(' + angle + 'deg)';
     });
   </script>
 </body>
