@@ -4,10 +4,79 @@
 <head>
   {% load static %}
   <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/principal.css' %}">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chat Interface</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leader-line/1.0.7/leader-line.min.js"></script>
+  <style>
+    :root {
+      --bot-bg:{{ config.cor_mensagem_bot }};
+      --user-bg: {{ config.cor_mensagem_user }};
+    }
+  </style>
+  {% if config.tema == 'escuro' %}
+  <style>
+    .opcoes img{
+    filter: invert();
+    }
+    :root {
+      --background-color: #222;
+      --text-color: #fff;
+  
+      --sidebar-bg: #2c2c2c;
+      --sidebar-li-border: #000;
+      --messages-bg: #525151;
+      --input-area-border-top: #444;
+      --input-bg: #2c2c2c;
+  
+      --message-button-bg: #252525;
+      --message-button-border: #000;
+      --button-hover-bg: #737373;
+  
+      --opcoes-bg: #383838;
+  
+      --scrollbar-track: #2c2c2c;
+      --scrollbar-thumb: #444;
+      --scrollbar-thumb-hover: #666;
+  
+      --data-hora-color: #789ad84a;
+      --loading-dot-color: #333;
+
+      --botao-copia-bg:#252525;
+      --botao-copia-bd:#fff;
+
+    }
+  </style>
+  {% else %}
+  <style>
+    :root {
+      --background-color: #fff;
+      --text-color: #000;
+  
+      --sidebar-bg: #f0f0f0;
+      --sidebar-li-border: #ccc;
+      --messages-bg: #eaeaea;
+      --input-area-border-top: #ccc;
+      --input-bg: #ffffff;
+  
+      --message-button-bg: #252525;
+      --message-button-border: #000;
+      --button-hover-bg: #737373;
+  
+      --opcoes-bg: #ddd;
+  
+      --scrollbar-track: #ccc;
+      --scrollbar-thumb: #444;
+      --scrollbar-thumb-hover: #666;
+  
+      --data-hora-color:rgba(78, 78, 78, 0.8);
+      --loading-dot-color: #333;
+
+      --botao-copia-bg:#b1b1b1;
+      --botao-copia-bd:black;
+    }
+  </style>
+  {% endif %}  
+  <link rel="stylesheet" href="{% static 'css/principal_.css' %}">
 </head>
 
 <body>
@@ -60,8 +129,8 @@
       <div class="chat-title" id="chatTitle">
         <div class="modelo" style="float: left;">
           <label for="modelo">Modelo:</label>
-          <select name="modelo" id="modelo" value="3b" class="select-modelo">
-            <option value="3b">3b</option>
+          <select name="modelo" id="modelo" value="3b" class="select-modelo">       
+            <option value="{{ config.modelo_ia }}">{{ config.modelo_ia }}</option>
             {% for model in modelos %}
             <option value="{{ model }}">{{ model }}</option>
             {% endfor %}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações do Chat</title>
+    <style>
+        body {
+            background-color: {% if config.tema == 'escuro' %} #222 {% else %} #fff {% endif %};
+            color: {% if config.tema == 'escuro' %} #fff {% else %} #000 {% endif %};
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #333;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Configurações do Chat</h2>
+
+        <div class="input-group">
+            <label for="tema">Tema:</label>
+            <select id="tema">
+                <option value="claro" {% if config.tema == "claro" %}selected{% endif %}>Claro</option>
+                <option value="escuro" {% if config.tema == "escuro" %}selected{% endif %}>Escuro</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="cor_mensagem_user">Cor da Mensagem do Usuário:</label>
+            <input type="color" id="cor_mensagem_user" value="{{ config.cor_mensagem_user }}">
+        </div>
+
+        <div class="input-group">
+            <label for="cor_mensagem_bot">Cor da Mensagem do Bot:</label>
+            <input type="color" id="cor_mensagem_bot" value="{{ config.cor_mensagem_bot }}">
+        </div>
+
+        <div class="input-group">
+            <label for="tamanho_fonte">Tamanho da Fonte:</label>
+            <input type="number" id="tamanho_fonte" value="{{ config.tamanho_fonte }}">
+        </div>
+
+        <div class="input-group">
+            <label>Notificações:</label>
+            <input type="checkbox" id="notificacoes_som" {% if config.notificacoes_som %}checked{% endif %}>
+        </div>
+
+        <div class="input-group">
+            <label for="modelo_ia">Modelo de IA:</label>
+            <select id="modelo_ia">
+                <option value="3b" {% if config.modelo_ia == "3b" %}selected{% endif %}>3b</option>
+                <option value="8b" {% if config.modelo_ia == "8b" %}selected{% endif %}>8b</option>
+            </select>
+        </div>
+
+        <button onclick="salvarConfiguracoes()">Salvar</button>
+    </div>
+
+    <script>
+        function salvarConfiguracoes() {
+            const formData = new FormData();
+            formData.append("tema", document.getElementById("tema").value);
+            formData.append("cor_mensagem_user", document.getElementById("cor_mensagem_user").value);
+            formData.append("cor_mensagem_bot", document.getElementById("cor_mensagem_bot").value);
+            formData.append("tamanho_fonte", document.getElementById("tamanho_fonte").value);
+            formData.append("notificacoes_som", document.getElementById("notificacoes_som").checked);
+            formData.append("modelo_ia", document.getElementById("modelo_ia").value);
+
+            fetch("{% url 'chat_app:salvar_config' %}", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                window.location.href = "{% url 'chat_app:configs' %}";
+                alert(data.message);
+            })
+            .catch(error => console.error("Erro ao salvar configurações:", error));
+        }
+    </script>
+
+</body>
+</html>

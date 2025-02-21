@@ -1,9 +1,8 @@
 import requests
 import json
 
-url = "https://0ffc-168-90-211-194.ngrok-free.app/chat"
+url = "https://5b8a-168-90-211-194.ngrok-free.app/chat"
 
-# Dados do payload
 payload_data = {
     "message": "Olá, como vai?",
     "historico": [{"role": "user", "content": "Oi"}],
@@ -13,14 +12,13 @@ payload_data = {
 
 payload_str = json.dumps(payload_data)
 data = {
-    "payload": payload_str  # deve ser enviado como string
+    "payload": payload_str  
 }
 
-# Caminho do arquivo que será enviado
-file_path = "imposto.jpeg"
+file_path = "test.mp3"
 
 with open(file_path, "rb") as file:
-    files = {"file": file}  # o nome "file" deve coincidir com o parâmetro do endpoint
+    files = {"file": file} 
     response = requests.post(url, data=data,files=files)
 
 print("Status:", response.status_code)

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Captura de Tela</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function atualizarImagem() {
+                const timestamp = new Date().getTime();
+                document.getElementById('screenshot').src = 'https://d029-168-90-211-194.ngrok-free.app/capture';
+                console.log('Imagem atualizada');
+            }
+            setInterval(atualizarImagem, 1000);
+        });
+    </script>
+</head>
+<body>
+    <img id="screenshot" src="https://d029-168-90-211-194.ngrok-free.app/capture" alt="Captura de Tela" style="width:100%;">
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vídeo Feed Fullscreen e Mapeamento do Ponteiro</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        overflow: hidden;
+        position: relative;
+      }
+      #video-feed {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      #pointer-info {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        padding: 5px 10px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        font-size: 1em;
+        border-radius: 5px;
+        z-index: 100;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="https://d029-168-90-211-194.ngrok-free.app/video_feed" alt="Vídeo Feed" id="video-feed" />
+    <div id="pointer-info">Posição: (x, y)</div>
+
+    <script>
+      const img = document.getElementById('video-feed')
+      img.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen()
+        } else {
+        refreshImage()
+          const valor = document.getElementById('pointer-info').textContent
+          const partes = valor.match(/\((\d+),\s*(\d+)\)/)
+          if (!partes) return
+      
+          const x = partes[1]
+          const y = partes[2]
+          const csrftoken = getCookie('csrftoken')
+      
+          fetch('/ponteiro', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+              x: x,
+              y: y,
+              tamanho: {
+                width: window.innerWidth,
+                height: window.innerHeight
+              }
+            })
+          })
+          .then((response) => response.json())
+          .then((data) => console.log('Dados recebidos do servidor:', data))
+          .catch((error) => console.error('Erro:', error))
+        }
+    })
+      
+      document.addEventListener('mousemove', function (event) {
+        if (document.fullscreenElement) {
+          const x = event.clientX
+          const y = event.clientY
+          document.getElementById('pointer-info').textContent = `Posição: (${x}, ${y})`
+        } else {
+          document.getElementById('pointer-info').textContent = `Posição: (off,off)`
+        }
+      })
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+        }
+        return cookieValue;
+    }
+    function refreshImage() {
+      const img = document.getElementById('video-feed');
+      const baseUrl = img.src.split('?')[0];
+      img.src = `${baseUrl}?t=${new Date().getTime()}`;
+    }
+    if (document.fullscreenElement) {
+        setInterval(refreshImage, 1000);
+    }
+    </script>
+</body>
+</html>

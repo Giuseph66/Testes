@@ -18,6 +18,7 @@ venv/
 
 # Arquivos de log
 *.log
+*.sqlite3
 
 # Arquivos de configuração local e variáveis de ambiente
 *.env

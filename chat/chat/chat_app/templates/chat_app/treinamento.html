@@ -1,43 +1,196 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-  {% load static %}
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="{% static 'css/treinamento.css' %}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Treinamento</title>
-</head>
-<body>
-  <header class="header">
-    <h1>Treinamento de Modelos</h1>
-  </header>
-  <div class="opcoes">
-    <a href="{% url 'chat_app:configs' %}">
-      <img src="{% static 'imgs/configuracoes.png' %}" alt="configurações">
-      <span class="tooltip">Configurações</span>
-    </a>          
-    <a href="{% url 'chat_app:imag' %}">
-      <img src="{% static 'imgs/confy.png' %}" alt="Comfyui">
-      <span class="tooltip">Confg gerador de imagens</span>
-    </a>
-    <a href="{% url 'chat_app:index' %}">
-      <img src="{% static 'imgs/home.png' %}" alt="home">
-      <span class="tooltip">Inicio</span>
-    </a>
-    <a href="{% url 'chat_app:treinamento' %}">
-      <img src="{% static 'imgs/cerebro.png' %}" alt="treinamento">
-      <span class="tooltip">Treinamento modelo em especifico</span>
-    </a>
-    <a href="{% url 'chat_app:api_apis' %}">
-      <img src="{% static 'imgs/api.png' %}" alt="api">
-      <span class="tooltip">API</span>
-    </a>
-  </div>   
-  <main class="content">
-    <p>Aqui você pode encontrar recursos para treinamento de modelos específicos.</p>
-  </main>
-  <footer class="footer">
-    <p>&copy; 2025 IA-chat</p>
-  </footer>
-</body>
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Treinamento</title>
+    {% if config.tema == 'escuro' %}
+      <style>
+        img {
+          filter: invert();
+        }
+        :root {
+          --background-color: #222;
+          --text-color: #fff;
+          --sidebar-bg: #2c2c2c;
+          --sidebar-li-border: #000;
+          --messages-bg: #525151;
+          --bot-bg: #1b1b1b;
+          --opcoes-bg: #383838;
+          --user-bg: #333333;
+          --input-area-border-top: #444;
+          --input-bg: #2c2c2c;
+          --button-bg: #4caf50;
+          --button-hover-bg: #737373;
+          --footer-bg: #2c2c2c;
+          --border: #333333;
+        }
+      </style>
+    {% else %}
+      <style>
+        :root {
+          --background-color: #fff;
+          --text-color: #222;
+          --sidebar-bg: #f0f0f0;
+          --sidebar-li-border: #ccc;
+          --messages-bg: #eaeaea;
+          --bot-bg: #dcdcdc;
+          --opcoes-bg: #ddd;
+          --user-bg: #cccccc;
+          --input-area-border-top: #ccc;
+          --input-bg: #ffffff;
+          --button-bg: #4caf50;
+          --button-hover-bg: #46a049;
+          --footer-bg: #d4d4d4;
+          --border: #a7a7a7;
+        }
+      </style>
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'css/treinamento.css' %}" />
+  </head>
+  <body>
+    <div class="salva">
+      <header class="header">
+        <h1>Treinamento de Modelos</h1>
+        <div class="tooltip-wrapper">
+          <div class="info_json" style="cursor: auto;">
+            <img src="{% static 'imgs/info.png' %}" alt="Info" />
+          </div>
+          <span class="toaltip" style="top: 90%;left: -500%;height: 355px;width: 500px; white-space:wrap;text-align: justify;">
+            O processo de treinamento de um modelo de inteligência artificial envolve ajustar a maneira como ele responde a diferentes inputs, para que ele se torne mais preciso e eficaz em tarefas específicas. No contexto deste sistema, esse ajuste é feito ao personalizar o modelo com exemplos de perguntas e respostas, de modo a direcionar sua capacidade de entendimento e resposta conforme o tipo de dados que se deseja trabalhar. O sistema permite a inserção manual de dados ou a importação de um arquivo, e uma vez configurado, ele transmite essas informações ao backend para refinar o modelo de acordo com as necessidades definidas, aprimorando suas respostas e comportamento em situações semelhantes no futuro. <br>
+            Este processo consiste em ajustar um modelo pré-existente com exemplos adicionais para que ele aprenda a lidar com cenários específicos ou dados mais especializados. Em vez de criar uma inteligência artificial do zero, você aproveita o que o modelo já sabe e acrescenta novas informações, permitindo que ele atenda melhor às necessidades de um domínio particular. <hr/>
+            <h3>Como configurar o modelo</h3>
+            <p>Para configurar o modelo, siga os passos abaixo:</p>
+            <ol>
+                <li>O Sistema irá pegar como base o modelo que estiver configurado como padrão.</li>
+                <li>Insira as perguntas e respostas relevantes para o domínio que você deseja que o modelo aprenda. Você pode adicionar perguntas e respostas manualmente ou importar um arquivo Json com esses dados.(Siga o exemplo)</li>
+                <li>Recomenda-se colocar o maximo de informações para refinar o modelo (minimo 500)</li>
+                <li>Apos inserir os dados para fazer o refinamento do modelo é so confirmar e aguardar!</li>
+                <li>Obs: O modelo refinado poderiá ser usado normalmente como um modelo comum...</li>
+          
+          </span>
+        </div>
+      </header>
+      <main class="content">
+        <div id="qa-interface">
+          <h2>Perguntas e Respostas</h2>
+          <button class="remove" onclick="limpar()" style="float: right;">Limpar</button>
+          <div id="qa-container"></div>
+          <button id="add-btn" class="outros">Adicionar Pergunta/Resposta</button>
+
+          <hr />
+          <label for="contagem" id="contagem">Contagem de Perguntas e Respostas:</label>
+          <hr />
+          <div class="tooltip-wrapper">
+            <div class="info_json" id="abrir_modal">
+              <img src="{% static 'imgs/info.png' %}" alt="Info" />
+            </div>
+            <span class="toaltip">Exemplos de JSON aceitos</span>
+          </div>
+          
+          <label for="file-input"  class="custom-file-upload">Importar arquivo JSON</label>
+          <input type="file" id="file-input" accept=".json" />
+
+          <hr />
+
+          <button id="export-btn" class="outros">Exportar e Mostrar JSON</button>
+          <a id="download-btn" href="#" download="data.json" style="display:none;">Baixar JSON</a>
+
+          <h3>Resultado (JSON):</h3>
+          <pre id="json-output"></pre>
+        </div>
+      </main>
+      <div class="opcoes">
+        <a href="{% url 'chat_app:configs' %}">
+          <img src="{% static 'imgs/configuracoes.png' %}" alt="configurações" />
+          <span class="tooltip">Configurações</span>
+        </a>
+        <a href="{% url 'chat_app:imag' %}">
+          <img src="{% static 'imgs/confy.png' %}" alt="Comfyui" />
+          <span class="tooltip">Confg gerador de imagens</span>
+        </a>
+        <a href="{% url 'chat_app:index' %}">
+          <img src="{% static 'imgs/home.png' %}" alt="home" />
+          <span class="tooltip">Inicio</span>
+        </a>
+        <a href="{% url 'chat_app:treinamento' %}">
+          <img src="{% static 'imgs/cerebro.png' %}" alt="treinamento" />
+          <span class="tooltip">Treinamento modelo em específico</span>
+        </a>
+        <a href="{% url 'chat_app:api_apis' %}">
+          <img src="{% static 'imgs/api.png' %}" alt="api" />
+          <span class="tooltip">API</span>
+        </a>
+      </div>
+      <footer class="footer">
+        <p>&copy; 2025 IA-chat</p>
+      </footer>
+    </div>
+
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal">
+        <button class="modal-close" id="modalClose">&times;</button>
+        <h2>Exemplo de como deve ser o JSON</h2><div class="modal-content">
+          <div class="modal-text">
+            <label id="jsonExample1" class="texto">
+              Pergunta e Resposta
+        
+        JSON=[
+          {
+            "text": "&lt;Pergunta&gt;: Qual é a capital do Brasil?\n&lt;Resposta&gt;: Brasília"
+          }
+        ]
+            </label>
+            <img src="{% static 'imgs/copia.png' %}" alt="Copiar" style="width:20px; height:20px; float: right; margin-top: 10px; cursor: pointer;" onclick="copyToClipboard('#jsonExample1,this')">
+            <span class="tooltip" style="position: sticky; left: 70%;">Copiar</span>
+          </div>
+          <div class="modal-text">
+            <label id="jsonExample2" class="texto">
+              Usuário e Bot
+        
+        JSON=[
+          {
+            "text": "&lt;Usuario&gt;: Como faço para atualizar meu cadastro?\n&lt;Bot&gt;: Você pode atualizar seu cadastro na seção de perfil."
+          }
+        ]
+            </label>
+            <img src="{% static 'imgs/copia.png' %}" alt="Copiar" style="width:20px; height:20px; float: right; margin-top: 10px; cursor: pointer;" onclick="copyToClipboard('#jsonExample2,this')">
+            <span class="tooltip" style="position: sticky; left: 70%;">Copiar</span>
+          </div>
+          <div class="modal-text">
+            <label id="jsonExample3" class="texto">
+              Humano e Bot
+        
+        JSON=[
+          {
+            "text": "&lt;humano&gt;: O que é inteligência artificial?\n&lt;Bot&gt;: É a simulação de processos de inteligência humana por meio de máquinas."
+          }
+        ]
+            </label>
+            <img src="{% static 'imgs/copia.png' %}" alt="Copiar" style="width:20px; height:20px; float: right; margin-top: 10px; cursor: pointer;" onclick="copyToClipboard('#jsonExample3,this')">
+            <span class="tooltip" style="position: sticky; left: 70%;">Copiar</span>
+          </div>
+        </div>
+        
+        <script>
+          function copyToClipboard(selector, triggerElem) {
+            const element = document.querySelector(selector);
+            const text = element.innerText;
+            navigator.clipboard.writeText(text)
+              .then(() => {
+                // Obtém o tooltip que está logo após o elemento que disparou o clique
+                const tooltip = triggerElem.nextElementSibling;
+                if (tooltip && tooltip.classList.contains('tooltip')) {
+                  tooltip.innerText = 'Copiado!';
+                }
+              })
+              .catch(err => {
+                alert('Erro ao copiar: ' + err);
+              });
+          }
+          
+        </script>        
+  <script src="{% static 'scripts/treinamento.js' %}"></script>
+  </body>
 </html>

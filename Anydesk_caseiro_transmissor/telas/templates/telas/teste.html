@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Vídeo Feed Fullscreen e Mapeamento do Ponteiro</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      overflow: hidden;
+      position: relative;
+    }
+    /* A imagem ocupa toda a tela */
+    #video-feed {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    #pointer-info {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      font-size: 1em;
+      border-radius: 5px;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <img src="https://62cc-168-90-211-194.ngrok-free.app/video_feed" alt="Vídeo Feed" id="video-feed">
+  <div id="pointer-info">Posição: (x, y)</div>
+  
+  <script>
+    const img = document.getElementById('video-feed');
+
+    img.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener('mousemove', function(event) {
+      if (document.fullscreenElement) {
+        const x = event.clientX;
+        const y = event.clientY;
+        document.getElementById('pointer-info').textContent = `Posição: (${x}, ${y})`;
+      }
+    });
+  </script>
+</body>
+</html>

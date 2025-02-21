@@ -1,0 +1,1094 @@
+[
+    {
+        "text": "<Pergunta>: Como reinstalar o sistema após formatação do computador?\n<Resposta>: Fiz a instalação no notebook formatado e atualizei o servidor."
+    },
+    {
+        "text": "<Pergunta>: Como alterar o CFOP para doações de roupas?\n<Resposta>: Altere o CFOP de 5910/6910 para 5913/6913 conforme solicitação do cliente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir notas fiscais não faturadas no banco de dados?\n<Resposta>: Willian realizou ajustes diretos no banco de dados."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'limite de conexões excedido'?\n<Resposta>: Willian ajustou o licenciamento para permitir mais acessos simultâneos."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de 'interface não suportada' na NFC-e?\n<Resposta>: Atualize os arquivos AthenasDFe.dll e AthenasDFe.tlb no FrontCash."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar operação fiscal de devolução para fornecedores?\n<Resposta>: Crie uma operação com CFOP 5202/6202 e ajuste a tributação no banco de dados."
+    },
+    {
+        "text": "<Pergunta>: Por que a Sefaz rejeita a NFC-e com erro 999?\n<Resposta>: A Sefaz está temporariamente fora do ar. Reassine e retransmita após normalização."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir sequência quebrada de notas após cancelamento?\n<Resposta>: Acesse o banco de dados e ajuste manualmente o sequenciador."
+    },
+    {
+        "text": "<Pergunta>: Como habilitar estoque negativo?\n<Resposta>: Ative a opção nas configurações da empresa (Configurações > Estoque)."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de certificado digital na NF-e?\n<Resposta>: Reinstale o certificado A1 e reconfigure no módulo DF-e."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de SPED desatualizado?\n<Resposta>: Aguarde a atualização do sistema para a versão compatível com o SPED vigente."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se a TEF (Elgin) travar durante uma venda?\n<Resposta>: Reinicie o computador e verifique a conexão com o TEF Hub."
+    },
+    {
+        "text": "<Pergunta>: Como atualizar o IP do servidor após mudança de rede?\n<Resposta>: Atualize o IP no arquivo dbxconnections em todas as estações clientes."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'NCM inexistente' em uma NFC-e?\n<Resposta>: Cancele a nota, corrija o NCM no cadastro do produto e emita nova NFC-e."
+    },
+    {
+        "text": "<Pergunta>: Como configurar nova impressora fiscal?\n<Resposta>: Instale o driver e vincule a impressora à operação NFC-e nas configurações."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'senha de usuário inexistente'?\n<Resposta>: Altere a senha diretamente no banco de dados ou redefina via módulo de administração."
+    },
+    {
+        "text": "<Pergunta>: Por que o relatório de estoque não aparece?\n<Resposta>: Verifique se está na empresa correta e gere o relatório novamente (Relatórios > Estoque)."
+    },
+    {
+        "text": "<Pergunta>: Como emitir boletos avulsos sem nota fiscal?\n<Resposta>: Use a opção 'Boleto Avulso' no módulo financeiro e preencha os dados manualmente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de 'município não existe no IBGE'?\n<Resposta>: Padronize o nome da cidade em minúsculas conforme a base do IBGE."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema travar na tela inicial?\n<Resposta>: Feche o processo via Gerenciador de Tarefas e reinicie o sistema."
+    },
+    {
+        "text": "<Pergunta>: Como ajustar o valor do frete em uma nota fiscal?\n<Resposta>: Adicione um item de serviço 'FRETE' na nota e vincule ao cadastro do transporte."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'chave de acesso inválida' na NF-e?\n<Resposta>: Verifique o certificado digital e reassine a nota antes de transmitir."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não gera relatórios gráficos de contas a receber?\n<Resposta>: Altere o modo de relatório para 'Gráfico' em Configurações > Relatórios."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo usuário com permissões específicas?\n<Resposta>: Acesse Configurações > Permissões e defina os níveis de acesso desejados."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'arquivo XML corrompido'?\n<Resposta>: Regenere o XML a partir da nota fiscal e valide com o Validador da Sefaz."
+    },
+    {
+        "text": "<Pergunta>: Como configurar o PIX no sistema?\n<Resposta>: Atualize o certificado A3 e cadastre as chaves PIX no módulo financeiro."
+    },
+    {
+        "text": "<Pergunta>: Por que as notas de devolução não atualizam o estoque?\n<Resposta>: Verifique se a operação fiscal está configurada para movimentar estoque."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'data de emissão retroativa'?\n<Resposta>: Ajuste a data do sistema e solicite autorização da Sefaz para notas antigas."
+    },
+    {
+        "text": "<Pergunta>: Como inutilizar números de notas fiscais não utilizadas?\n<Resposta>: Use a opção 'Inutilização' no módulo fiscal e siga as orientações da Sefaz."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o servidor não reconhecer o banco de dados?\n<Resposta>: Verifique as permissões de acesso ao Firebird e reinicie o serviço."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de 'CNPJ inválido' no cadastro de cliente?\n<Resposta>: Valide o CNPJ no site da Receita Federal e atualize o cadastro."
+    },
+    {
+        "text": "<Pergunta>: Por que a nota fiscal não aparece no e-mail do cliente?\n<Resposta>: Verifique se o e-mail está cadastrado corretamente e se o serviço SMTP está ativo."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'estoque insuficiente' em vendas confirmadas?\n<Resposta>: Ajuste o estoque manualmente ou verifique operações fiscais não finalizadas."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar uma nova forma de pagamento?\n<Resposta>: Acesse Financeiro > Formas de Pagamento e preencha os campos necessários."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer o certificado digital?\n<Resposta>: Instale o certificado no navegador e reinicie o sistema."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'data futura' na emissão de nota fiscal?\n<Resposta>: Corrija a data do sistema e reassine a nota com a data atual."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a conexão remota com o servidor?\n<Resposta>: Utilize o AnyDesk ou TeamViewer e atualize as credenciais no dbxconnections."
+    },
+    {
+        "text": "<Pergunta>: Por que o PDV não imprime cupons fiscais?\n<Resposta>: Verifique a conexão da impressora e reinicie o serviço fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de 'tributação incorreta' no SPED?\n<Resposta>: Revise as operações fiscais e atualize os códigos CST/CFOP."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'certificado digital expirado'?\n<Resposta>: Renove o certificado A1 e atualize as configurações no módulo DF-e."
+    },
+    {
+        "text": "<Pergunta>: Por que a nota fiscal não aparece no contador?\n<Resposta>: Verifique se o XML foi enviado e se o contador tem acesso ao diretório de arquivos."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir erro de 'produto duplicado' no cadastro?\n<Resposta>: Consolide os cadastros duplicados usando a ferramenta de unificação de produtos."
+    },
+    {
+        "text": "<Pergunta>: Como habilitar a impressão de observações na NFC-e?\n<Resposta>: Ative a opção 'Exibir Observações' nas configurações da operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de comunicação com a Sefaz'?\n<Resposta>: Verifique a conexão com a internet e o certificado digital."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo código municipal de serviço?\n<Resposta>: Acesse Cadastros > Tributação e adicione o código conforme orientação do contador."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'valor total divergente' na NF-e?\n<Resposta>: Recalcule os impostos e valide os valores dos itens manualmente."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite alterar a forma de pagamento após finalizar a OS?\n<Resposta>: Crie uma nova OS ou ajuste via banco de dados (necessário acesso técnico)."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de caractere inválido' na descrição do produto?\n<Resposta>: Remova símbolos especiais (ex: @, #) e use apenas caracteres alfanuméricos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar o backup automático do banco de dados?\n<Resposta>: Use o agendador de tarefas do Windows para executar backups diários."
+    },
+    {
+        "text": "<Pergunta>: Por que o SPED não inclui todas as notas fiscais?\n<Resposta>: Verifique se as notas estão autorizadas e com datas dentro do período do SPED."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'falha na assinatura digital'?\n<Resposta>: Reinstale o certificado e verifique a senha no módulo DF-e."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo modelo de impressora não fiscal?\n<Resposta>: Adicione o modelo manualmente em Configurações > Impressoras."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer a TEF após atualização?\n<Resposta>: Reinstale os drivers da maquininha e reinicie o serviço fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de timeout na transmissão da NF-e'?\n<Resposta>: Aumente o tempo de espera nas configurações de comunicação da Sefaz."
+    },
+    {
+        "text": "<Pergunta>: Por que o relatório de vendas não mostra dados históricos?\n<Resposta>: Verifique o filtro de datas e gere o relatório novamente."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'permissão negada' ao acessar o servidor?\n<Resposta>: Conceda permissões de administrador ao usuário no Firebird."
+    },
+    {
+        "text": "<Pergunta>: Como importar notas fiscais de compra via XML?\n<Resposta>: Use a opção 'Importar XML' no módulo de compras e valide os dados."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de licença inválida'?\n<Resposta>: Renove a licença ou entre em contato com o suporte técnico."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de CST não relacionado ao CFOP'?\n<Resposta>: Revise a tabela de tributação e atualize os códigos conforme orientação contábil."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não emite DANFE?\n<Resposta>: Verifique se o arquivo PDF da nota está gerado e se o caminho da impressora está correto."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo grupo de produtos?\n<Resposta>: Acesse Cadastros > Produtos > Grupos e preencha os campos necessários."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o cliente não aparecer na busca do PDV?\n<Resposta>: Verifique se o cliente está cadastrado na empresa correta."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'estoque negativo não permitido'?\n<Resposta>: Desative a restrição em Configurações > Estoque > Permitir Saldo Negativo."
+    },
+    {
+        "text": "<Pergunta>: Por que a NFC-e não imprime o QR Code?\n<Resposta>: Atualize o driver da impressora e verifique a conexão USB."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de duplicidade de NCM'?\n<Resposta>: Padronize os NCMs no cadastro de produtos e remova duplicidades."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a taxa de juros do cartão de crédito?\n<Resposta>: Acesse Financeiro > Taxas e defina a porcentagem na forma de pagamento."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar XML para o contador?\n<Resposta>: Verifique as configurações de e-mail no módulo fiscal e teste o envio manual."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'CNPJ da matriz não encontrado'?\n<Resposta>: Atualize o cadastro da matriz no módulo de empresas."
+    },
+    {
+        "text": "<Pergunta>: Por que a nota de devolução não gera crédito para o cliente?\n<Resposta>: Configure a operação fiscal para gerar crédito automático."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo código de barras para produtos?\n<Resposta>: Adicione o código no cadastro do produto (Campo 'Código de Barras')."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema travar ao emitir relatórios?\n<Resposta>: Reduza o intervalo de datas do relatório ou aumente a memória alocada."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de alíquota não configurada'?\n<Resposta>: Cadastre a alíquota do ICMS para a operação fiscal em questão."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o PIS/COFINS corretamente?\n<Resposta>: Verifique as regras tributárias no cadastro da operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'data de vencimento inválida' em boletos?\n<Resposta>: Corrija a data no cadastro da fatura e reimprima o boleto."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo plano de contas?\n<Resposta>: Use o módulo contábil e siga as orientações do contador."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer o leitor de código de barras?\n<Resposta>: Configure o leitor como emulador de teclado nas opções do PDV."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de conexão com o banco de dados'?\n<Resposta>: Reinicie o serviço do Firebird e verifique as credenciais de acesso."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'XML malformado' na NF-e?\n<Resposta>: Valide o XML com o Validador da Sefaz e corrija os campos inválidos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite alterar a data de emissão de uma nota cancelada?\n<Resposta>: Notas canceladas são bloqueadas para edição. Crie uma nova nota com os dados corretos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de etiquetas de produtos?\n<Resposta>: Acesse o módulo de produção e vincule o modelo de etiqueta à impressora térmica."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o código de barras de um produto?\n<Resposta>: Verifique se o código está cadastrado corretamente no cadastro do produto."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de alíquota zerada' no cálculo do ICMS?\n<Resposta>: Atualize a alíquota na operação fiscal correspondente."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema exibe 'erro de conexão com o banco de dados' após atualização?\n<Resposta>: Atualize o driver do Firebird e reinicie o serviço do servidor."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo tipo de serviço para NFS-e?\n<Resposta>: Adicione o serviço em Cadastros > Tributação > Códigos Municipais."
+    },
+    {
+        "text": "<Pergunta>: Como resolver erro de 'CNPJ da matriz não autorizado'?\n<Resposta>: Use o certificado digital da matriz para emitir a nota."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se a nota fiscal não aparecer no relatório de vendas?\n<Resposta>: Verifique o filtro de datas e gere o relatório novamente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de duplicidade de NFC-e'?\n<Resposta>: Acesse o banco de dados e remova a NFC-e duplicada."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não gera o arquivo do SPED?\n<Resposta>: Verifique se todas as notas do período estão autorizadas e sem erros."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a sincronização automática com o contador?\n<Resposta>: Ative a opção 'Envio Automático de XML' nas configurações fiscais."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer o certificado A3?\n<Resposta>: Instale o driver do token e reinicie o navegador."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de validação do schema XML'?\n<Resposta>: Atualize o sistema para a versão mais recente e reassine a nota."
+    },
+    {
+        "text": "<Pergunta>: Por que o relatório de comissões não inclui vendas recentes?\n<Resposta>: Verifique se as vendas estão finalizadas e com status 'Faturado'."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo modelo de contrato de serviço?\n<Resposta>: Use o editor de modelos em Configurações > Documentos."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de permissão ao salvar arquivo'?\n<Resposta>: Conceda permissão de escrita ao diretório do sistema."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de serviço inválido' na NFS-e?\n<Resposta>: Atualize a lista de códigos municipais no sistema."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite excluir um cliente vinculado a uma venda?\n<Resposta>: Inative o cliente ou remova o vínculo manualmente no banco de dados."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de timeout na transmissão da NFS-e'?\n<Resposta>: Aumente o tempo de espera nas configurações de comunicação."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não emite DANFE em lote?\n<Resposta>: Use a opção 'Emissão em Lote' no módulo fiscal e selecione as notas."
+    },
+    {
+        "text": "<Pergunta>: Como configurar múltiplas empresas no mesmo banco de dados?\n<Resposta>: Crie empresas filiais em Configurações > Empresas."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer a impressora não fiscal?\n<Resposta>: Instale o driver genérico TEXT/PDF e configure no sistema."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de CPF inválido' no cadastro de cliente?\n<Resposta>: Valide o CPF no site da Receita Federal e atualize o cadastro."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo do estoque após uma devolução?\n<Resposta>: Verifique se a operação de devolução está configurada para movimentar estoque."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de certificado revogado'?\n<Resposta>: Renove o certificado digital e atualize as configurações no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se a nota fiscal não aparecer no e-mail do cliente?\n<Resposta>: Verifique as configurações de SMTP e o limite de anexos do e-mail."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo tipo de frete?\n<Resposta>: Adicione o frete em Cadastros > Transportadoras > Tipos de Frete."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS-ST corretamente?\n<Resposta>: Revise as tabelas de ICMS-ST e atualize os valores manuais."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de data de emissão futura'?\n<Resposta>: Ajuste a data do sistema operacional e reassine a nota."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o leitor de cartão?\n<Resposta>: Reinicie o serviço da TEF e reinstale os drivers."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de conexão SSL com a Sefaz'?\n<Resposta>: Atualize os certificados SSL/TLS do sistema operacional."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite alterar o CFOP após emitir a nota?\n<Resposta>: Cancele a nota e crie uma nova com o CFOP correto."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de boletos?\n<Resposta>: Ative a opção 'Gerar Boleto ao Finalizar Venda' no módulo financeiro."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de licença expirada'?\n<Resposta>: Renove a licença ou entre em contato com o suporte."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de NCM divergente' na NF-e?\n<Resposta>: Atualize o NCM no cadastro do produto e reassine a nota."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não importa notas de compra do XML?\n<Resposta>: Verifique se o XML está assinado e no formato correto."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de estoque negativo após venda'?\n<Resposta>: Ajuste o estoque manualmente ou revise as operações pendentes."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município inválido'?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não envia o XML para o contador automaticamente?\n<Resposta>: Verifique a configuração do diretório de envio no módulo fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo tipo de documento fiscal?\n<Resposta>: Adicione o documento em Configurações > Tributação > Documentos Fiscais."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer a assinatura digital?\n<Resposta>: Reinstale o certificado e verifique a senha no módulo DF-e."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de CST não relacionado ao CFOP'?\n<Resposta>: Atualize a tabela de relacionamento CST/CFOP no cadastro tributário."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de NFS-e?\n<Resposta>: Verifique se o município está homologado para NFS-e no sistema."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de recibos não fiscais?\n<Resposta>: Use a opção 'Impressão Direta' no módulo financeiro."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de chave de acesso duplicada'?\n<Resposta>: Cancele a nota duplicada e gere uma nova chave."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de valor total da nota divergente'?\n<Resposta>: Recalcule os impostos e verifique os valores dos itens."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo do caixa automaticamente?\n<Resposta>: Execute o fechamento diário do caixa para atualizar os saldos."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço inexistente' na NFS-e?\n<Resposta>: Cadastre o código municipal de serviço no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se a nota fiscal não aparecer no relatório do SPED?\n<Resposta>: Verifique se a nota está dentro do período e com status autorizado."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar uma nova regra de comissão para vendedores?\n<Resposta>: Defina a regra em Vendas > Comissões > Configurações."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um produto vendido?\n<Resposta>: Inative o produto ou remova o vínculo com vendas existentes."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de data de competência inválida' no SPED?\n<Resposta>: Ajuste a data de competência no cadastro da empresa."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema travar ao gerar o relatório de estoque?\n<Resposta>: Reduza o intervalo de datas ou aumente a memória alocada."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras inválido' na etiqueta?\n<Resposta>: Utilize um gerador de código de barras externo e importe a imagem."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o IPI corretamente?\n<Resposta>: Verifique a alíquota e a base de cálculo no cadastro do produto."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a sincronização com o e-commerce?\n<Resposta>: Use a API do sistema e vincule às plataformas de venda online."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de certificado digital não encontrado'?\n<Resposta>: Instale o certificado no repositório do Windows e reconfigure no sistema."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite alterar o tipo de operação após emitir a nota?\n<Resposta>: Cancele a nota e crie uma nova com a operação correta."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de recibos em duas vias?\n<Resposta>: Ative a opção 'Duplicata' nas configurações da impressora fiscal."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer o código de segurança do certificado?\n<Resposta>: Reinstale o certificado e insira a senha correta no módulo DF-e."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade inválido' na NF-e?\n<Resposta>: Atualize o CNAE da empresa no cadastro principal."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não gera o arquivo de remessa de boletos?\n<Resposta>: Verifique os dados bancários e o formato do arquivo exigido pelo banco."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de assinatura digital incompatível'?\n<Resposta>: Atualize o sistema para a versão compatível com o padrão da Sefaz."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com o TEF'?\n<Resposta>: Reinicie o serviço da TEF e verifique a conexão com a maquininha."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo tipo de desconto para promoções?\n<Resposta>: Crie uma regra de desconto em Vendas > Promoções."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para outro estado?\n<Resposta>: Configure a operação fiscal com CFOP interestadual."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de barras duplicado'?\n<Resposta>: Consolide os produtos com códigos repetidos."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não finalizar uma venda?\n<Resposta>: Verifique se todos os itens estão com preços válidos e reinicie o PDV."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação inválido' na NFC-e?\n<Resposta>: Reemita a NFC-e e valide o QR Code."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de uma forma de pagamento?\n<Resposta>: Remova o vínculo da forma de pagamento com vendas existentes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a exportação de dados para o contador?\n<Resposta>: Use a opção 'Exportar Dados Fiscais' no módulo contábil."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não calcular o frete corretamente?\n<Resposta>: Revise a tabela de fretes e os critérios de cálculo."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de serviço não cadastrado' na NFS-e?\n<Resposta>: Cadastre o código municipal de serviço em Tributação."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os preços após a importação?\n<Resposta>: Execute a rotina de atualização de preços manualmente."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de timeout na comunicação com o servidor'?\n<Resposta>: Verifique a velocidade da internet e aumente o tempo de timeout."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de produto inexistente' na NF-e?\n<Resposta>: Atualize o cadastro de produtos com os códigos corretos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas em lote?\n<Resposta>: Verifique se todas as notas estão validadas e sem erros."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de NFS-e?\n<Resposta>: Ative a opção 'Emissão Automática' no módulo de serviços."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de permissão negada' ao imprimir?\n<Resposta>: Conceda permissão de impressão ao usuário no sistema operacional."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de CST inválido' no SPED?\n<Resposta>: Atualize a tabela de CSTs conforme a legislação vigente."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não reconhece a alteração de preços em massa?\n<Resposta>: Execute a rotina de atualização de preços após a importação."
+    },
+    {
+        "text": "<Pergunta>: Como cadastrar um novo modelo de relatório personalizado?\n<Resposta>: Use o editor de relatórios em Ferramentas > Relatórios."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar SMS de cobrança?\n<Resposta>: Verifique as credenciais do serviço de SMS e a conexão com a API."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de barras inválido' na etiqueta?\n<Resposta>: Utilize um formato compatível (ex: EAN-13) e gere novamente."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um fornecedor vinculado a uma compra?\n<Resposta>: Inative o fornecedor ou remova o vínculo manualmente."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de data de emissão anterior à autorização'?\n<Resposta>: Corrija a data da nota e reassine com a data atual."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer a impressora de etiquetas?\n<Resposta>: Instale o driver Zebra ou Argox e configure no sistema."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município não encontrado'?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o desconto condicional?\n<Resposta>: Verifique as regras de desconto em Promoções > Descontos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com o sistema de folha de pagamento?\n<Resposta>: Use a API do sistema ou importe arquivos CSV."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de licença insuficiente'?\n<Resposta>: Adquira licenças adicionais ou reduza o número de acessos."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de atividade incompatível' na NFS-e?\n<Resposta>: Altere o CNAE da empresa para um compatível com o serviço."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do CFOP em uma nota de entrada?\n<Resposta>: Cancele a nota e crie uma nova com o CFOP correto."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de verificação inválido' no DANFE?\n<Resposta>: Regenere o DANFE e valide o código de barras."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto duplicado' na importação?\n<Resposta>: Remova os produtos duplicados ou atualize os códigos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente isento?\n<Resposta>: Cadastre o cliente como 'Isento' no campo de inscrição estadual."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de observações personalizadas na NFC-e?\n<Resposta>: Adicione as observações no campo 'Informações Adicionais' da nota."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de código de serviço não vinculado'?\n<Resposta>: Associe o código de serviço à operação fiscal correspondente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de base de cálculo do ICMS inválida'?\n<Resposta>: Verifique os valores dos produtos e recalcule a base de cálculo."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não gera o arquivo de remessa do banco?\n<Resposta>: Verifique o layout exigido pelo banco e ajuste as configurações."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de certificado digital não compatível'?\n<Resposta>: Utilize um certificado A1 ou A3 válido para emissão fiscal."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não atualizar o saldo do caixa após recebimento?\n<Resposta>: Execute o fechamento parcial do caixa para atualizar os valores."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município divergente' na NF-e?\n<Resposta>: Atualize o código do município no cadastro do cliente."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um plano de contas?\n<Resposta>: Remova o vínculo do plano com lançamentos contábeis existentes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a sincronização com o app móvel?\n<Resposta>: Ative a opção de sincronização em Configurações > Integrações."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de arquivo inválido'?\n<Resposta>: Converta o arquivo para o formato suportado (ex: CSV, XML)."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras não reconhecido' no PDV?\n<Resposta>: Configure o leitor para o padrão EAN-13 ou CODE-128."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o PIS/COFINS retido?\n<Resposta>: Atualize as regras tributárias na operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de verificação do QR Code inválido'?\n<Resposta>: Reemita a NFC-e e gere um novo QR Code."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não permitir a alteração do vendedor em uma OS?\n<Resposta>: Cancele a OS e crie uma nova com o vendedor correto."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de atividade incompatível com o serviço'?\n<Resposta>: Altere o CNAE da empresa ou o código de serviço."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não importa clientes do arquivo CSV?\n<Resposta>: Valide o formato do CSV e os campos obrigatórios."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de data de vencimento anterior à emissão'?\n<Resposta>: Ajuste a data de vencimento para um período válido."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto inexistente' na importação de XML?\n<Resposta>: Cadastre o produto no sistema antes de importar a nota fiscal."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo do cliente após pagamento?\n<Resposta>: Execute a conciliação bancária para atualizar os saldos automaticamente."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão automática de DANFE?\n<Resposta>: Ative a opção 'Gerar DANFE ao Autorizar' no módulo fiscal."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com a base de dados'?\n<Resposta>: Reinicie o serviço do Firebird e verifique as credenciais de acesso."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de CST não relacionado ao CFOP' no SPED?\n<Resposta>: Atualize a tabela de relacionamento tributário no cadastro fiscal."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente inativo?\n<Resposta>: Reative o cliente ou cadastre um novo no módulo de cadastros."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço duplicado' na NFS-e?\n<Resposta>: Remova o código duplicado ou atualize a lista de serviços municipais."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se a nota fiscal não aparecer no relatório de vendas mensal?\n<Resposta>: Verifique os filtros de data e empresa antes de gerar o relatório."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de alíquota não configurada para o estado'?\n<Resposta>: Cadastre a alíquota interestadual no cadastro tributário."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS-ST em vendas interestaduais?\n<Resposta>: Configure a operação fiscal para calcular ICMS-ST conforme a UF de destino."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de etiquetas com código de barras personalizado?\n<Resposta>: Use o editor de etiquetas e vincule ao cadastro do produto."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o preço promocional?\n<Resposta>: Atualize as regras de promoção e reinicie o módulo de vendas."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de chave de acesso já utilizada'?\n<Resposta>: Gere uma nova chave de acesso e cancele a nota duplicada."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de uma forma de pagamento vinculada a vendas?\n<Resposta>: Inative a forma de pagamento ou remova os vínculos manuais."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município inválido' na NFS-e?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de certificado digital bloqueado'?\n<Resposta>: Desbloqueie o certificado no site da autoridade certificadora."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a sincronização automática de estoque com o e-commerce?\n<Resposta>: Use a API do sistema para integrar os níveis de estoque em tempo real."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o IPI na nota fiscal de importação?\n<Resposta>: Verifique se a operação fiscal está configurada para calcular IPI."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de data de emissão inconsistente'?\n<Resposta>: Corrija a data do sistema operacional e reassine a nota."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de barras inválido' na etiqueta de produto?\n<Resposta>: Utilize um gerador de código de barras válido e reimporte a imagem."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente sem CPF?\n<Resposta>: Configure a operação para aceitar 'Consumidor Final' sem CPF."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de relatórios de comissões?\n<Resposta>: Agende a geração no módulo de relatórios > Comissões."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não reconhecer a impressora fiscal após atualização?\n<Resposta>: Reinstale o driver da impressora e reinicie o serviço fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de atividade incompatível' na NFS-e?\n<Resposta>: Altere o CNAE da empresa para um compatível com o serviço."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do valor total da nota após emissão?\n<Resposta>: Cancele a nota e emita uma nova com os valores corrigidos."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de base de cálculo do PIS/COFINS inválida'?\n<Resposta>: Verifique os valores dos produtos e recalcule os impostos."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de licença expirada para módulo fiscal'?\n<Resposta>: Renove a licença específica do módulo fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de recibos em impressoras não fiscais?\n<Resposta>: Use o driver genérico TEXT/PDF e ajuste o layout."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo de caixa após recebimentos?\n<Resposta>: Execute o fechamento parcial do caixa para atualizar os saldos."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do DANFE inválido'?\n<Resposta>: Regenere o DANFE e valide o código de barras."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não finalizar vendas com pagamento misto?\n<Resposta>: Atualize o sistema para a versão que suporta pagamentos múltiplos."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município divergente' na NFC-e?\n<Resposta>: Atualize o código do município no cadastro da empresa."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um cadastro de fornecedor?\n<Resposta>: Remova o vínculo do fornecedor com notas de entrada existentes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de logística?\n<Resposta>: Utilize a API ou importe/exporte arquivos CSV para sincronizar dados."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de timeout na consulta de estoque'?\n<Resposta>: Otimize a conexão com o banco de dados ou aumente o timeout."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não vinculado à prefeitura'?\n<Resposta>: Homologue o serviço com a prefeitura antes de emitir NFS-e."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o frete baseado no peso dos produtos?\n<Resposta>: Configure a tabela de fretes para considerar o peso total."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de verificação do XML inválido'?\n<Resposta>: Valide o XML com o Validador da Sefaz e corrija os campos."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não encontrado' no PDV?\n<Resposta>: Cadastre o produto no sistema ou atualize a base de dados."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas em contingência?\n<Resposta>: Ative o modo de contingência no módulo fiscal e configure o DANFE offline."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a impressão de recibos com logotipo personalizado?\n<Resposta>: Importe a imagem do logotipo nas configurações da impressora fiscal."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de certificado digital não confiável'?\n<Resposta>: Instale a cadeia de certificados da autoridade certificadora."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade incompatível com o serviço'?\n<Resposta>: Atualize o CNAE da empresa para um compatível com o serviço."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do CFOP após cancelamento?\n<Resposta>: Notas canceladas não podem ser editadas. Emita uma nova nota."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras não reconhecido na NFC-e'?\n<Resposta>: Reemita a NFC-e e gere um novo QR Code válido."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não atualizar os saldos após devolução?\n<Resposta>: Verifique se a operação de devolução está configurada para movimentar estoque."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de boletos para clientes recorrentes?\n<Resposta>: Use a opção 'Gerar Boletos Automáticos' no módulo financeiro."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um plano de contas vinculado a lançamentos?\n<Resposta>: Inative o plano ou ajuste os lançamentos existentes."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município não encontrado' na NF-e?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV travar ao processar pagamento com cartão?\n<Resposta>: Reinicie o serviço da TEF e verifique a conexão com a maquininha."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço duplicado' na prefeitura?\n<Resposta>: Remova o código duplicado ou atualize a lista de serviços homologados."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o desconto em vendas com múltiplos itens?\n<Resposta>: Configure o desconto para aplicar sobre o total da venda."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a exportação de relatórios para Excel?\n<Resposta>: Use a opção 'Exportar para Excel' no módulo de relatórios."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de arquivo inválido' na importação?\n<Resposta>: Converta o arquivo para o formato CSV ou XML exigido."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de verificação do SPED inválido'?\n<Resposta>: Valide o SPED com o validador oficial e corrija os campos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente bloqueado?\n<Resposta>: Desbloqueie o cliente no cadastro ou ajuste as restrições."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de atividade não relacionada à NFS-e'?\n<Resposta>: Atualize o CNAE da empresa para incluir o serviço prestado."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de produto inexistente' na NFC-e?\n<Resposta>: Cadastre o produto no sistema antes de emitir a nota."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo do caixa após cancelamento de venda?\n<Resposta>: Execute o estorno manual ou ajuste via conciliação bancária."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para entrega futura?\n<Resposta>: Use a operação fiscal específica para vendas com entrega agendada."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com o servidor de banco de dados'?\n<Resposta>: Verifique o firewall e reinicie o serviço do Firebird."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de CST não relacionado à operação'?\n<Resposta>: Atualize o CST na operação fiscal conforme a legislação."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do vendedor em vendas finalizadas?\n<Resposta>: Cancele a venda e crie uma nova com o vendedor correto."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de barras inválido' na etiqueta de produto?\n<Resposta>: Utilize um padrão válido (ex: EAN-13) e gere novamente."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar e-mail de confirmação de venda?\n<Resposta>: Verifique as configurações de SMTP e teste o envio manual."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de ordens de serviço?\n<Resposta>: Ative a opção 'Criar OS Automática' no módulo de vendas."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS para operações interestaduais?\n<Resposta>: Configure a alíquota interestadual no cadastro tributário."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não homologado'?\n<Resposta>: Homologue o serviço com a prefeitura antes de emitir NFS-e."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não imprimir o cupom fiscal após venda?\n<Resposta>: Verifique a conexão da impressora e reinicie o serviço fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município divergente' no cadastro?\n<Resposta>: Atualize o código do município conforme a tabela do IBGE."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um grupo de produtos?\n<Resposta>: Remova os produtos do grupo antes de excluí-lo."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de BI (Business Intelligence)?\n<Resposta>: Exporte os dados em CSV ou use conectores via API."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de data inválido'?\n<Resposta>: Corrija o formato da data para DD/MM/AAAA."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do XML da NF-e'?\n<Resposta>: Valide o XML com o Validador da Sefaz e corrija os campos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas em lote para clientes diferentes?\n<Resposta>: Emita notas individualmente ou use empresas diferentes."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade incompatível com o município'?\n<Resposta>: Atualize o CNAE ou cadastre um código de serviço válido."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não cadastrado' na importação?\n<Resposta>: Importe primeiro o cadastro de produtos antes das notas fiscais."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza o saldo de estoque após inventário?\n<Resposta>: Execute a rotina de atualização de estoque após o inventário."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para bonificação?\n<Resposta>: Use a operação fiscal específica para bonificação (CFOP 5915)."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com a impressora fiscal'?\n<Resposta>: Verifique a porta USB/Serial e reinstale os drivers."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de CST inválido para o CFOP'?\n<Resposta>: Atualize o CST conforme a relação permitida para o CFOP."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração da data de emissão de uma OS?\n<Resposta>: Cancele a OS e crie uma nova com a data correta."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras duplicado' no cadastro de produtos?\n<Resposta>: Consolide os produtos ou atualize os códigos de barras."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar SMS de confirmação de pagamento?\n<Resposta>: Verifique as configurações do gateway SMS e a conexão com a API."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de ordens de compra?\n<Resposta>: Use a opção 'Gerar OC Automaticamente' no módulo de compras."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o IPI em notas de importação?\n<Resposta>: Configure a operação fiscal para incluir cálculo de IPI."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município não encontrado' na NFS-e?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV travar ao aplicar desconto em porcentagem?\n<Resposta>: Atualize o sistema para a versão com correção de bugs."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não vinculado à empresa'?\n<Resposta>: Associe o código de serviço à empresa emissora da NFS-e."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um modelo de relatório?\n<Resposta>: Remova o vínculo do modelo com usuários ou processos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de CRM?\n<Resposta>: Use a API do sistema para sincronizar clientes e vendas."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de número inválido'?\n<Resposta>: Corrija os campos numéricos para usar apenas dígitos."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do DANFE inválido'?\n<Resposta>: Regenere o DANFE e valide o código de barras."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente com restrição?\n<Resposta>: Remova a restrição no cadastro do cliente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade não relacionada à operação'?\n<Resposta>: Atualize o CNAE ou cadastre uma nova operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não encontrado' no SPED?\n<Resposta>: Cadastre o produto com código válido antes de gerar o SPED."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os saldos após conciliação bancária?\n<Resposta>: Execute novamente a conciliação e valide os lançamentos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para remessa?\n<Resposta>: Use a operação fiscal específica para remessa (CFOP 5901)."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de certificado digital não encontrado'?\n<Resposta>: Instale o certificado no repositório do sistema operacional."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de CST inválido para o estado'?\n<Resposta>: Atualize o CST conforme a legislação tributária local."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do valor do frete após emissão?\n<Resposta>: Cancele a nota e emita uma nova com o frete corrigido."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras não reconhecido no PDV'?\n<Resposta>: Configure o leitor para o padrão EAN-13 ou CODE-128."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar notificações de contas a vencer?\n<Resposta>: Ative as notificações em Configurações > Financeiro."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de pedidos de compra?\n<Resposta>: Use a opção 'Gerar Pedido Automaticamente' no módulo de estoque."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS em operações de simples remessa?\n<Resposta>: Configure a operação fiscal para isentar ICMS quando aplicável."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município inválido' na NFC-e?\n<Resposta>: Atualize o código do município no cadastro da empresa."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o pagamento em dinheiro?\n<Resposta>: Reinicie o PDV e verifique as configurações de formas de pagamento."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não autorizado'?\n<Resposta>: Solicite a autorização do serviço na prefeitura local."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um tipo de frete?\n<Resposta>: Remova o vínculo do frete com notas fiscais existentes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de gestão de estoque?\n<Resposta>: Use a API ou exporte/importe arquivos CSV para sincronização."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de hora inválido'?\n<Resposta>: Corrija o formato da hora para HH:MM:SS."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do XML da NFS-e'?\n<Resposta>: Valide o XML com o validador da prefeitura e reassine."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente com débito?\n<Resposta>: Ajuste o limite de crédito do cliente ou conceda exceção."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade não relacionada ao serviço'?\n<Resposta>: Atualize o CNAE para incluir o serviço prestado."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não encontrado' no inventário?\n<Resposta>: Cadastre o produto antes de realizar o inventário."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os saldos após ajuste de estoque?\n<Resposta>: Execute a rotina de atualização de estoque manualmente."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para consignação?\n<Resposta>: Use a operação fiscal específica para consignação (CFOP 5914)."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com a Sefaz'?\n<Resposta>: Verifique a internet e o certificado digital."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de CST não permitido para o CFOP'?\n<Resposta>: Atualize o CST conforme a tabela de relacionamento tributário."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração da forma de pagamento após faturamento?\n<Resposta>: Cancele a venda e crie uma nova com a forma correta."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras inválido' na etiqueta de preço?\n<Resposta>: Gere um novo código de barras válido e reimprima."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar relatórios por e-mail?\n<Resposta>: Verifique as configurações de SMTP e o tamanho do anexo."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de contratos de serviço?\n<Resposta>: Use modelos pré-definidos no módulo de serviços."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS-ST em vendas para consumidor final?\n<Resposta>: Configure a operação fiscal para calcular ICMS-ST quando aplicável."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município divergente' na NFS-e?\n<Resposta>: Atualize o código do município no cadastro da empresa."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o desconto em porcentagem?\n<Resposta>: Atualize o sistema para a versão com correção de bugs."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não homologado'?\n<Resposta>: Homologue o serviço com a prefeitura antes de emitir NFS-e."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um tipo de desconto?\n<Resposta>: Remova o vínculo do desconto com promoções ativas."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de cobrança recorrente?\n<Resposta>: Use a API para sincronizar assinaturas e pagamentos."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de valor monetário'?\n<Resposta>: Corrija os campos para usar apenas números e vírgulas."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do XML da NFC-e'?\n<Resposta>: Valide o XML com o validador da Sefaz e reassine."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente com restrição fiscal?\n<Resposta>: Remova a restrição ou solicite autorização da Sefaz."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade não relacionada à operação'?\n<Resposta>: Atualize o CNAE ou cadastre uma nova operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não cadastrado' no PDV?\n<Resposta>: Cadastre o produto ou atualize a base de dados antes de vender."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os saldos após devolução parcial?\n<Resposta>: Execute a conciliação manual ou ajuste via banco de dados."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para exportação?\n<Resposta>: Use a operação fiscal específica para exportação (CFOP 7901)."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de certificado digital expirado'?\n<Resposta>: Renove o certificado e atualize as configurações no sistema."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de CST não permitido para o estado'?\n<Resposta>: Atualize o CST conforme a legislação tributária local."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração da quantidade em notas canceladas?\n<Resposta>: Notas canceladas não podem ser editadas. Emita uma nova nota."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras duplicado' no cadastro?\n<Resposta>: Consolide os produtos ou atualize os códigos de barras."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar alertas de estoque mínimo?\n<Resposta>: Ative os alertas em Configurações > Estoque > Notificações."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de contratos de prestação de serviço?\n<Resposta>: Use modelos personalizados no módulo de serviços."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS em operações de bonificação?\n<Resposta>: Configure a operação para isentar ICMS quando aplicável."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município inválido' na NFS-e?\n<Resposta>: Atualize a tabela de municípios do IBGE no sistema."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o pagamento via PIX?\n<Resposta>: Atualize o sistema para a versão compatível com PIX."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não vinculado à empresa'?\n<Resposta>: Associe o código de serviço à empresa emissora da NFS-e."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um modelo de contrato?\n<Resposta>: Remova o vínculo do modelo com contratos ativos."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de atendimento ao cliente?\n<Resposta>: Use a API para sincronizar tickets e interações."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de número de telefone'?\n<Resposta>: Corrija o formato para (DDD) XXXX-XXXX."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do XML da NFS-e'?\n<Resposta>: Valide o XML com o validador da prefeitura e reassine."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente com restrição comercial?\n<Resposta>: Remova a restrição no cadastro do cliente."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade não relacionada ao serviço'?\n<Resposta>: Atualize o CNAE para incluir o serviço prestado."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não encontrado' na exportação?\n<Resposta>: Cadastre o produto antes de exportar os dados."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os saldos após ajuste manual?\n<Resposta>: Execute a rotina de atualização de estoque manualmente."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a emissão de notas fiscais para doação?\n<Resposta>: Use a operação fiscal específica para doação (CFOP 5913)."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de conexão com o servidor de e-mail'?\n<Resposta>: Verifique as configurações de SMTP e a porta de comunicação."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de CST não permitido para o serviço'?\n<Resposta>: Atualize o CST conforme a legislação tributária aplicável."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a alteração do vendedor em OS finalizadas?\n<Resposta>: Cancele a OS e crie uma nova com o vendedor correto."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de barras inválido' na etiqueta de promoção?\n<Resposta>: Gere um novo código de barras válido e reimprima."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema não enviar lembretes de pagamento?\n<Resposta>: Ative as notificações em Configurações > Financeiro > Lembretes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a geração automática de relatórios de desempenho?\n<Resposta>: Agende a geração no módulo de relatórios > Desempenho."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não calcula o ICMS em operações de devolução?\n<Resposta>: Configure a operação de devolução para recalcular impostos."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de município divergente' na NFC-e?\n<Resposta>: Atualize o código do município no cadastro da empresa."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o PDV não reconhecer o pagamento com vale-presente?\n<Resposta>: Cadastre o vale-presente como forma de pagamento."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de serviço não autorizado pela prefeitura'?\n<Resposta>: Homologue o serviço antes de emitir NFS-e."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a exclusão de um tipo de frete vinculado a notas?\n<Resposta>: Remova o vínculo com notas fiscais existentes."
+    },
+    {
+        "text": "<Pergunta>: Como configurar a integração com sistemas de análise de dados?\n<Resposta>: Exporte os dados em CSV ou conecte via API."
+    },
+    {
+        "text": "<Pergunta>: O que fazer se o sistema exibir 'erro de formato de CNPJ inválido'?\n<Resposta>: Corrija o CNPJ para o formato 00.000.000/0000-00."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de verificação do XML da CTe'?\n<Resposta>: Valide o XML com o Validador da Sefaz e corrija os campos."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não permite a emissão de notas para cliente com limite excedido?\n<Resposta>: Aumente o limite de crédito ou conceda exceção."
+    },
+    {
+        "text": "<Pergunta>: Como corrigir 'erro de código de atividade não relacionada à operação'?\n<Resposta>: Atualize o CNAE ou cadastre uma nova operação fiscal."
+    },
+    {
+        "text": "<Pergunta>: Como resolver 'erro de código de produto não cadastrado' no SPED?\n<Resposta>: Cadastre o produto com código válido antes de gerar o arquivo."
+    },
+    {
+        "text": "<Pergunta>: Por que o sistema não atualiza os saldos após conciliação automática?\n<Resposta>: Verifique as regras de conciliação e execute novamente."
+    }
+]

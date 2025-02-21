@@ -2,8 +2,8 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #1e1e1e;
-  color: white;
+  background-color: var(--background-color);
+  color:var(--text-color);
   display: flex;
   height: 100vh;
 }
@@ -16,7 +16,7 @@ body {
 
 .sidebar {
   width: 250px;
-  background-color: #2c2c2c;
+  background-color: var(--siderbar-bg);
   padding: 15px;
   display: flex;
   flex-direction: column;
@@ -39,28 +39,28 @@ body {
 }
 
 .sidebar ul::-webkit-scrollbar-track {
-  background: #2c2c2c; 
+  background: var(--scrollbar-track); 
   border-radius: 10px;
 }
 
 .sidebar ul::-webkit-scrollbar-thumb {
-  background: #444; 
+  background: var(--scrollbar-thumb); 
   border-radius: 10px;
 }
 
 .sidebar ul::-webkit-scrollbar-thumb:hover {
-  background: #666; 
+  background: var(--scrollbar-thumb-hover); 
 }
 
 .sidebar ul {
   scrollbar-width: thin; 
-  scrollbar-color: #444 #2c2c2c;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 .sidebar li {
   position: relative;
   padding: 10px;
-  border: 1px solid #000000;
+  border: 1px solid var(--sidebar-li-border);
   cursor: pointer;
   margin-top: 5px;
   border-radius: 50px;
@@ -76,7 +76,7 @@ body {
 }
 
 .messages {
-  background-color: #525151;
+  background-color: var(--messages-bg);
   border-radius: 10px;
   flex: 1;
   overflow-y: auto;
@@ -91,25 +91,26 @@ body {
   padding: 10px;
   border-radius: 5px;
   max-width: 70%;
-}
-
+}  
 .message.bot {
-  background-color: #1b1b1b;
-  align-self: flex-start; /* Mensagem do bot à esquerda */
+  background-color: var(--bot-bg);
+  align-self: flex-start; 
 }
-
+.controle button{
+  background-color: aqua;
+  color: #4CAF50;
+}
 .message.user {
-  background-color: #333333;
-  color: white;
+  background-color: var(--user-bg);
   align-self: flex-end; /* Mensagem do usuário à direita */
 }
 .messages::-webkit-scrollbar {
-  width: 8px; /* Largura da barra de scroll */
+  width: 8px;
 }
 .input-area {
   position: relative; /* Necessário para que o z-index seja aplicado */
   display: flex;
-  border-top: 1px solid #444;
+  border-top: 1px solid var(--scrollbar-thumb);
   padding: 10px;
   z-index: 10000;
 }
@@ -124,9 +125,9 @@ body {
   position: relative; /* Garante que o z-index seja considerado */
   z-index: 10000;
   padding: 10px;
-  background-color: #2c2c2c;
+  background-color: var(--scrollbar-track);
   border: none;
-  color: white;
+  color: var(--text-color);
 }
 
 
@@ -154,9 +155,9 @@ body {
   z-index: 10000;
   padding: 10px;
   height: 10px;
-  background-color: #2c2c2c;
+  background-color: var(--scrollbar-track);
   border: 2px black;
-  color: white;
+  color: var(--text-color);
   border-radius: 12px;
 }
 .chat-title select{
@@ -165,9 +166,9 @@ body {
   z-index: 10000;
   padding: 10px;
   height: 35px;
-  background-color: #2c2c2c;
+  background-color: var(--scrollbar-track);
   border: 2px black;
-  color: white;
+  color: var(--text-color);
   border-radius: 12px;
 }
 .novo-chat-btn {
@@ -184,9 +185,8 @@ body {
   height: 24px;
   fill: currentColor;
 }
-
-  .tooltip {
-  position: absolute;
+.tooltip {
+position: absolute;
   bottom: -50%; 
   left: 50%;
   transform: translateX(-50%);
@@ -201,6 +201,7 @@ body {
   transition: opacity 0.3s ease;
   pointer-events: none;
   z-index: 9999;
+
 }
 .novo-chat-btn:hover .tooltip {
   opacity: 1;
@@ -212,8 +213,8 @@ body {
   align-items: center;
   justify-content: center;
   padding: 10px 12px;
-  background-color: #252525;
-  border: 2px solid black;
+  background-color: var(--botao-copia-bg);
+  border: 2px solid var(--botao-copia-bg);
   float: right;
   color: white;
   border-radius: 12px;
@@ -330,7 +331,7 @@ body {
   display: flex;
   height: 38px;
   flex-direction: row;
-  background-color: rgb(56, 56, 56);
+  background-color: var(--opcoes-bg);
   border: 1px solid black;
   border-radius: 15px;
   margin-top: auto;
@@ -345,7 +346,6 @@ body {
 
 .opcoes img {
   max-height: 28px;
-  filter: invert();
   display: block;
   height: auto;
   width: auto;
@@ -360,12 +360,15 @@ body {
   visibility: visible;
 }
 .data_hora{
-  color: #789ad84a;
+  color: var(--data-hora-color);
   position: relative;
   font-size: 12px;
   float: left;
   margin-top: 50px;
   transition: 50%;
+}
+.data_hora:hover .data_hora{
+  background-color: #0d0d0d;
 }
 .data_hora:hover .tooltip{
   bottom: -25px;
