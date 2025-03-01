@@ -4,7 +4,7 @@ import urllib.parse
 from PIL import Image
 import io
 cont=0
-server_address = "7056-168-90-211-194.ngrok-free.app"
+server_address = "b51f-168-228-92-133.ngrok-free.app"
 output_images = {}
 def get_image(filename, subfolder, folder_type):
     data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
