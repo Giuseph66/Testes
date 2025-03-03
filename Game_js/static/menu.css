@@ -1,0 +1,117 @@
+/* Estilo global */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #111;
+  color: #eee;
+  overflow: hidden;
+}
+
+/* Tela de Menu */
+#menuOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Fundo dark com um toque de vermelho profundo */
+  background: linear-gradient(135deg, #000 0%, #330000 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#menuOverlay h1 {
+  font-family: 'Bangers', cursive;
+  font-size: 64px;
+  color: #e63946;  /* vermelho vibrante */
+  margin: 0;
+  text-shadow: 2px 2px 4px #000;
+}
+
+#menuOverlay .subtitle {
+  font-size: 20px;
+  margin-top: 10px;
+  margin-bottom: 30px;
+  color: #f1faee;
+}
+
+#menuOverlay p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+#menuOverlay form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+#menuOverlay form input, 
+#menuOverlay form button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+}
+
+#menuOverlay form input {
+  background: #222;
+  color: #eee;
+  width: 200px;
+}
+
+#menuOverlay form button {
+  background: #e63946;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#menuOverlay form button:hover {
+  background: #d62828;
+}
+
+#menuOverlay button#startButton {
+  margin-top: 30px;
+  padding: 15px 30px;
+  background: #e63946;
+  color: #fff;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#menuOverlay button#startButton:hover {
+  background: #d62828;
+}
+
+/* Estilos para o canvas e UI do jogo (para páginas de jogo) */
+canvas {
+  background: #333;
+  display: block;
+  margin: 0 auto;
+  border: 2px solid #555;
+}
+
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+}
+
+#ui > div {
+  margin-bottom: 5px;
+}

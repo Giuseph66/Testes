@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>HARRYM - A Jornada do Templo (Endless)</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div id="ui">
+        <div id="coinUI">Moedas: <span id="coinCount"></span></div>
+        <div id="runeUI">Runas: <span id="runeCount"></span></div>
+        <div id="escudoUI">Escudo: <span id="escudoTimer"></span></div>
+        <div id="impulsoUI">Impulso: <span id="impulsoTimer"></span></div>
+        <div id="velocidadeUI">Velocidade: <span id="velocidadeTimer"></span></div>
+        <div id="invisibilidadeUI">Invisibilidade: <span id="invisibilidadeTimer"></span></div>
+        <div id="magnetismoUI">Magnetismo: <span id="magnetismoTimer"></span></div>
+      </div>
+      
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
