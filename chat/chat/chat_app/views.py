@@ -7,6 +7,7 @@ from pymongo import MongoClient, errors
 import requests
 import time 
 
+<<<<<<< HEAD
 try:
     colecao = MongoClient("mongodb://localhost:27017/")["meu_banco"]["minha_colecao"]
 except errors.ServerSelectionTimeoutError as e:
@@ -40,6 +41,25 @@ def index(request):
         contatos=[]
         modelo=[]
         personalidade="Sem acesso "
+=======
+
+colecao = MongoClient("mongodb://localhost:27017/")["meu_banco"]["minha_colecao"]
+url='https://d362-177-155-221-140.ngrok-free.app'
+
+def index(request):
+    contatos=colecao.distinct("contato")
+    contatos=carregachat_interno(contatos)
+    configs=requests.get(f'{url}/config').json()
+    modelo=list(configs['modelo'].keys())
+    personalidade=configs['personality']
+    if personalidade =="":
+        personalidade='Simples'
+    try:
+        config = Configuracao.objects.first()  
+        modelo.remove(config.modelo_ia)
+    except:
+        pass
+>>>>>>> 327bcbe (kali 03/03/25)
     return render(request, 'chat_app/principal.html',{"cont":contatos,"modelos":modelo,"personalidade":personalidade,"config": config})
 
 def carregachat_interno(contatos):
@@ -64,6 +84,7 @@ def treinamento(request):
     return render(request, 'chat_app/treinamento.html',{"config": config})
 
 def configs(request):
+<<<<<<< HEAD
     try:
         configs=requests.get(f'{url}/config').json()
         modelo=list(configs['modelo'].keys())
@@ -74,6 +95,15 @@ def configs(request):
         configs=[]
         modelo=[]
     config = Configuracao.objects.first()  
+=======
+    configs=requests.get(f'{url}/config').json()
+    modelo=list(configs['modelo'].keys())
+    try:
+        config = Configuracao.objects.first()  
+        modelo.remove(config.modelo_ia)
+    except:
+        pass
+>>>>>>> 327bcbe (kali 03/03/25)
     return render(request, 'chat_app/confgs.html',{"config": config,"modelos":modelo})
 
 def imag(request):

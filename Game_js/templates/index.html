@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>HARRYM - Menu</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="menuOverlay">
+    <h1>HARRYM</h1>
+    <p class="subtitle">A Jornada do Templo - Endless</p>
+    <p>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;"></input></p>
+    <div id="statusContainer">
+      <h2>Status</h2>
+      <p id="extraJumpsStatus">Pulos Extras: 0</p>
+      <h3>Habilidades</h3>
+      <ul id="abilitiesList"></ul>
+      <h2>Histórico do Jogo</h2>
+      <ul id="historyList"></ul>
+      <h2>Recursos</h2>
+      <p id="coinsDisplay">Moedas: 0</p>
+      <p id="runesDisplay">Runas: 0</p>
+    </div>
+    <button id="customizeButton" onclick="window.location.href='/customize'">Personalizar</button>
+    <button id="startButton">Iniciar</button>
+  </div>
+  <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('startButton').focus();
+    });
+  </script>
+</body>
+</html>

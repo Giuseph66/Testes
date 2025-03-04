@@ -1,41 +1,75 @@
-// Canvas e contexto
+// ========= Sistema de Seed =========
+// Defina uma seed padrão ou use uma que venha do localStorage// Recupera a seed do localStorage (convertendo para número, se necessário)
+let seed = parseInt(localStorage.getItem('seed'));
+// Função seededRandom() usando LCG
+function seededRandom() {
+  seed = (seed * 9301 + 49297) % 233280;
+  return seed / 233280;
+}
+
+// ========= Configuração do Canvas =========
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Variáveis globais
-let coins = 0, runes = 0;
+// ========= Variáveis Globais =========
+let coins = JSON.parse(localStorage.getItem('coins')) || 0;
+let runes = JSON.parse(localStorage.getItem('runes')) || 0;
 let gameOver = false;
-// Objeto para controlar os poderes ativos
 let activePowers = {
   escudo: 0,
   impulso: 0,
   velocidade: 0,
   invisibilidade: 0,
-  magnetismo: 0
+  magnetismo: 0,
+  teletransporte: 0,
+  cloneSombrio: 0,
+  controleDoTempo: 0,
+  mundoInvertido: 0,
+  voar: 0,
+  raioLaser: 0,
+  escalada: 0,
+  espectro: 0,
+  espadaSagrada: 0,
+  bumerangue: 0,
+  formaAquatica: 0,
+  congelamento: 0,
+  furia: 0,
+  mina: 0,
+  laminaGiratoria: 0,
+  curaGradual: 0,
+  armadilhaEspinhos: 0,
+  gancho: 0,
+  eloEspiritual: 0,
+  superSopro: 0
 };
-let scrollOffset = 0;        // deslocamento global (x)
-let currentRoom = 0;         // sala em que o jogador está
-const ROOM_WIDTH = canvas.width; // cada sala tem 800px de largura
-let frameCount = 0;          // contador global para animações
+let scrollOffset = 0;
+let currentRoom = 0;
+const ROOM_WIDTH = canvas.width;
+let frameCount = 0;
 
-// Estrutura para armazenar as salas geradas
+// ========= Estrutura das Salas =========
 const rooms = {};
 
-// Personagem HarryM
+// ========= Configuração do Jogador =========
 const player = {
-  x: 50, y: 300,
-  width: 30, height: 30,
-  velocityX: 0, velocityY: 0,
-  speed: 3,         
+  x: 50, // Always start the game from the beginning
+  y: 300,
+  width: 30, 
+  height: 30,
+  velocityX: 0, 
+  velocityY: 0,
+  speed: 3,
   jumpForce: -10,
-  color: 'red'
+  color: 'red',
+  maxAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1,
+  remainingAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1
 };
 
-// Física e controle de teclado
+// ========= Física e Teclado =========
 const GRAVITY = 0.3;
 const keys = {};
 
-// Função para gerar uma sala proceduralmente
+// ========= Função para Gerar Salas =========
 function generateRoom(roomIndex) {
   const roomStartX = roomIndex * ROOM_WIDTH;
   const room = {
@@ -50,55 +84,54 @@ function generateRoom(roomIndex) {
   // Plataforma do chão
   room.platforms.push({ x: roomStartX, y: 550, width: ROOM_WIDTH, height: 50 });
 
-  // Plataformas extras (2 a 4 por sala)
-  const numPlatforms = 2 + Math.floor(Math.random() * 3);
+  // Plataformas extras (2 a 4)
+  const numPlatforms = 2 + Math.floor(seededRandom() * 3);
   for (let i = 0; i < numPlatforms; i++) {
-    const platWidth = 80 + Math.random() * 70;
-    const platX = roomStartX + Math.random() * (ROOM_WIDTH - platWidth);
-    const platY = 300 + Math.random() * 200;
+    const platWidth = 80 + seededRandom() * 70;
+    const platX = roomStartX + seededRandom() * (ROOM_WIDTH - platWidth);
+    const platY = 300 + seededRandom() * 200;
     room.platforms.push({ x: platX, y: platY, width: platWidth, height: 20 });
   }
 
   // Moedas (1 a 3)
-  const numCoins = 1 + Math.floor(Math.random() * 3);
+  const numCoins = 1 + Math.floor(seededRandom() * 3);
   for (let i = 0; i < numCoins; i++) {
-    const coinX = roomStartX + 50 + Math.random() * (ROOM_WIDTH - 100);
-    const coinY = 250 + Math.random() * 200;
+    const coinX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
+    const coinY = 250 + seededRandom() * 200;
     room.coins.push({ x: coinX, y: coinY, width: 15, height: 15, collected: false });
   }
 
   // Runas (0 a 2)
-  const numRunes = Math.floor(Math.random() * 3);
+  const numRunes = Math.floor(seededRandom() * 3);
   for (let i = 0; i < numRunes; i++) {
-    const runeX = roomStartX + 50 + Math.random() * (ROOM_WIDTH - 100);
-    const runeY = 200 + Math.random() * 150;
+    const runeX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
+    const runeY = 200 + seededRandom() * 150;
     room.runes.push({ x: runeX, y: runeY, width: 20, height: 20, collected: false });
   }
 
-  // Power-ups (0 a 2) – tipos: "escudo", "impulso", "velocidade", "invisibilidade" e "magnetismo"
-  const numPowerUps = Math.floor(Math.random() * 3);
+  // Power-ups (0 a 2)
+  const numPowerUps = Math.floor(seededRandom() * 3);
   const powerTypes = ['escudo', 'impulso', 'velocidade', 'invisibilidade', 'magnetismo'];
   for (let i = 0; i < numPowerUps; i++) {
-    const pType = powerTypes[Math.floor(Math.random() * powerTypes.length)];
-    const pX = roomStartX + 50 + Math.random() * (ROOM_WIDTH - 100);
-    const pY = 220 + Math.random() * 200;
+    const pType = powerTypes[Math.floor(seededRandom() * powerTypes.length)];
+    const pX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
+    const pY = 220 + seededRandom() * 200;
     room.powerUps.push({ type: pType, x: pX, y: pY, width: 20, height: 20, collected: false });
   }
 
   // Espinhos (1 a 3)
-  const numSpikes = 1 + Math.floor(Math.random() * 3);
+  const numSpikes = 1 + Math.floor(seededRandom() * 3);
   for (let i = 0; i < numSpikes; i++) {
-    const spikeX = roomStartX + 50 + Math.random() * (ROOM_WIDTH - 100);
+    const spikeX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
     room.spikes.push({ x: spikeX, y: 530, width: 30, height: 20 });
   }
 
-  // Inimigos (2 a 4) – com variações de tipo
-  const numEnemies = 2 + Math.floor(Math.random() * 3);
+  // Inimigos (2 a 4)
+  const numEnemies = 2 + Math.floor(seededRandom() * 3);
   const enemyTypes = ["normal", "fast", "big"];
   for (let i = 0; i < numEnemies; i++) {
-    const enemyType = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+    const enemyType = enemyTypes[Math.floor(seededRandom() * enemyTypes.length)];
     let enemyWidth, enemyHeight, velocityX;
-    // Define atributos com base no tipo do inimigo
     if (enemyType === "normal") {
       enemyWidth = 30; enemyHeight = 30; velocityX = 1;
     } else if (enemyType === "fast") {
@@ -106,8 +139,8 @@ function generateRoom(roomIndex) {
     } else if (enemyType === "big") {
       enemyWidth = 40; enemyHeight = 40; velocityX = 0.7;
     }
-    const enemyX = roomStartX + 50 + Math.random() * (ROOM_WIDTH - 100);
-    const enemyY = 520 - (enemyHeight - 30); // Ajusta a posição vertical conforme o tamanho
+    const enemyX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
+    const enemyY = 520 - (enemyHeight - 30);
     let rangeStart = enemyX - 50, rangeEnd = enemyX + 50;
     if (rangeStart < roomStartX) rangeStart = roomStartX;
     if (rangeEnd > roomStartX + ROOM_WIDTH) rangeEnd = roomStartX + ROOM_WIDTH;
@@ -125,14 +158,13 @@ function generateRoom(roomIndex) {
   return room;
 }
 
-// Pré-carrega as salas iniciais (0, 1 e 2)
+// ========= Inicialização das Salas =========
 rooms[0] = generateRoom(0);
 rooms[1] = generateRoom(1);
 rooms[2] = generateRoom(2);
 
-// Atualiza a UI – cada container (com seu respectivo ID) só é exibido se seu valor for diferente de 0
+// ========= Atualização da UI =========
 function updateUI() {
-  // Para moedas
   const coinUI = document.getElementById('coinUI');
   if (coins > 0) {
     coinUI.style.display = 'block';
@@ -140,7 +172,6 @@ function updateUI() {
   } else {
     coinUI.style.display = 'none';
   }
-  // Para runas
   const runeUI = document.getElementById('runeUI');
   if (runes > 0) {
     runeUI.style.display = 'block';
@@ -148,7 +179,6 @@ function updateUI() {
   } else {
     runeUI.style.display = 'none';
   }
-  // Para cada poder
   const powers = ['escudo', 'impulso', 'velocidade', 'invisibilidade', 'magnetismo'];
   powers.forEach(power => {
     const uiElement = document.getElementById(power + 'UI');
@@ -159,19 +189,26 @@ function updateUI() {
       uiElement.style.display = 'none';
     }
   });
+  const extraJumpsUI = document.getElementById('extraJumpsUI');
+  if (player.maxAirJumps > 1) {
+    extraJumpsUI.style.display = 'block';
+    document.getElementById('extraJumpsCount').textContent = Math.max(player.remainingAirJumps - 1, 0);
+  } else {
+    extraJumpsUI.style.display = 'none';
+  }
 }
 
-// Atualiza o jogador, aplicando física, colisões e carregamento dinâmico das salas
+// ========= Atualização do Jogador =========
 function updatePlayer() {
-  // Movimentação horizontal com panning à esquerda e direita
+  // Movimento horizontal
   if (keys['ArrowLeft']) {
     let newX = player.x - player.speed;
-    const leftBound = 100; // limite para iniciar o panning à esquerda
+    const leftBound = 100;
     if (newX < leftBound) {
       const roomKeys = Object.keys(rooms).map(Number);
       const minRoomKey = Math.min(...roomKeys);
       const allowedMinScroll = minRoomKey * ROOM_WIDTH - 100;
-      let delta = newX - leftBound; // valor negativo
+      let delta = newX - leftBound;
       if (scrollOffset + delta < allowedMinScroll) {
         delta = allowedMinScroll - scrollOffset;
       }
@@ -182,7 +219,7 @@ function updatePlayer() {
     }
   } else if (keys['ArrowRight']) {
     let newX = player.x + player.speed;
-    const rightBound = canvas.width / 2; // limite para panning à direita
+    const rightBound = canvas.width / 2;
     if (newX > rightBound) {
       let delta = newX - rightBound;
       scrollOffset += delta;
@@ -192,23 +229,26 @@ function updatePlayer() {
     }
   }
 
-  // Aplica a gravidade
+  // Salva a posição vertical anterior
+  const prevY = player.y;
+  
+  // Atualiza verticalmente com gravidade
   player.velocityY += GRAVITY;
   player.y += player.velocityY;
 
-  // Colisão com plataformas (corrigida para evitar teletransporte)
+  // Colisão com plataformas (somente se o jogador estiver caindo vindo de cima)
   let collided = false;
   for (let key in rooms) {
     for (let i = 0; i < rooms[key].platforms.length; i++) {
       const plat = rooms[key].platforms[i];
-      const previousBottom = player.y + player.height - player.velocityY;
+      const previousBottom = prevY + player.height;
       if (
         player.x < plat.x - scrollOffset + plat.width &&
         player.x + player.width > plat.x - scrollOffset &&
         player.y < plat.y + plat.height &&
         player.y + player.height > plat.y &&
         player.velocityY >= 0 &&
-        previousBottom <= plat.y
+        previousBottom <= plat.y + 5
       ) {
         player.y = plat.y - player.height;
         player.velocityY = 0;
@@ -219,28 +259,25 @@ function updatePlayer() {
     if (collided) break;
   }
 
-  // Determina a sala atual com base na posição absoluta
   const absoluteX = player.x + scrollOffset;
   const newRoom = Math.floor(absoluteX / ROOM_WIDTH);
-  if (newRoom > currentRoom) {
-    currentRoom = newRoom;
-  }
+  if (newRoom > currentRoom) currentRoom = newRoom;
 
-  // Pré-carrega as próximas 2 salas (somente para a direita)
+  // Pré-carrega as próximas 2 salas à direita
   for (let r = currentRoom + 1; r <= currentRoom + 2; r++) {
     if (!(r in rooms)) {
       rooms[r] = generateRoom(r);
     }
   }
 
-  // Remove salas antigas se houver mais de 10 carregadas
+  // Remove salas antigas se houver mais de 10
   const roomKeys = Object.keys(rooms).map(Number).sort((a, b) => a - b);
   if (roomKeys.length > 10) {
     delete rooms[roomKeys[0]];
   }
 }
 
-// Atualiza os inimigos de todas as salas (movimentação e animação simples)
+// ========= Atualização dos Inimigos =========
 function updateEnemies() {
   for (let key in rooms) {
     rooms[key].enemies.forEach(enemy => {
@@ -253,15 +290,14 @@ function updateEnemies() {
   }
 }
 
-// Verifica colisões com colecionáveis, power-ups, inimigos e espinhos
+// ========= Verificação de Colisões =========
 function checkCollisions() {
   for (let key in rooms) {
     const room = rooms[key];
 
-    // Moedas (com animação de flutuação e efeito de magnetismo)
+    // Moedas: coleta normal ou via magnetismo
     room.coins.forEach(coin => {
       if (!coin.collected) {
-        // Coleta por colisão normal
         if (
           player.x < coin.x - scrollOffset + coin.width &&
           player.x + player.width > coin.x - scrollOffset &&
@@ -270,20 +306,19 @@ function checkCollisions() {
         ) {
           coin.collected = true;
           coins += 10;
+          localStorage.setItem('coins', JSON.stringify(coins));
           updateUI();
-        }
-        // Coleta pelo magnetismo se ativo (dentro de 100px do centro do jogador)
-        else if (activePowers['magnetismo'] > 0) {
+        } else if (activePowers['magnetismo'] > 0) {
           const playerCenterX = player.x + player.width / 2;
           const playerCenterY = player.y + player.height / 2;
           const coinCenterX = coin.x - scrollOffset + coin.width / 2;
           const coinCenterY = coin.y + coin.height / 2;
           const dx = playerCenterX - coinCenterX;
           const dy = playerCenterY - coinCenterY;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          if (distance < 100) {
+          if (Math.sqrt(dx * dx + dy * dy) < 100) {
             coin.collected = true;
             coins += 10;
+            localStorage.setItem('coins', JSON.stringify(coins));
             updateUI();
           }
         }
@@ -301,6 +336,7 @@ function checkCollisions() {
       ) {
         rune.collected = true;
         runes++;
+        localStorage.setItem('runes', JSON.stringify(runes));
         updateUI();
       }
     });
@@ -315,12 +351,12 @@ function checkCollisions() {
         player.y + player.height > power.y
       ) {
         power.collected = true;
-        activePowers[power.type] = 300; // duração em frames
+        activePowers[power.type] = 300;
         updateUI();
       }
     });
 
-    // Inimigos – se colidir sem proteção (escudo ou invisibilidade) ou, se com impulso, elimina e recompensa
+    // Inimigos: se colidir sem proteção ou se com impulso, elimina e recompensa
     room.enemies.forEach(enemy => {
       if (
         player.x < enemy.x - scrollOffset + enemy.width &&
@@ -330,11 +366,9 @@ function checkCollisions() {
       ) {
         if (activePowers['escudo'] <= 0 && activePowers['invisibilidade'] <= 0) {
           if (activePowers['impulso'] > 0) {
-            // Remove o inimigo e aplica recompensa
             const idx = room.enemies.indexOf(enemy);
             if (idx > -1) {
               room.enemies.splice(idx, 1);
-              // Recompensa: 50% chance de ganhar moedas (15) ou uma runa
               if (Math.random() < 0.5) {
                 coins += 15;
               } else {
@@ -349,7 +383,7 @@ function checkCollisions() {
       }
     });
 
-    // Espinhos – desconsidera colisão se escudo ou invisibilidade estiverem ativos
+    // Espinhos
     room.spikes.forEach(spike => {
       if (
         player.x < spike.x - scrollOffset + spike.width &&
@@ -365,58 +399,64 @@ function checkCollisions() {
   }
 }
 
-// Atualiza os power-ups ativos e seus efeitos
+// ========= Atualização dos Power-ups =========
 function updatePowerUp() {
   for (let type in activePowers) {
     if (activePowers[type] > 0) {
       activePowers[type]--;
-      if (activePowers[type] === 0) {
-        if (type === 'impulso') {
-          player.jumpForce = -10;
-        } else if (type === 'velocidade') {
-          player.speed = 3;
-        }
-      } else {
-        if (type === 'impulso') {
-          player.jumpForce = -15;
-        } else if (type === 'velocidade') {
-          player.speed = 5;
-        }
+      if (type === 'impulso') {
+        player.jumpForce = activePowers[type] > 0 ? -15 : -10;
+      } else if (type === 'velocidade') {
+        player.speed = activePowers[type] > 0 ? 5 : 3;
       }
     }
   }
   updateUI();
 }
 
-// Função que desenha todos os elementos de todas as salas com animações simples
+// ========= Função de Desenho =========
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Fundo com gradiente vertical
+  let bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  bgGradient.addColorStop(0, "#111");
+  bgGradient.addColorStop(1, "#000");
+  ctx.fillStyle = bgGradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // Desenha cada sala carregada
+  // Desenha cada sala
   for (let key in rooms) {
     const room = rooms[key];
 
-    // Plataformas
+    // Plataformas com sombra
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
+    ctx.shadowBlur = 4;
     room.platforms.forEach(plat => {
-      ctx.fillStyle = '#777';
+      ctx.fillStyle = "#777";
       ctx.fillRect(plat.x - scrollOffset, plat.y, plat.width, plat.height);
     });
+    ctx.shadowBlur = 0;
 
-    // Moedas com leve flutuação
+    // Moedas com flutuação e sombra
     room.coins.forEach(coin => {
       if (!coin.collected) {
         const offsetY = Math.sin((frameCount + coin.x) * 0.05) * 5;
         ctx.fillStyle = 'gold';
+        ctx.shadowColor = "rgba(255,215,0,0.7)";
+        ctx.shadowBlur = 6;
         ctx.fillRect(coin.x - scrollOffset, coin.y + offsetY, coin.width, coin.height);
+        ctx.shadowBlur = 0;
       }
     });
 
-    // Runas com leve oscilação
+    // Runas com oscilação e brilho
     room.runes.forEach(rune => {
       if (!rune.collected) {
         const offsetY = Math.sin((frameCount + rune.x) * 0.05) * 3;
         ctx.fillStyle = 'cyan';
+        ctx.shadowColor = "rgba(0,255,255,0.7)";
+        ctx.shadowBlur = 6;
         ctx.fillRect(rune.x - scrollOffset, rune.y + offsetY, rune.width, rune.height);
+        ctx.shadowBlur = 0;
       }
     });
 
@@ -424,16 +464,14 @@ function draw() {
     room.powerUps.forEach(power => {
       if (!power.collected) {
         const pulse = Math.abs(Math.sin(frameCount * 0.1));
-        ctx.fillStyle =
-          power.type === 'escudo'
-            ? `rgba(0,0,255,${0.5 + pulse * 0.5})`
-            : power.type === 'impulso'
-            ? `rgba(0,255,0,${0.5 + pulse * 0.5})`
-            : power.type === 'velocidade'
-            ? `rgba(255,165,0,${0.5 + pulse * 0.5})`
-            : power.type === 'invisibilidade'
-            ? `rgba(255,255,255,${0.5 + pulse * 0.5})`
-            : `rgba(255,0,255,${0.5 + pulse * 0.5})`; // magnetismo
+        let color;
+        if (power.type === 'escudo') color = `rgba(0,0,255,${0.5 + pulse * 0.5})`;
+        else if (power.type === 'impulso') color = `rgba(0,255,0,${0.5 + pulse * 0.5})`;
+        else if (power.type === 'velocidade') color = `rgba(255,165,0,${0.5 + pulse * 0.5})`;
+        else if (power.type === 'invisibilidade') color = `rgba(255,255,255,${0.5 + pulse * 0.5})`;
+        else if (power.type === 'magnetismo') color = `rgba(255,0,255,${0.5 + pulse * 0.5})`;
+        else color = 'gray';
+        ctx.fillStyle = color;
         ctx.fillRect(power.x - scrollOffset, power.y, power.width, power.height);
       }
     });
@@ -444,88 +482,74 @@ function draw() {
       ctx.fillRect(spike.x - scrollOffset, spike.y, spike.width, spike.height);
     });
 
-    // Inimigos – variação de cores de acordo com o tipo
+    // Inimigos com variação de cores e sombra
     room.enemies.forEach(enemy => {
       const enemyYOffset = Math.sin(frameCount * 0.1) * 2;
-      if (enemy.type === 'normal') {
-        ctx.fillStyle = 'purple';
-      } else if (enemy.type === 'fast') {
-        ctx.fillStyle = 'red';
-      } else if (enemy.type === 'big') {
-        ctx.fillStyle = 'darkblue';
-      }
+      if (enemy.type === 'normal') ctx.fillStyle = 'purple';
+      else if (enemy.type === 'fast') ctx.fillStyle = 'red';
+      else if (enemy.type === 'big') ctx.fillStyle = 'darkblue';
+      ctx.shadowColor = "rgba(0,0,0,0.6)";
+      ctx.shadowBlur = 4;
       ctx.fillRect(enemy.x - scrollOffset, enemy.y + enemyYOffset, enemy.width, enemy.height);
+      ctx.shadowBlur = 0;
     });
   }
 
-  // Desenha o jogador
+  // Desenha o jogador com sombra
   ctx.fillStyle = player.color;
+  ctx.shadowColor = "rgba(0,0,0,0.7)";
+  ctx.shadowBlur = 6;
   ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.shadowBlur = 0;
 
-  // Indicadores visuais dos poderes ativos (bordas concêntricas)
+  // Desenha os indicadores dos poderes ativos (bordas concêntricas)
   let borderOffset = 0;
   if (activePowers['escudo'] > 0) {
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-      player.x - borderOffset,
-      player.y - borderOffset,
-      player.width + 2 * borderOffset,
-      player.height + 2 * borderOffset
-    );
+    ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
   if (activePowers['impulso'] > 0) {
     ctx.strokeStyle = 'green';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-      player.x - borderOffset,
-      player.y - borderOffset,
-      player.width + 2 * borderOffset,
-      player.height + 2 * borderOffset
-    );
+    ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
   if (activePowers['velocidade'] > 0) {
     ctx.strokeStyle = 'orange';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-      player.x - borderOffset,
-      player.y - borderOffset,
-      player.width + 2 * borderOffset,
-      player.height + 2 * borderOffset
-    );
+    ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
   if (activePowers['invisibilidade'] > 0) {
     ctx.strokeStyle = 'white';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-      player.x - borderOffset,
-      player.y - borderOffset,
-      player.width + 2 * borderOffset,
-      player.height + 2 * borderOffset
-    );
+    ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
   if (activePowers['magnetismo'] > 0) {
     ctx.strokeStyle = 'magenta';
     ctx.lineWidth = 3;
-    ctx.strokeRect(
-      player.x - borderOffset,
-      player.y - borderOffset,
-      player.width + 2 * borderOffset,
-      player.height + 2 * borderOffset
-    );
+    ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
+  
+  // Exibe a seed no canto superior direito
+  ctx.fillStyle = 'white';
+  ctx.font = "16px Arial";
+  ctx.fillText("Seed: " + seed, canvas.width - 120, 20);
 }
 
-// Loop principal do jogo
+// ========= Loop Principal =========
 function gameLoop() {
   if (gameOver) {
-    alert("Game Over! Você foi longe: " + Math.floor(player.x + scrollOffset) +" MP.");
-    window.location.reload();
+    let distancia = Math.floor(player.x + scrollOffset);
+    coins += distancia;
+    localStorage.setItem('coins', JSON.stringify(coins));
+    localStorage.setItem('distanceTraveled', distancia);
+    localStorage.setItem('coinsEarned', distancia);
+    window.location.href = '/game_over';
     return;
   }
   frameCount++;
@@ -537,18 +561,69 @@ function gameLoop() {
   requestAnimationFrame(gameLoop);
 }
 
-// Eventos de teclado
-window.addEventListener('keydown', (e) => {
-  keys[e.key] = true;
-  // Pulo: somente se estiver no chão/plataforma
-  if (e.key === ' ' && player.velocityY === 0) {
-    player.velocityY = player.jumpForce;
-  }
-});
-window.addEventListener('keyup', (e) => {
-  keys[e.key] = false;
-});
+// Remove any dynamic loading of powers.js previously done.
+// Instead, wrap event listener setup in DOMContentLoaded to be sure the document is ready 
+// and that powers.js (loaded in the HTML) is available.
 
-// Inicia a UI e o loop do jogo
-updateUI();
-gameLoop();
+document.addEventListener('DOMContentLoaded', () => {
+  // Set up key events once, using the functions from powers.js:
+  document.addEventListener('keydown', (e) => {
+    keys[e.key] = true;
+    if (e.key === ' ') {
+      if (player.velocityY === 0) {
+        player.velocityY = player.jumpForce;
+      } else if (player.remainingAirJumps > 0) {
+        player.velocityY = player.jumpForce;
+        player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
+        localStorage.setItem('extraJumps', JSON.stringify(player.remainingAirJumps));
+        updateUI();
+      }
+    } else if (e.key === 'T') {
+      useTeletransporte();
+    } else if (e.key === 'C') {
+      createClone();
+    } else if (e.key === 'L') {
+      shootLaser();
+    } else if (e.key === 'M') {
+      placeMine();
+    } else if (e.key === 'G') {
+      useGrapplingHook();
+    } else if (e.key === 'B') {
+      useSuperBlow();
+    } else if (e.key === 'Q') {
+      applyTimeControl();
+    } else if (e.key === 'I') {
+      applyInvertedWorld();
+    } else if (e.key === 'F') {
+      applyFlying();
+    } else if (e.key === 'E') {
+      applySpectralForm();
+    } else if (e.key === 'S') {
+      applySacredSword();
+    } else if (e.key === 'A') {
+      applyBoomerangEffect();
+    } else if (e.key === 'W') {
+      applyAquaticForm();
+    } else if (e.key === 'R') {
+      applyFreezing();
+    } else if (e.key === 'U') {
+      applyFury();
+    } else if (e.key === 'P') {
+      applySpinningBlade();
+    } else if (e.key === 'H') {
+      applyGradualHealing();
+    } else if (e.key === 'K') {
+      placeSpikeTrap();
+    } else if (e.key === 'O') {
+      useSpiritualLink();
+    }
+    // Add more key bindings for other abilities as needed
+  });
+  window.addEventListener('keyup', (e) => {
+    keys[e.key] = false;
+  });
+
+  // Inicializa a UI e Inicia o Loop
+  updateUI();
+  gameLoop();
+});

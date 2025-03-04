@@ -1,0 +1,62 @@
+/* Estilos globais */
+body {
+  margin: 0;
+  background: #0d0d0d;
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+}
+
+/* Estilização do canvas */
+#gameCanvas {
+  display: block;
+  margin: 20px auto;
+  background: linear-gradient(180deg, #1a1a1a, #000000);
+  border: 2px solid #333;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Painel de UI */
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 10px 15px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  z-index: 100;
+}
+
+#ui > div {
+  margin-bottom: 8px;
+  padding: 5px 10px;
+  font-size: 16px;
+  background: rgba(20, 20, 20, 0.8);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+#ui span {
+  font-weight: bold;
+  color: #ffcc00;
+  margin-left: 5px;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 5px #ffcc00; }
+  50% { box-shadow: 0 0 15px #ffcc00; }
+  100% { box-shadow: 0 0 5px #ffcc00; }
+}
+
+.ui-pulse {
+  animation: pulse 1.5s infinite;
+}
+
+/* Responsividade */
+@media (max-width: 800px) {
+  #ui > div {
+    font-size: 14px;
+  }
+}

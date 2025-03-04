@@ -14,7 +14,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Fundo dark com um toque de vermelho profundo */
   background: linear-gradient(135deg, #000 0%, #330000 100%);
   display: flex;
   flex-direction: column;
@@ -31,7 +30,7 @@ body {
 #menuOverlay h1 {
   font-family: 'Bangers', cursive;
   font-size: 64px;
-  color: #e63946;  /* vermelho vibrante */
+  color: #e63946;
   margin: 0;
   text-shadow: 2px 2px 4px #000;
 }
@@ -97,21 +96,52 @@ body {
   background: #d62828;
 }
 
-/* Estilos para o canvas e UI do jogo (para páginas de jogo) */
-canvas {
-  background: #333;
-  display: block;
-  margin: 0 auto;
-  border: 2px solid #555;
+#menuOverlay button#customizeButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #e63946; /* Adjusted color */
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.3s ease;
 }
 
-#ui {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
+#menuOverlay button#customizeButton:hover {
+  background: #d62828; /* Adjusted color */
 }
 
-#ui > div {
+#statusContainer {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+  margin-bottom: 20px;
+}
+
+#statusContainer h2, #statusContainer h3 {
+  margin: 10px 0;
+}
+
+#statusContainer p, #statusContainer ul {
+  margin: 5px 0;
+}
+
+#statusContainer p {
+  font-size: 18px;
+}
+
+#statusContainer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#statusContainer ul li {
+  background: rgba(20, 20, 20, 0.8);
+  padding: 5px 10px;
   margin-bottom: 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
 }
