@@ -7,21 +7,23 @@ function seededRandom() {
   return seed / 233280;
 }
 
+let clones = [];
 // ========= Configuração do Canvas =========
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-
 // ========= Variáveis Globais =========
 let coins = JSON.parse(localStorage.getItem('coins')) || 0;
 let runes = JSON.parse(localStorage.getItem('runes')) || 0;
 let gameOver = false;
+window.timeControlActive = false;
+window.Inverter = false;
 let activePowers = {
   escudo: 0,
   impulso: 0,
   velocidade: 0,
   invisibilidade: 0,
   magnetismo: 0,
-  teletransporte: 0,
+  teletransporte: 1,
   cloneSombrio: 0,
   controleDoTempo: 0,
   mundoInvertido: 0,
@@ -46,6 +48,7 @@ let scrollOffset = 0;
 let currentRoom = 0;
 const ROOM_WIDTH = canvas.width;
 let frameCount = 0;
+let passiveAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
 
 // ========= Estrutura das Salas =========
 const rooms = {};
@@ -66,7 +69,7 @@ const player = {
 };
 
 // ========= Física e Teclado =========
-const GRAVITY = 0.3;
+let GRAVITY = 0.3;
 const keys = {};
 
 // ========= Função para Gerar Salas =========
@@ -200,7 +203,13 @@ function updateUI() {
 
 // ========= Atualização do Jogador =========
 function updatePlayer() {
-  // Movimento horizontal
+  // Armazena a posição vertical anterior para verificação de colisão
+  const prevY = player.y;
+  if (player.y < 0) {
+    player.y = 0;
+    player.velocityY = 0;
+  }
+  // Movimento horizontal (o seu código existente para mover o player)
   if (keys['ArrowLeft']) {
     let newX = player.x - player.speed;
     const leftBound = 100;
@@ -229,9 +238,6 @@ function updatePlayer() {
     }
   }
 
-  // Salva a posição vertical anterior
-  const prevY = player.y;
-  
   // Atualiza verticalmente com gravidade
   player.velocityY += GRAVITY;
   player.y += player.velocityY;
@@ -259,6 +265,27 @@ function updatePlayer() {
     if (collided) break;
   }
 
+  // Colisão com clones (trata os clones como plataformas)
+  if (!collided) {
+    for (let clone of clones) {
+      const previousBottom = prevY + player.height;
+      if (
+        player.x < clone.x - scrollOffset + clone.width &&
+        player.x + player.width > clone.x - scrollOffset &&
+        player.y < clone.y + clone.height &&
+        player.y + player.height > clone.y &&
+        player.velocityY >= 0 &&
+        previousBottom <= clone.y + 5
+      ) {
+        player.y = clone.y - player.height;
+        player.velocityY = 0;
+        collided = true;
+        break;
+      }
+    }
+  }
+
+  // Atualiza a sala atual com base na posição
   const absoluteX = player.x + scrollOffset;
   const newRoom = Math.floor(absoluteX / ROOM_WIDTH);
   if (newRoom > currentRoom) currentRoom = newRoom;
@@ -277,12 +304,17 @@ function updatePlayer() {
   }
 }
 
+
 // ========= Atualização dos Inimigos =========
 function updateEnemies() {
   for (let key in rooms) {
     rooms[key].enemies.forEach(enemy => {
-      enemy.x += enemy.velocityX;
+      // Se o controle do tempo estiver ativo, os inimigos se movem a 30% da velocidade normal
+      const speedFactor = window.timeControlActive ? 0.1 : 1;
+      //console.log(speedFactor,window.timeControlActive,GRAVITY);
+      enemy.x += enemy.velocityX * speedFactor;
       enemy.animationFrame = (enemy.animationFrame + 1) % 360;
+      // Verifica limites e inverte a velocidade se necessário
       if (enemy.x < enemy.range[0] || enemy.x + enemy.width > enemy.range[1]) {
         enemy.velocityX *= -1;
       }
@@ -534,11 +566,10 @@ function draw() {
     ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
-  
-  // Exibe a seed no canto superior direito
+  let semente = parseInt(localStorage.getItem('seed'));
   ctx.fillStyle = 'white';
   ctx.font = "16px Arial";
-  ctx.fillText("Seed: " + seed, canvas.width - 120, 20);
+  ctx.fillText("Seed: " + semente, canvas.width - 120, 20);
 }
 
 // ========= Loop Principal =========
@@ -559,12 +590,36 @@ function gameLoop() {
   checkCollisions();
   draw();
   requestAnimationFrame(gameLoop);
+  updateClones();
 }
 
 // Remove any dynamic loading of powers.js previously done.
 // Instead, wrap event listener setup in DOMContentLoaded to be sure the document is ready 
 // and that powers.js (loaded in the HTML) is available.
+function updateClones() {
+  if (clones.length > 0) {
+    const now = Date.now();
+    clones.forEach(clone => {
+      // Calcula a transparência com base no tempo restante
+      const elapsedTime = now - clone.spawnTime;
+      const progress = elapsedTime / clone.duration;
+      const alpha = Math.max(0, 1 - progress); // Diminui de 1 para 0 conforme o tempo passa
 
+      // Desenha o clone com transparência
+      ctx.fillStyle = clone.color;
+      ctx.globalAlpha = alpha; // Aplica a transparência
+      ctx.fillRect(clone.x - scrollOffset, clone.y, clone.width, clone.height);
+      ctx.globalAlpha = 1.0; // Reseta a transparência para os demais elementos
+
+      // Atualiza a posição do clone
+      clone.x += clone.velocityX;
+      clone.y += clone.velocityY;
+    });
+    
+    // Remove clones que excederam sua duração
+    clones = clones.filter(clone => now - clone.spawnTime < clone.duration);
+  }
+}
 document.addEventListener('DOMContentLoaded', () => {
   // Set up key events once, using the functions from powers.js:
   document.addEventListener('keydown', (e) => {
@@ -625,5 +680,98 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Inicializa a UI e Inicia o Loop
   updateUI();
+  applyPassiveAbilities();
   gameLoop();
 });
+
+// Function to display active abilities
+function displayActiveAbilities() {
+  const activeAbilitiesList = document.getElementById('activeAbilitiesList');
+  activeAbilitiesList.innerHTML = '';
+  passiveAbilities.forEach(ability => {
+    const li = document.createElement('li');
+    li.textContent = ability.name;
+    activeAbilitiesList.appendChild(li);
+  });
+}
+
+// Function to display power information
+function displayPowerInfo() {
+  const powerInfoList = document.getElementById('powerInfoList');
+  powerInfoList.innerHTML = '';
+  passiveAbilities.forEach(ability => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;
+    powerInfoList.appendChild(li);
+  });
+}
+
+// Apply passive abilities
+function applyPassiveAbilities() {
+  passiveAbilities.forEach(ability => {
+    if (ability.name === 'Teletransporte') {
+      ability.key = 'T';
+      player.teleport = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Clone Sombrio') {
+      ability.key = 'C';
+      player.clone = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Controle do Tempo') {
+      ability.key = 'Q';
+      player.timeControl = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Mundo Invertido') {
+      ability.key = 'I';
+      player.invertedWorld = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Voar') {
+      ability.key = 'F';
+      player.canFly = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Raio Laser') {
+      ability.key = 'L';
+      player.laser = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Escalada') {
+      ability.key = 'E';
+      player.canClimb = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Espectro') {
+      ability.key = 'E'; // Se desejar uma tecla diferente, altere aqui
+      player.spectralForm = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Espada Sagrada') {
+      ability.key = 'S';
+      player.sacredSword = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Efeito Bumerangue') {
+      ability.key = 'A';
+      player.boomerang = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Forma Aquática') {
+      ability.key = 'W';
+      player.aquaticForm = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Congelamento') {
+      ability.key = 'R';
+      player.freezing = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Fúria') {
+      ability.key = 'U';
+      player.fury = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Mina Programável') {
+      ability.key = 'M';
+      player.mine = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Lâmina Giratória') {
+      ability.key = 'P';
+      player.spinningBlade = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Cura Gradual') {
+      ability.key = 'H';
+      player.gradualHealing = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Armadilha de Espinhos') {
+      ability.key = 'K';
+      player.spikeTrap = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Corda/Gancho') {
+      ability.key = 'G';
+      player.grapplingHook = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Elo Espiritual') {
+      ability.key = 'O';
+      player.spiritualLink = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Super Sopro') {
+      ability.key = 'B';
+      player.superBlow = { level: ability.level || 1, key: ability.key };
+    }
+  });
+  displayActiveAbilities();
+  displayPowerInfo();
+}
+

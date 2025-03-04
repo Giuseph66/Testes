@@ -7,6 +7,7 @@ body {
     align-items: center;
     padding-top: 50px;
     margin: 0;
+    overflow: auto;
 }
 
 h1 {
@@ -46,3 +47,87 @@ button {
 button:hover {
     background-color: #d62828;
 }
+  .book-container {
+    width: 300px;
+    height: 400px;
+    left: 0;
+    position: relative;
+    perspective: 1500px;
+  }
+  /* O livro conterá as folhas */
+  .book {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+  }
+  /* Cada folha representa duas páginas (frente e verso) */
+  .leaf {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+    transform-origin: left center;
+  }
+  .leaf.flipped {
+    transform: rotateY(-180deg);
+  }
+  /* Cada página ocupa 98% da largura da folha */
+  .page {
+    position: absolute;
+    width: 98%;
+    height: 100%;
+    backface-visibility: hidden;
+    background-color: #222;
+    border: 1px solid #e63946;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    box-shadow: 0 0 15px rgba(230, 57, 70, 0.3);
+    cursor: pointer;
+  }
+  /* Página da frente: posicionada à direita */
+  .front {
+    right: 0;
+    z-index: 2;
+  }
+  /* Página de verso: posicionada à esquerda e rotacionada */
+  .back {
+    left: 0;
+    transform: rotateY(180deg);
+    background-color: #333;
+    z-index: 1;
+  }
+  /* Efeito hover para indicar área clicável */
+  .page:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+    background: rgba(230, 57, 70, 0.1);
+  }
+  .front:hover::before {
+    right: 0;
+  }
+  .back:hover::before {
+    left: 0;
+  }
+  h1 {
+    color: #e63946;
+    border-bottom: 1px solid #e63946;
+    padding-bottom: 5px;
+  }
+  code {
+    background-color: #111;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #f1faee;
+  }
+  .page::-webkit-scrollbar {
+    width: 5px;
+  }
+  .page::-webkit-scrollbar-thumb {
+    background: #e63946;
+  }

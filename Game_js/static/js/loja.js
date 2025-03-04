@@ -36,28 +36,222 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Lida com a compra de novas habilidades
-  document.getElementById('newAbilityForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const abilityName = document.getElementById('abilityName').value.trim();
-    const abilityDescription = document.getElementById('abilityDescription').value.trim();
-    const cost = 10; // Defina o custo das habilidades em runas
-    if (runes >= cost) {
-      runes -= cost;
-      localStorage.setItem('runes', JSON.stringify(runes));
-      runesDisplay.textContent = "Runas: " + runes;
-      let newAbilities = JSON.parse(localStorage.getItem('newAbilities')) || {};
-      newAbilities[abilityName] = { description: abilityDescription };
-      localStorage.setItem('newAbilities', JSON.stringify(newAbilities));
-      alert("Nova habilidade adquirida: " + abilityName);
-      e.target.reset();
-    } else {
-      alert("Runas insuficientes!");
-    }
-  });
-
   // Botão para voltar ao menu
   document.getElementById('backButton').addEventListener('click', () => {
     window.location.href = '/';
   });
+
+  // Configuração do livro de poderes
+  const leaves = document.querySelectorAll('.leaf');
+  const totalLeaves = leaves.length;
+  let currentLeaf = 0;
+
+  function ajusta() {
+    const book = document.querySelector('.book-container');
+    if (book) {
+      if (currentLeaf > 0 && currentLeaf < totalLeaves) {
+        book.style.left = '15%';
+      } else if (currentLeaf === 0) {
+        book.style.left = '0';
+      } else if (currentLeaf === totalLeaves) {
+        book.style.left = '30%';
+      }
+    } else {
+      console.error("Elemento com a classe 'book-container' não foi encontrado.");
+    }
+  }
+
+  // Define o z-index inicial para cada folha com base em sua ordem (a primeira em cima)
+  leaves.forEach((leaf, index) => {
+    leaf.style.zIndex = totalLeaves - index;
+  });
+
+  // Função para virar a folha para frente (avançar)
+  function nextPage(leaf, index, clickX, rect) {
+    if (clickX > rect.width * 0.8 && index === currentLeaf) {
+      leaf.classList.add('flipped');
+      // Após virar, diminui o z-index para que a próxima folha apareça sobre ela
+      leaf.style.zIndex = 0;
+      currentLeaf++;
+      ajusta();
+    }
+  }
+
+  // Função para voltar a folha (desvirar)
+  function prevPage(leaf, index, clickX, rect) {
+    if (clickX < rect.width * 0.2 && index === currentLeaf - 1) {
+      // Antes de desvirar, restaura o z-index para que a folha volte a ficar no topo
+      leaf.style.zIndex = totalLeaves - index;
+      leaf.classList.remove('flipped');
+      currentLeaf--;
+      ajusta();
+    }
+  }
+
+  // Adiciona os eventos de clique para as páginas de cada folha
+  leaves.forEach((leaf, index) => {
+    const frontPage = leaf.querySelector('.front');
+    const backPage = leaf.querySelector('.back');
+
+    frontPage.addEventListener('click', (e) => {
+      const rect = frontPage.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      nextPage(leaf, index, clickX, rect);
+    });
+
+    backPage.addEventListener('click', (e) => {
+      const rect = backPage.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      prevPage(leaf, index, clickX, rect);
+    });
+  });
 });
+
+function purchaseAbility(abilityName) {
+  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
+  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+  const ability = purchasedAbilities.find(a => a.name === abilityName);
+  let cost = 10;
+
+  if (ability) {
+    cost = Math.ceil(ability.level * 10 * 1.3);
+  }
+
+  if (runes >= cost) {
+    runes -= cost;
+    localStorage.setItem('runes', JSON.stringify(runes));
+    document.getElementById('runesDisplay').textContent = `Runas: ${runes}`;
+
+    if (ability) {
+      ability.level++;
+    } else {
+      purchasedAbilities.push({ name: abilityName, level: 1 });
+    }
+
+    localStorage.setItem('abilities', JSON.stringify(purchasedAbilities));
+    alert(`Habilidade "${abilityName}" comprada com sucesso!`);
+    updateUI();
+    applyPassiveAbilities();
+  } else {
+    alert('Runas insuficientes!');
+  }
+}
+
+function updateUI() {
+  const abilitiesUI = document.getElementById('abilitiesUI');
+  const activeAbilitiesList = document.getElementById('activeAbilitiesList');
+  const powerInfoList = document.getElementById('powerInfoList');
+  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+
+  if (purchasedAbilities.length > 0) {
+    abilitiesUI.style.display = 'block';
+    activeAbilitiesList.innerHTML = '';
+    powerInfoList.innerHTML = '';
+
+    purchasedAbilities.forEach(ability => {
+      const li = document.createElement('li');
+      li.textContent = `${ability.name} (Nível ${ability.level})`;
+      activeAbilitiesList.appendChild(li);
+
+      const powerInfoLi = document.createElement('li');
+      powerInfoLi.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;
+      powerInfoList.appendChild(powerInfoLi);
+    });
+  } else {
+    abilitiesUI.style.display = 'none';
+  }
+}
+
+function applyPassiveAbilities() {
+  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+
+  purchasedAbilities.forEach(ability => {
+    if (ability.name === 'Teletransporte') {
+      ability.key = 'T';
+      player.teleport = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Clone Sombrio') {
+      ability.key = 'C';
+      player.clone = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Controle do Tempo') {
+      ability.key = 'Q';
+      player.timeControl = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Mundo Invertido') {
+      ability.key = 'I';
+      player.invertedWorld = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Voar') {
+      ability.key = 'F';
+      player.canFly = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Raio Laser') {
+      ability.key = 'L';
+      player.laser = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Escalada') {
+      ability.key = 'E';
+      player.canClimb = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Espectro') {
+      ability.key = 'E'; // Se desejar uma tecla diferente, altere aqui
+      player.spectralForm = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Espada Sagrada') {
+      ability.key = 'S';
+      player.sacredSword = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Efeito Bumerangue') {
+      ability.key = 'A';
+      player.boomerang = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Forma Aquática') {
+      ability.key = 'W';
+      player.aquaticForm = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Congelamento') {
+      ability.key = 'R';
+      player.freezing = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Fúria') {
+      ability.key = 'U';
+      player.fury = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Mina Programável') {
+      ability.key = 'M';
+      player.mine = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Lâmina Giratória') {
+      ability.key = 'P';
+      player.spinningBlade = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Cura Gradual') {
+      ability.key = 'H';
+      player.gradualHealing = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Armadilha de Espinhos') {
+      ability.key = 'K';
+      player.spikeTrap = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Corda/Gancho') {
+      ability.key = 'G';
+      player.grapplingHook = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Elo Espiritual') {
+      ability.key = 'O';
+      player.spiritualLink = { level: ability.level || 1, key: ability.key };
+    } else if (ability.name === 'Super Sopro') {
+      ability.key = 'B';
+      player.superBlow = { level: ability.level || 1, key: ability.key };
+    }
+  });
+  displayActiveAbilities();
+  displayPowerInfo();
+}
+
+function displayActiveAbilities() {
+  const activeAbilitiesList = document.getElementById('activeAbilitiesList');
+  activeAbilitiesList.innerHTML = '';
+  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+
+  purchasedAbilities.forEach(ability => {
+    const li = document.createElement('li');
+    li.textContent = `${ability.name} (Nível ${ability.level})`;
+    activeAbilitiesList.appendChild(li);
+  });
+}
+
+function displayPowerInfo() {
+  const powerInfoList = document.getElementById('powerInfoList');
+  powerInfoList.innerHTML = '';
+  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+
+  purchasedAbilities.forEach(ability => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;
+    powerInfoList.appendChild(li);
+  });
+}

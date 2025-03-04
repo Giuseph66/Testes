@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Livro Digital Interativo</title>
+  <style>
+    /* Estilos Base */
+    body {
+      background-color: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      color: #00ff9d;
+    }
+    .book-container {
+      width: 300px;
+      height: 400px;
+      position: relative;
+      perspective: 1500px;
+    }
+    /* O livro conterá as folhas */
+    .book {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+    }
+    /* Cada folha representa duas páginas (frente e verso) */
+    .leaf {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 1s;
+      transform-origin: left center;
+    }
+    .leaf.flipped {
+      transform: rotateY(-180deg);
+    }
+    /* Cada página ocupa 50% da largura da folha */
+    .page {
+      position: absolute;
+      width: 98%;
+      height: 100%;
+      backface-visibility: hidden;
+      background-color: #1a1a1a;
+      border: 1px solid #00ff9d;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+      cursor: pointer;
+    }
+    /* Página da frente: posicionada à direita */
+    .front {
+      right: 0;
+    }
+    /* Página de verso: posicionada à esquerda e já rotacionada */
+    .back {
+      left: 0;
+      transform: rotateY(180deg);
+      background-color: #1f1f1f;
+    }
+    /* Efeito hover para indicar área clicável */
+    .page:hover::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 20%;
+      background: rgba(0, 255, 157, 0.1);
+    }
+    .front:hover::before {
+      right: 0;
+    }
+    .back:hover::before {
+      left: 0;
+    }
+    h1 {
+      color: #00ff9d;
+      border-bottom: 1px solid #00ff9d;
+      padding-bottom: 5px;
+    }
+    code {
+      background-color: #121212;
+      padding: 2px 5px;
+      border-radius: 3px;
+      color: #ff5555;
+    }
+    .page::-webkit-scrollbar {
+      width: 5px;
+    }
+    .page::-webkit-scrollbar-thumb {
+      background: #00ff9d;
+    }
+  </style>
+</head>
+<body>
+  <div class="book-container">
+    <div class="book">
+      <!-- Folha 1: Páginas 1 e 2 -->
+      <div class="leaf" data-leaf="1" style="z-index:10;">
+        <div class="page front" id="page1">
+          <h1>Capítulo 1</h1>
+          <p>No coração da cidade cibernética, onde os dados fluíam como sangue...</p>
+          <code>while (true) { hackTheWorld(); }</code>
+        </div>
+        <div class="page back" id="page2">
+          <h1>Capítulo 1 (Continuação)</h1>
+          <p>O hacker conhecido como NeoByte observava as linhas de código...</p>
+        </div>
+      </div>
+      <!-- Folha 2: Páginas 3 e 4 -->
+      <div class="leaf" data-leaf="2" style="z-index:9;">
+        <div class="page front" id="page3">
+          <h1>Capítulo 2</h1>
+          <p>O sistema de segurança da Megacorp parecia impenetrável...</p>
+        </div>
+        <div class="page back" id="page4">
+          <h1>Capítulo 2 (Continuação)</h1>
+          <p>Mas NeoByte tinha um plano. Ele começou a injetar seu vírus...</p>
+        </div>
+      </div>
+      <!-- Folha 3: Páginas 5 e 6 -->
+      <div class="leaf" data-leaf="3" style="z-index:8;">
+        <div class="page front" id="page5">
+          <h1>Capítulo 3</h1>
+          <p>Em meio a sombras e códigos, a verdade se escondia...</p>
+        </div>
+        <div class="page back" id="page6">
+          <h1>Capítulo 3 (Continuação)</h1>
+          <p>Os segredos da rede revelavam uma conspiração global...</p>
+        </div>
+      </div>
+      <!-- Folha 4: Páginas 7 e 8 -->
+      <div class="leaf" data-leaf="4" style="z-index:7;">
+        <div class="page front" id="page7">
+          <h1>Capítulo 4</h1>
+          <p>A resistência digital se fortalecia a cada linha de código...</p>
+        </div>
+        <div class="page back" id="page8">
+          <h1>Capítulo 4 (Continuação)</h1>
+          <p>Rebeldes virtuais se uniam para derrubar o sistema opressor...</p>
+        </div>
+      </div>
+      <!-- Folha 5: Páginas 9 e 10 -->
+      <div class="leaf" data-leaf="5" style="z-index:6;">
+        <div class="page front" id="page9">
+          <h1>Capítulo 5</h1>
+          <p>Um labirinto de códigos escondia a chave para a liberdade...</p>
+        </div>
+        <div class="page back" id="page10">
+          <h1>Capítulo 5 (Continuação)</h1>
+          <p>O enigma digital desafiava até os mais experientes hackers...</p>
+        </div>
+      </div>
+      <!-- Folha 6: Páginas 11 e 12 -->
+      <div class="leaf" data-leaf="6" style="z-index:5;">
+        <div class="page front" id="page11">
+          <h1>Capítulo 6</h1>
+          <p>A batalha entre sistemas se intensificava nas sombras da internet...</p>
+        </div>
+        <div class="page back" id="page12">
+          <h1>Capítulo 6 (Continuação)</h1>
+          <p>Dados e segredos eram armas em uma guerra invisível...</p>
+        </div>
+      </div>
+      <!-- Folha 7: Páginas 13 e 14 -->
+      <div class="leaf" data-leaf="7" style="z-index:4;">
+        <div class="page front" id="page13">
+          <h1>Capítulo 7</h1>
+          <p>Intrigas e traições emergiam no submundo digital...</p>
+        </div>
+        <div class="page back" id="page14">
+          <h1>Capítulo 7 (Continuação)</h1>
+          <p>O confronto entre aliados e inimigos se intensificava...</p>
+        </div>
+      </div>
+      <!-- Folha 8: Páginas 15 e 16 -->
+      <div class="leaf" data-leaf="8" style="z-index:3;">
+        <div class="page front" id="page15">
+          <h1>Capítulo 8</h1>
+          <p>Nas entranhas da rede, um novo poder surgia...</p>
+        </div>
+        <div class="page back" id="page16">
+          <h1>Capítulo 8 (Continuação)</h1>
+          <p>O despertar de uma inteligência artificial ameaçava o status quo...</p>
+        </div>
+      </div>
+      <!-- Folha 9: Páginas 17 e 18 -->
+      <div class="leaf" data-leaf="9" style="z-index:2;">
+        <div class="page front" id="page17">
+          <h1>Capítulo 9</h1>
+          <p>Entre códigos e segredos, a verdade se revelava lentamente...</p>
+        </div>
+        <div class="page back" id="page18">
+          <h1>Capítulo 9 (Continuação)</h1>
+          <p>A revelação chocante transformava para sempre o mundo digital...</p>
+        </div>
+      </div>
+      <!-- Folha 10: Páginas 19 e 20 -->
+      <div class="leaf" data-leaf="10" style="z-index:1;">
+        <div class="page front" id="page19">
+          <h1>Epílogo</h1>
+          <p>Com o sistema da Megacorp derrubado, NeoByte desapareceu...</p>
+        </div>
+        <div class="page back" id="page20">
+          <h1>Fim</h1>
+          <p>Mas sua lenda continuou a inspirar hackers em todo o mundo...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const leaves = document.querySelectorAll('.leaf');
+    let currentLeaf = 0;
+
+    // Para cada folha, adiciona eventos de clique nas páginas para virar a folha
+    leaves.forEach((leaf, index) => {
+      const frontPage = leaf.querySelector('.front');
+      const backPage = leaf.querySelector('.back');
+
+      // Clique na borda direita da página da frente para avançar
+      frontPage.addEventListener('click', (e) => {
+        const rect = frontPage.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        if (clickX > rect.width * 0.8 && index === currentLeaf) {
+          leaf.classList.add('flipped');
+          currentLeaf++;
+        }
+      });
+
+      // Clique na borda esquerda da página de verso para voltar
+      backPage.addEventListener('click', (e) => {
+        const rect = backPage.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        if (clickX < rect.width * 0.2 && index === currentLeaf - 1) {
+          leaves[currentLeaf - 1].classList.remove('flipped');
+          currentLeaf--;
+        }
+      });
+    });
+  </script>
+</body>
+</html>
