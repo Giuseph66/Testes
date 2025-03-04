@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>HARRYM - Loja</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/customization.css') }}">
+</head>
+<body>
+  <h1>Loja</h1>
+  <p id="coinsDisplay">Moedas: 0</p>
+  <p id="runesDisplay">Runas: 0</p>
+  <form id="extraJumpForm">
+    <input type="number" id="jumpCount" placeholder="Quantidade de Pulos Extras" required>
+    <p id="totalCost">Custo: 0 moedas</p>
+    <button type="submit">Comprar Pulos Extras (50 Moedas)</button>
+  </form>
+  <form id="newAbilityForm">
+    <input type="text" id="abilityName" placeholder="Nome da Habilidade" required>
+    <input type="text" id="abilityDescription" placeholder="Descrição da Habilidade" required>
+    <button type="submit">Comprar Nova Habilidade (10 Runas)</button>
+  </form>
+  <button id="backButton">Voltar ao Menu</button>
+  <script src="{{ url_for('static', filename='js/loja.js') }}"></script>
+</body>
+</html>
