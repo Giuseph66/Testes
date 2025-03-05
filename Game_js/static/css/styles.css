@@ -7,10 +7,10 @@ body {
   overflow: hidden;
 }
 
-/* Estilização do canvas */
 #gameCanvas {
   display: block;
   margin: 20px auto;
+  margin-right: 25%;
   background: linear-gradient(180deg, #1a1a1a, #000000);
   border: 2px solid #333;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
@@ -56,14 +56,30 @@ body {
 
 #powerInfo {
   position: absolute;
+  overflow-y: auto;
   top: 10px;
   right: 10px;
   width: 20%;
+  height: auto;
+  max-height: 90%; /* Adjust height to fit the screen */
   padding: 10px 15px;
   background: rgba(0, 0, 0, 0.7);
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   z-index: 100;
+}
+
+#powerInfo::-webkit-scrollbar {
+  width: 8px;
+}
+
+#powerInfo::-webkit-scrollbar-thumb {
+  background: #ffcc00;
+  border-radius: 4px;
+}
+
+#powerInfo::-webkit-scrollbar-thumb:hover {
+  background: #ff9900;
 }
 
 #powerInfo h3 {

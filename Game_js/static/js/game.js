@@ -15,6 +15,7 @@ const ctx = canvas.getContext('2d');
 let coins = JSON.parse(localStorage.getItem('coins')) || 0;
 let runes = JSON.parse(localStorage.getItem('runes')) || 0;
 let gameOver = false;
+let mundo_invertido = false;
 window.timeControlActive = false;
 window.Inverter = false;
 let activePowers = {
@@ -23,7 +24,7 @@ let activePowers = {
   velocidade: 0,
   invisibilidade: 0,
   magnetismo: 0,
-  teletransporte: 1,
+  teletransporte: 0,
   cloneSombrio: 0,
   controleDoTempo: 0,
   mundoInvertido: 0,
@@ -49,6 +50,73 @@ let currentRoom = 0;
 const ROOM_WIDTH = canvas.width;
 let frameCount = 0;
 let passiveAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+
+let airTime = 0;
+let extraJumpCount = 0;
+let rocketEnemyActive = false;
+
+const rocketEnemy = {
+  x: -2000,
+  y: 0,
+  width: 50,
+  height: 20,
+  speed: 8,
+  active: false
+};
+
+let cooldowns = {
+  teletransporte: [0,0] ,
+plataformaextra: [0,0] ,
+controledotempo: [0,0] ,
+mundoinvertido: [0,0] ,
+voar: [0,0] ,
+raiolaser: [0,0] ,
+escalada: [0,0] ,
+espectro: [0,0] ,
+espadasagrada: [0,0] ,
+efeitobumerangue: [0,0] ,
+formaaquática: [0,0] ,
+congelamento: [0,0] ,
+fúria: [0,0] ,
+minaprogramável: [0,0] ,
+laminaGiratoria: [0,0] ,
+curagradual: [0,0] ,
+armadilhadeespinhos: [0,0] ,
+corda_gancho: [0,0] ,
+eloespiritual: [0,0] ,
+supersopro: [0,0] 
+};
+
+function updateCooldowns() {
+  for (let ability in cooldowns) {
+    if (cooldowns[ability][0] > 0) {
+      cooldowns[ability][0] -= 1000 / 60; // Assuming 60 FPS
+      if (cooldowns[ability][0] < 0) cooldowns[ability][0] = 0;
+    }
+  }
+}
+
+function drawCooldownBars() {
+  const abilities = Object.keys(cooldowns);
+  abilities.forEach((ability) => {
+    const cooldown = cooldowns[ability][0];
+    const maxCooldown = cooldowns[ability][1];
+    const abilityElement = document.getElementById(ability.toLowerCase()+"Carrega");
+    if (cooldown > 0) {
+      //console.log(cooldown,maxCooldown)
+      if (abilityElement) {
+          const porcentagem = ((maxCooldown - cooldown) / maxCooldown) * 100; 
+          abilityElement.style.display = 'block';
+          abilityElement.style.width = `${100-porcentagem}%`; 
+        }
+      }else{ if (abilityElement) {
+        setTimeout(() => {
+        abilityElement.style.display = 'none';
+        abilityElement.style.width = `0%`; 
+      }, 1000);}
+      }
+  });
+}
 
 // ========= Estrutura das Salas =========
 const rooms = {};
@@ -302,8 +370,33 @@ function updatePlayer() {
   if (roomKeys.length > 10) {
     delete rooms[roomKeys[0]];
   }
-}
+  if (mundo_invertido){
+    if (player.y>300) {
+      airTime += 1 / 60; 
+    }else {
+      airTime = 0;
+      extraJumpCount = 0;
+      rocketEnemyActive = false;
+    }
+  }else{
+    if (player.y<300) {
+      airTime += 1 / 60; 
+    }else {
+      airTime = 0;
+      extraJumpCount = 0;
+      rocketEnemyActive = false;
+    }
+  }
 
+  if (airTime > 8 || extraJumpCount > 10) {
+    rocketEnemyActive = true;
+    rocketEnemy.active = true;
+    rocketEnemy.y = player.y; 
+  }else{
+    rocketEnemy.x= -1000;
+    rocketEnemy.active = false;
+  }
+}
 
 // ========= Atualização dos Inimigos =========
 function updateEnemies() {
@@ -319,6 +412,14 @@ function updateEnemies() {
         enemy.velocityX *= -1;
       }
     });
+  }
+
+  // Update rocket enemy
+  if (rocketEnemy.active) {
+    rocketEnemy.x += rocketEnemy.speed;
+    if (rocketEnemy.x > canvas.width) {
+      rocketEnemy.x = -50;
+    }
   }
 }
 
@@ -383,7 +484,7 @@ function checkCollisions() {
         player.y + player.height > power.y
       ) {
         power.collected = true;
-        activePowers[power.type] = 300;
+        activePowers[power.type] += 300;
         updateUI();
       }
     });
@@ -428,6 +529,46 @@ function checkCollisions() {
         }
       }
     });
+  }
+
+  // Check collision with rocket enemy
+  if (rocketEnemy.active) {
+    if (
+      player.x < rocketEnemy.x + rocketEnemy.width &&
+      player.x + player.width > rocketEnemy.x &&
+      player.y < rocketEnemy.y + rocketEnemy.height &&
+      player.y + player.height > rocketEnemy.y
+    ) {
+      if (activePowers['escudo'] <= 0 && activePowers['invisibilidade'] <= 0) {
+        gameOver = true;
+      }
+    }
+  }
+}
+
+function checkCanvasCollisions() {
+  // Check collision with the top of the canvas
+  if (player.y < 0) {
+    player.y = 0;
+    player.velocityY = 0;
+  }
+
+  // Check collision with the bottom of the canvas
+  if (player.y + player.height > canvas.height) {
+    player.y = canvas.height - player.height;
+    player.velocityY = 0;
+  }
+
+  // Check collision with the left of the canvas
+  if (player.x < 0) {
+    player.x = 0;
+    player.velocityX = 0;
+  }
+
+  // Check collision with the right of the canvas
+  if (player.x + player.width > canvas.width) {
+    player.x = canvas.width - player.width;
+    player.velocityX = 0;
   }
 }
 
@@ -570,7 +711,18 @@ function draw() {
   ctx.fillStyle = 'white';
   ctx.font = "16px Arial";
   ctx.fillText("Seed: " + semente, canvas.width - 120, 20);
+  ctx.fillText("MP: " + Math.floor(player.x + scrollOffset), 0, 20);
+  
+  // Draw rocket enemy
+  if (rocketEnemy.active) {
+    ctx.fillStyle = 'red';
+    ctx.fillText("!!!!",0, rocketEnemy.y);
+    ctx.fillText("-".repeat(canvas.width),0, 300);
+    ctx.fillStyle = 'green';
+    ctx.fillRect(rocketEnemy.x, rocketEnemy.y, rocketEnemy.width, rocketEnemy.height);
+  }
 }
+
 
 // ========= Loop Principal =========
 function gameLoop() {
@@ -588,7 +740,10 @@ function gameLoop() {
   updateEnemies();
   updatePowerUp();
   checkCollisions();
+  checkCanvasCollisions(); // Add this line to check canvas collisions
+  updateCooldowns(); // Add this line to update cooldowns
   draw();
+  drawCooldownBars(); // Add this line to draw cooldown bars
   requestAnimationFrame(gameLoop);
   updateClones();
 }
@@ -620,6 +775,9 @@ function updateClones() {
     clones = clones.filter(clone => now - clone.spawnTime < clone.duration);
   }
 }
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Set up key events once, using the functions from powers.js:
   document.addEventListener('keydown', (e) => {
@@ -632,45 +790,84 @@ document.addEventListener('DOMContentLoaded', () => {
         player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
         localStorage.setItem('extraJumps', JSON.stringify(player.remainingAirJumps));
         updateUI();
+        extraJumpCount++;
       }
-    } else if (e.key === 'T') {
+    } else if (e.key.toUpperCase() === 'T' && cooldowns.teletransporte[0] === 0) {
       useTeletransporte();
-    } else if (e.key === 'C') {
+      cooldowns.teletransporte[0] = 5000 - 5000 * (player.teleport?.level/100 || 1); // Example cooldown duration
+      cooldowns.teletransporte[1] = 5000 - 5000 * (player.teleport?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'C' && cooldowns.plataformaextra[0] === 0) {
       createClone();
-    } else if (e.key === 'L') {
+      cooldowns.plataformaextra[0] =5000 - 5000 * (player.clone?.level/100 || 1); // Example cooldown duration
+      cooldowns.plataformaextra[1] =5000 - 5000 * (player.clone?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'L' && cooldowns.raiolaser[0] === 0) {
       shootLaser();
-    } else if (e.key === 'M') {
+      cooldowns.raiolaser[0] =5000 - 5000 * (player.laser?.level/100 || 1); // Example cooldown duration
+      cooldowns.raiolaser[1] =5000 - 5000 * (player.laser?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'M' && cooldowns.mina[0] === 0) {
       placeMine();
-    } else if (e.key === 'G') {
+      cooldowns.mina[0] =5000 - 5000 * (player.mine?.level/100 || 1); // Example cooldown duration
+      cooldowns.mina[1] =5000 - 5000 * (player.mine?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'G' && cooldowns.corda_gancho[0] === 0) {
       useGrapplingHook();
-    } else if (e.key === 'B') {
+      cooldowns.corda_gancho[0] =5000 - 5000 * (player.grapplingHook?.level/100 || 1); // Example cooldown duration
+      cooldowns.corda_gancho[1] =5000 - 5000 * (player.grapplingHook?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'B' && cooldowns.supersopro[0] === 0) {
       useSuperBlow();
-    } else if (e.key === 'Q') {
+      cooldowns.supersopro[0] =5000 - 5000 * (player.superBlow?.level/100 || 1); // Example cooldown duration
+      cooldowns.supersopro[1] =5000 - 5000 * (player.superBlow?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'Q' && cooldowns.controledotempo[0] === 0) {
       applyTimeControl();
-    } else if (e.key === 'I') {
+      cooldowns.controledotempo[0] =5000 - 5000 * (player.timeControl?.level/100 || 1); // Example cooldown duration
+      cooldowns.controledotempo[1] =5000 - 5000 * (player.timeControl?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'I' && cooldowns.mundoinvertido[0] === 0) {
       applyInvertedWorld();
-    } else if (e.key === 'F') {
+      cooldowns.mundoinvertido[0] =5000 - 5000 * (player.invertedWorld?.level/100 || 1); // Example cooldown duration
+      cooldowns.mundoinvertido[1] =5000 - 5000 * (player.invertedWorld?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'F' && cooldowns.voar[0] === 0) {
       applyFlying();
-    } else if (e.key === 'E') {
-      applySpectralForm();
-    } else if (e.key === 'S') {
+      cooldowns.voar[0] =5000 - 5000 * (player.canFly?.level/100 || 1); // Example cooldown duration
+      cooldowns.voar[1] =5000 - 5000 * (player.canFly?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'E' && cooldowns.escalada[0] === 0) {
+      applyClimbing();
+      cooldowns.escalada[0] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
+      cooldowns.escalada[1] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'S' && cooldowns.espadasagrada[0] === 0) {
       applySacredSword();
-    } else if (e.key === 'A') {
+      cooldowns.espadasagrada[0] =5000 - 5000 * (player.sacredSword?.level/100 || 1); // Example cooldown duration
+      cooldowns.espadasagrada[1] =5000 - 5000 * (player.sacredSword?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'A' && cooldowns.efeitobumerangue[0] === 0) {
       applyBoomerangEffect();
-    } else if (e.key === 'W') {
+      cooldowns.efeitobumerangue[0] =5000 - 5000 * (player.boomerang?.level/100 || 1); // Example cooldown duration
+      cooldowns.efeitobumerangue[1] =5000 - 5000 * (player.boomerang?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'W' && cooldowns.formaaquática[0] === 0) {
       applyAquaticForm();
-    } else if (e.key === 'R') {
+      cooldowns.formaaquática[0] =5000 - 5000 * (player.aquaticForm?.level/100 || 1); // Example cooldown duration
+      cooldowns.formaaquática[1] =5000 - 5000 * (player.aquaticForm?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'R' && cooldowns.congelamento[0] === 0) {
       applyFreezing();
-    } else if (e.key === 'U') {
+      cooldowns.congelamento[0] =5000 - 5000 * (player.freezing?.level/100 || 1); // Example cooldown duration
+      cooldowns.congelamento[1] =5000 - 5000 * (player.freezing?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'U' && cooldowns.fúria[0] === 0) {
       applyFury();
-    } else if (e.key === 'P') {
+      cooldowns.fúria[0] =5000 - 5000 * (player.fury?.level/100 || 1); // Example cooldown duration
+      cooldowns.fúria[1] =5000 - 5000 * (player.fury?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'P' && cooldowns.laminaGiratoria[0] === 0) {
       applySpinningBlade();
-    } else if (e.key === 'H') {
+      cooldowns.laminaGiratoria[0] =5000 - 5000 * (player.spinningBlade?.level/100 || 1); // Example cooldown duration
+      cooldowns.laminaGiratoria[1] =5000 - 5000 * (player.spinningBlade?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'H' && cooldowns.curagradual[0] === 0) {
       applyGradualHealing();
-    } else if (e.key === 'K') {
+      cooldowns.curagradual[0] =5000 - 5000 * (player.gradualHealing?.level/100 || 1); // Example cooldown duration
+      cooldowns.curagradual[1] =5000 - 5000 * (player.gradualHealing?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'K' && cooldowns.armadilhadeespinhos[0] === 0) {
       placeSpikeTrap();
-    } else if (e.key === 'O') {
+      cooldowns.armadilhadeespinhos[0] =5000 - 5000 * (player.spikeTrap?.level/100 || 1); // Example cooldown duration
+      cooldowns.armadilhadeespinhos[1] =5000 - 5000 * (player.spikeTrap?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'O' && cooldowns.eloespiritual[0] === 0) {
       useSpiritualLink();
+      cooldowns.eloespiritual[0] =5000 - 5000 * (player.spiritualLink?.level/100 || 1); // Example cooldown duration
+      cooldowns.eloespiritual[1] =5000 - 5000 * (player.spiritualLink?.level/100 || 1); // Example cooldown duration
     }
     // Add more key bindings for other abilities as needed
   });
@@ -700,19 +897,30 @@ function displayPowerInfo() {
   const powerInfoList = document.getElementById('powerInfoList');
   powerInfoList.innerHTML = '';
   passiveAbilities.forEach(ability => {
+    const carrega = document.createElement('div');
     const li = document.createElement('li');
+    carrega.id = (ability.name).replace(/ /g,"").toLowerCase().replace("/", "_")+"Carrega";
+    carrega.style.position = "absolute"; // Posicionamento absoluto
+    carrega.style.top = "0"; // Alinha ao topo do <li>
+    carrega.style.left = "0"; // Alinha à esquerda do <li>
+    carrega.style.width = "0%"; // Começa com 0% de largura
+    carrega.style.height = "100%"; // Altura completa do <li>
+    carrega.style.backgroundColor = "rgba(255, 0, 0, 0.42)"; // Cor de fundo (vermelho semi-transparente)
+    carrega.style.transition = "width 0.5s ease"; // Animação suave da largura
+    carrega.style.zIndex = "99"; // Coloca acima do texto
     li.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;
+    li.style.position = "relative";
+    li.appendChild(carrega);
     powerInfoList.appendChild(li);
   });
 }
 
-// Apply passive abilities
 function applyPassiveAbilities() {
   passiveAbilities.forEach(ability => {
     if (ability.name === 'Teletransporte') {
       ability.key = 'T';
       player.teleport = { level: ability.level || 1, key: ability.key };
-    } else if (ability.name === 'Clone Sombrio') {
+    } else if (ability.name === 'Plataforma Extra') {
       ability.key = 'C';
       player.clone = { level: ability.level || 1, key: ability.key };
     } else if (ability.name === 'Controle do Tempo') {

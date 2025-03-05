@@ -36,6 +36,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Função para comprar o máximo possível de pulos extras
+  document.getElementById('buyMaxButton').addEventListener('click', () => {
+    const maxJumpCount = Math.floor(coins / 50);
+    if (maxJumpCount > 0) {
+      coins -= maxJumpCount * 50;
+      localStorage.setItem('coins', JSON.stringify(coins));
+      coinsDisplay.textContent = "Moedas: " + coins;
+      let currentJumps = JSON.parse(localStorage.getItem('extraJumps')) || 1;
+      currentJumps += maxJumpCount;
+      localStorage.setItem('extraJumps', JSON.stringify(currentJumps));
+      alert("Pulos extras atualizados: " + (currentJumps - 1));
+      totalCostDisplay.textContent = "Custo: 0 moedas";
+    } else {
+      alert("Moedas insuficientes!");
+    }
+  });
+
   // Botão para voltar ao menu
   document.getElementById('backButton').addEventListener('click', () => {
     window.location.href = '/';
@@ -164,68 +181,68 @@ function updateUI() {
 
 function applyPassiveAbilities() {
   const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
-
+  player=[];
   purchasedAbilities.forEach(ability => {
     if (ability.name === 'Teletransporte') {
       ability.key = 'T';
-      player.teleport = { level: ability.level || 1, key: ability.key };
+      player.teleport = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Clone Sombrio') {
       ability.key = 'C';
-      player.clone = { level: ability.level || 1, key: ability.key };
+      player.clone = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Controle do Tempo') {
       ability.key = 'Q';
-      player.timeControl = { level: ability.level || 1, key: ability.key };
+      player.timeControl = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Mundo Invertido') {
       ability.key = 'I';
-      player.invertedWorld = { level: ability.level || 1, key: ability.key };
+      player.invertedWorld = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Voar') {
       ability.key = 'F';
-      player.canFly = { level: ability.level || 1, key: ability.key };
+      player.canFly = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Raio Laser') {
       ability.key = 'L';
-      player.laser = { level: ability.level || 1, key: ability.key };
+      player.laser = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Escalada') {
       ability.key = 'E';
-      player.canClimb = { level: ability.level || 1, key: ability.key };
+      player.canClimb = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Espectro') {
       ability.key = 'E'; // Se desejar uma tecla diferente, altere aqui
-      player.spectralForm = { level: ability.level || 1, key: ability.key };
+      player.spectralForm = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Espada Sagrada') {
       ability.key = 'S';
-      player.sacredSword = { level: ability.level || 1, key: ability.key };
+      player.sacredSword = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Efeito Bumerangue') {
       ability.key = 'A';
-      player.boomerang = { level: ability.level || 1, key: ability.key };
+      player.boomerang = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Forma Aquática') {
       ability.key = 'W';
-      player.aquaticForm = { level: ability.level || 1, key: ability.key };
+      player.aquaticForm = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Congelamento') {
       ability.key = 'R';
-      player.freezing = { level: ability.level || 1, key: ability.key };
+      player.freezing = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Fúria') {
       ability.key = 'U';
-      player.fury = { level: ability.level || 1, key: ability.key };
+      player.fury = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Mina Programável') {
       ability.key = 'M';
-      player.mine = { level: ability.level || 1, key: ability.key };
+      player.mine = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Lâmina Giratória') {
       ability.key = 'P';
-      player.spinningBlade = { level: ability.level || 1, key: ability.key };
+      player.spinningBlade = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Cura Gradual') {
       ability.key = 'H';
-      player.gradualHealing = { level: ability.level || 1, key: ability.key };
+      player.gradualHealing = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Armadilha de Espinhos') {
       ability.key = 'K';
-      player.spikeTrap = { level: ability.level || 1, key: ability.key };
+      player.spikeTrap = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Corda/Gancho') {
       ability.key = 'G';
-      player.grapplingHook = { level: ability.level || 1, key: ability.key };
+      player.grapplingHook = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Elo Espiritual') {
       ability.key = 'O';
-      player.spiritualLink = { level: ability.level || 1, key: ability.key };
+      player.spiritualLink = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Super Sopro') {
       ability.key = 'B';
-      player.superBlow = { level: ability.level || 1, key: ability.key };
+      player.superBlow = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     }
   });
   displayActiveAbilities();
@@ -234,6 +251,9 @@ function applyPassiveAbilities() {
 
 function displayActiveAbilities() {
   const activeAbilitiesList = document.getElementById('activeAbilitiesList');
+  if (!activeAbilitiesList) {
+    return;
+  }
   activeAbilitiesList.innerHTML = '';
   const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
 
@@ -246,6 +266,9 @@ function displayActiveAbilities() {
 
 function displayPowerInfo() {
   const powerInfoList = document.getElementById('powerInfoList');
+  if (!powerInfoList) {
+    return;
+  }
   powerInfoList.innerHTML = '';
   const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
 

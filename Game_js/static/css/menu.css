@@ -9,17 +9,62 @@ body {
 
 /* Tela de Menu */
 #menuOverlay {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background: linear-gradient(135deg, #000 0%, #330000 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   animation: fadeIn 1s ease-out;
+  overflow-y: auto;
+}
+#menuOverlay::-webkit-scrollbar {
+  display: none;
+}
+#abilitiesList{
+  height: auto;
+  max-height: 100px;
+  overflow-y: auto;
+}
+#abilitiesList::-webkit-scrollbar {
+  width: 10px;
+}
+
+#abilitiesList::-webkit-scrollbar-track {
+  background: #333;
+}
+
+#abilitiesList::-webkit-scrollbar-thumb {
+  background: #ff192c;
+  border-radius: 5px;
+}
+
+#abilitiesList::-webkit-scrollbar-thumb:hover {
+  background: #ff192c;
+}
+#historyList{
+  height: auto;
+  max-height: 100px;
+  overflow-y: auto;
+}
+#historyList::-webkit-scrollbar {
+  width: 10px;
+}
+
+#historyList::-webkit-scrollbar-track {
+  background: #333;
+}
+
+#historyList::-webkit-scrollbar-thumb {
+  background: #ff192c;
+  border-radius: 5px;
+}
+
+#historyList::-webkit-scrollbar-thumb:hover {
+  background: #ff192c;
 }
 
 @keyframes fadeIn {
@@ -30,7 +75,7 @@ body {
 #menuOverlay h1 {
   font-family: 'Bangers', cursive;
   font-size: 64px;
-  color: #e63946;
+  color: #ff192c;
   margin: 0;
   text-shadow: 2px 2px 4px #000;
 }
@@ -70,20 +115,20 @@ body {
 }
 
 #menuOverlay form button {
-  background: #e63946;
+  background: #ff192c;
   color: #fff;
   cursor: pointer;
   transition: background 0.3s ease;
 }
 
 #menuOverlay form button:hover {
-  background: #d62828;
+  background: #ff0404;
 }
 
 #menuOverlay button#startButton {
   margin-top: 30px;
   padding: 15px 30px;
-  background: #e63946;
+  background: #ff192c;
   color: #fff;
   font-size: 18px;
   border: none;
@@ -93,13 +138,13 @@ body {
 }
 
 #menuOverlay button#startButton:hover {
-  background: #d62828;
+  background: #ff0000;
 }
 
 #menuOverlay button#customizeButton {
   margin-top: 20px;
   padding: 10px 20px;
-  background: #e63946; /* Adjusted color */
+  background: #ff192c; /* Adjusted color */
   color: #fff;
   font-size: 16px;
   border: none;
@@ -109,7 +154,7 @@ body {
 }
 
 #menuOverlay button#customizeButton:hover {
-  background: #d62828; /* Adjusted color */
+  background: #ff0000; /* Adjusted color */
 }
 
 #statusContainer {

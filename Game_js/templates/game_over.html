@@ -66,8 +66,13 @@
     document.addEventListener('DOMContentLoaded', () => {
       const distance = localStorage.getItem('distanceTraveled') || 0;
       const coins = localStorage.getItem('coinsEarned') || 0;
+      const seed = localStorage.getItem('seed') || 0;
+      const momento = new Date().toLocaleString();
+      const historicoExistente = JSON.parse(localStorage.getItem('historico')) || [];
       document.getElementById('distance').textContent = distance + " MP";
       document.getElementById('coins').textContent = coins;
+      historicoExistente.push({ distance, momento, seed });
+      localStorage.setItem('historico', JSON.stringify(historicoExistente));
     });
 
     function voltarMenu() {

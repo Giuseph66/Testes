@@ -8,19 +8,22 @@
 </head>
 <body>
   <h1>Loja</h1>
-  <p id="coinsDisplay">Moedas: 0</p>
-  <p id="runesDisplay">Runas: 0</p>
+  <div class="coins-runes">
+    <p id="coinsDisplay">Moedas: 0</p>
+    <p id="runesDisplay">Runas: 0</p>
+  </div>
   <form id="extraJumpForm">
-    <input type="number" id="jumpCount" placeholder="Quantidade de Pulos Extras" required>
+    <input type="number" id="jumpCount" placeholder="Quantidade de Pulos Extras" required style="width: 93%;">
     <p id="totalCost">Custo: 0 moedas</p>
     <button type="submit">Comprar Pulos Extras (50 Moedas)</button>
+    <button type="button" id="buyMaxButton">Compra MAX</button>
   </form>
   <div class="book-container">
     <div class="book" id="book">
       <!-- Folhas com poderes serão geradas dinamicamente -->
     </div>
   </div>
-  <button id="backButton">Voltar ao Menu</button>
+  <button id="backButton" style="margin-top: 30px;">Voltar ao Menu</button>
   <script src="{{ url_for('static', filename='js/loja.js') }}"></script>
   <script src="{{ url_for('static', filename='js/book.js') }}"></script>
 </body>

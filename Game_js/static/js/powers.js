@@ -1,4 +1,3 @@
-// Teletransporte
 function useTeletransporte() {
   if (player.teleport) {
     const distance = 100 + ((player.teleport.level*0.3)*100 || 1); // Increase distance with level
@@ -35,7 +34,9 @@ function applyTimeControl() {
     GRAVITY = 0.06;
     window.timeControlActive = true;
     player.jumpForce= -4.5;
+    rocketEnemy.speed = 1;
     setTimeout(() => {
+      rocketEnemy.speed = 8;
       player.jumpForce = -10;
       GRAVITY = 0.3;
       window.timeControlActive = false;
@@ -44,12 +45,68 @@ function applyTimeControl() {
 }
 
 
-
+//mundo invertido
 function applyInvertedWorld() {
   if (player.invertedWorld) {
-    const duration = 5000 * (player.invertedWorld.level || 1); // Increase duration with level
-    player.speed = -player.speed;
-    setTimeout(() => { player.speed = -player.speed; }, duration);
+function invertYAxis() {
+  const canvasHeight = canvas.height;
+  mundo_invertido = !mundo_invertido;
+
+  // Invert player position and velocity
+  player.y = canvasHeight - player.y - player.height;
+  player.velocityY = -player.velocityY;
+
+  // Invert positions of platforms
+  for (let key in rooms) {
+    rooms[key].platforms.forEach(platform => {
+      platform.y = canvasHeight - platform.y - platform.height;
+    });
+  }
+
+  // Invert positions of coins
+  for (let key in rooms) {
+    rooms[key].coins.forEach(coin => {
+      coin.y = canvasHeight - coin.y - coin.height;
+    });
+  }
+
+  // Invert positions of runes
+  for (let key in rooms) {
+    rooms[key].runes.forEach(rune => {
+      rune.y = canvasHeight - rune.y - rune.height;
+    });
+  }
+
+  // Invert positions of power-ups
+  for (let key in rooms) {
+    rooms[key].powerUps.forEach(powerUp => {
+      powerUp.y = canvasHeight - powerUp.y - powerUp.height;
+    });
+  }
+
+  // Invert positions of spikes
+  for (let key in rooms) {
+    rooms[key].spikes.forEach(spike => {
+      spike.y = canvasHeight - spike.y - spike.height;
+    });
+  }
+
+  // Invert positions of enemies
+  for (let key in rooms) {
+    rooms[key].enemies.forEach(enemy => {
+      enemy.y = canvasHeight - enemy.y - enemy.height;
+      enemy.velocityY = -enemy.velocityY;
+    });
+  }
+
+  // Invert positions of clones
+  clones.forEach(clone => {
+    clone.y = canvasHeight - clone.y - clone.height;
+    clone.velocityY = -clone.velocityY;
+  });
+  
+}
+    invertYAxis()
   }
 }
 
@@ -57,8 +114,9 @@ function applyInvertedWorld() {
 function applyFlying() {
   if (player.canFly) {
     const duration = 5000 * (player.canFly.level || 1); // Increase duration with level
-    player.velocityY = -5;
-    setTimeout(() => { player.velocityY = 0; }, duration);
+    player.velocityY -= 10;
+    GRAVITY=0.2;
+    setTimeout(() => { GRAVITY = 0.3;}, duration);
   }
 }
 
@@ -134,7 +192,7 @@ function applyFury() {
     player.speed *= 2;
     player.attackPower = 2;
     setTimeout(() => {
-      player.speed /= 2;
+      player.speed = 2;
       player.attackPower = 1;
     }, duration);
   }
