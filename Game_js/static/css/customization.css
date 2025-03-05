@@ -154,7 +154,7 @@ button:hover {
   /* Página da frente: posicionada à direita */
   .front {
     right: 0;
-    z-index: 2;
+    z-index: 1;
   }
   /* Página de verso: posicionada à esquerda e rotacionada */
   .back {
