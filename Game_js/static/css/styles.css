@@ -9,6 +9,9 @@ body {
 #ceu{
   background: #333;
 }
+.hidden-img {
+  display: none;
+}
 #gameCanvas {
   display: block;
   margin: 20px auto;

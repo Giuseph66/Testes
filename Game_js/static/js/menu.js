@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let seed = Math.floor(Math.random() * 1000000);
   const seedDisplay = document.getElementById('seedDisplay');
   seedDisplay.value = seed; 
+  let tamanho = (String(seed).length * 3.5)+3.5;
+  console.log(tamanho);
+  seedDisplay.style.width= `${tamanho}%`;
 
   
   const extraJumps = JSON.parse(localStorage.getItem('extraJumps')) || 0;
@@ -22,10 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Exibe histórico do jogo, se houver
   const historyList = document.getElementById('historyList');
   const gameHistory = JSON.parse(localStorage.getItem('historico')) || [];
-  console.log(gameHistory);
+  //console.log(gameHistory);
+  gameHistory.sort((a, b) => b.distance-a.distance);
   if (gameHistory.length > 0){
     gameHistory.forEach(jogo => {
-      console.log(jogo);
+      //console.log(jogo);
       const li = document.createElement('li');
       li.innerHTML = `<b>Seed: ${jogo.seed},</b> <b>MP: ${jogo.distance},</b> <b>Data: ${jogo.momento}</b>`;
       historyList.appendChild(li);

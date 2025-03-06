@@ -2,126 +2,94 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Animação de Folhas do Livro</title>
+  <title>Desenho de Imagens no Canvas</title>
   <style>
-    .book-container {
-      width: 300px;
-      height: 400px;
-      position: relative;
-      perspective: 1000px;
-      margin: 50px auto;
+    body {
+      background: #111;
+      color: #eee;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    #gameCanvas {
+      background: #222;
+      margin-top: 20px;
       border: 2px solid #e63946;
     }
-    /* O livro (contendo as folhas) */
-    .book {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      transform-style: preserve-3d;
-    }
-    /* Cada folha com transição para flip */
-    .leaf {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      transform-style: preserve-3d;
-      transition: transform 1s linear;
-      transform-origin: left center;
-    }
-    .leaf.flipped {
-      transform: rotateY(-180deg);
-    }
-    /* Cada página ocupa 98% da folha */
-    .page {
-      position: absolute;
-      width: 98%;
-      height: 100%;
-      backface-visibility: hidden;
-      padding: 20px;
-      box-sizing: border-box;
-      overflow-y: auto;
-      box-shadow: 0 0 15px rgba(230,57,70,0.3);
-    }
-    /* Página da frente (lado direito da folha) */
-    .front {
-      right: 0;
-      background-color: #222;
-      border: 1px solid #e63946;
-      z-index: 2;
-    }
-    /* Página de verso (lado esquerdo da folha) */
-    .back {
-      left: 0;
-      background-color: #333;
-      border: 1px solid #e63946;
-      transform: rotateY(180deg);
-      z-index: 1;
-    }
-    button {
-      margin: 10px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #e63946;
-      border: none;
-      color: #fff;
-      border-radius: 4px;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background-color: #d62828;
+    /* Ocultamos as tags <img> para não exibi-las na tela */
+    .hidden-img {
+      display: none;
     }
   </style>
 </head>
 <body>
-  <div class="book-container">
-    <div class="book" id="book">
-      <!-- Folha 1: contém as páginas 1 e 2 -->
-      <div class="leaf" id="leaf1">
-        <div class="page front">
-          <h1>Página 1</h1>
-          <p>Conteúdo da página 1...</p>
-        </div>
-        <div class="page back">
-          <h1>Página 2</h1>
-          <p>Conteúdo da página 2...</p>
-        </div>
-      </div>
-      <!-- Folha 2: contém as páginas 3 e 4 -->
-      <div class="leaf" id="leaf2" style="z-index: 0;">
-        <div class="page front">
-          <h1>Página 3</h1>
-          <p>Conteúdo da página 3...</p>
-        </div>
-        <div class="page back">
-          <h1>Página 4</h1>
-          <p>Conteúdo da página 4...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="text-align:center;">
-    <button onclick="prevPage()">Página Anterior</button>
-    <button onclick="nextPage()">Próxima Página</button>
-  </div>
+  <h1>Exemplo de Inserção de Imagens no Canvas</h1>
+  
+  <!-- Canvas onde desenharemos -->
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+  <!-- Imagens (podem estar na mesma pasta ou em outro caminho) -->
+  <!-- Ajuste o src para o caminho correto dos seus arquivos -->
+  <img id="imgShield" class="hidden-img" src="static/images/escudo.png" alt="Escudo">
+  <img id="imgImpulse" class="hidden-img" src="static/images/pulso.png" alt="Batimento Cardíaco">
+  <img id="imgLightning" class="hidden-img" src="static/images/raio.png" alt="Raio">
+  <img id="imgInvisible" class="hidden-img" src="static/images/homem-invisivel.png" alt="Homem Invisível">
+  <img id="imgMagnet" class="hidden-img" src="static/images/ima.png" alt="Ímã">
+
   <script>
-    let currentLeaf = 0;
-    const leaves = document.querySelectorAll('.leaf');
-    const totalLeaves = leaves.length;
+    // Obtém o contexto do canvas
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
 
-    function nextPage() {
-      if (currentLeaf < totalLeaves) {
-        leaves[currentLeaf].classList.add('flipped');
-        currentLeaf++;
-      }
-    }
+    // Referências às imagens no DOM
+    const imgShield = document.getElementById('imgShield');
+    const imgImpulse = document.getElementById('imgImpulse');
+    const imgLightning = document.getElementById('imgLightning');
+    const imgInvisible = document.getElementById('imgInvisible');
+    const imgMagnet = document.getElementById('imgMagnet');
 
-    function prevPage() {
-      if (currentLeaf > 0) {
-        currentLeaf--;
-        leaves[currentLeaf].classList.remove('flipped');
-      }
+    function drawShield(x, y, width, height) {
+      drawTintedImage(imgShield, x, y, width, height, 'blue');
     }
+    function drawImpulse(x, y, width, height) {
+      drawTintedImage(imgImpulse, x, y, width, height, 'red');
+    }
+    function drawLightning(x, y, width, height) {
+      drawTintedImage(imgLightning, x, y, width, height, 'yellow');
+    }
+    function drawInvisibleMan(x, y, width, height) {
+      drawTintedImage(imgInvisible, x, y, width, height , 'white');
+    }
+    function drawMagnet(x, y, width, height) {
+      drawTintedImage(imgMagnet, x, y, width, height, 'magenta');
+    }
+    function drawTintedImage(img, x, y, width, height, tintColor) {
+      ctx.drawImage(img, x, y, width, height);
+      ctx.globalCompositeOperation = 'source-atop';
+      ctx.fillStyle = tintColor;
+      ctx.fillRect(x, y, width, height);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    
+    window.addEventListener('load', () => {
+      // Limpa o canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Desenha cada imagem com dimensões diferentes
+      drawShield(50, 50, 100, 100);
+      drawImpulse(200, 50, 100, 100);
+      drawLightning(350, 50, 100, 100);
+      drawInvisibleMan(500, 50, 100, 100);
+      drawMagnet(650, 50, 100, 100);
+
+      // Você pode desenhar mais de uma vez, ou em posições diferentes
+      drawShield(50, 200, 60, 60);
+      drawImpulse(200, 200, 60, 60);
+      drawLightning(350, 200, 60, 60);
+      drawInvisibleMan(500, 200, 60, 60);
+      drawMagnet(650, 200, 60, 60);
+    });
   </script>
 </body>
 </html>

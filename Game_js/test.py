@@ -1,5 +1,0 @@
-Escudo
-Impulso
-Velocidade
-Invisibilidade
-Magnetismo

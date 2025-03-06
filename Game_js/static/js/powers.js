@@ -76,7 +76,11 @@ function invertYAxis() {
       rune.y = canvasHeight - rune.y - rune.height;
     });
   }
-
+  for (let key in rooms) {
+    rooms[key].sucatas.forEach(sucata => {
+      sucata.y = canvasHeight - sucata.y - sucata.height;
+    });
+    }
   // Invert positions of power-ups
   for (let key in rooms) {
     rooms[key].powerUps.forEach(powerUp => {
@@ -106,8 +110,16 @@ function invertYAxis() {
   });
   
 }
-    invertYAxis()
-  }
+function invertgravity() {
+  GRAVITY *= -1;
+  player.jumpForce *= -1;
+}
+if (Math.floor(Math.random() * 2) == 0) {
+  invertgravity();
+}else{
+  invertYAxis();
+}
+}
 }
 
 // Voar
@@ -125,11 +137,13 @@ function applyFlying() {
 // Raio Laser
 function shootLaser() {
   if (player.laser) {
+    let tamnho_laser =100+1000*(player.laser.level/100 || 1);
+    let largura_laser =5+100*(player.laser.level/100 || 1)
     const laser = {
-      x: player.facingRight ? player.x + player.width : player.x - canvas.width,
-      y: player.y + player.height / 2,
-      width: canvas.width,
-      height: 5,
+      x: player.facingRight ? player.x + player.width/2 : player.x - tamnho_laser ,
+      y: (player.y + player.height / 2)- largura_laser/2,
+      width: tamnho_laser, 
+      height: largura_laser,
       direction: player.facingRight ? 1 : -1,
       duration: 1 + 1 * (player.laser.level/100 || 1) // Increase duration with level
     };

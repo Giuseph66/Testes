@@ -1,70 +1,70 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Barra de Carregamento com Contagem Regressiva</title>
-  <style>
-    /* Estilo da lista */
-    ul {
-      list-style-type: none;
-      padding: 0;
-      width: 300px;
-    }
-
-    /* Estilo dos itens da lista */
-    li {
-      border: 1px solid #ccc;
-      margin: 5px 0;
-      padding: 10px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Barra de carregamento */
-    .barra-carregamento {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0;
-      background-color: #4caf50; /* Cor da barra */
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mudar Cor Preta da Imagem</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+        .buttons {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Lista -->
-  <ul id="lista">
-    <li>
-      <div class="barra-carregamento"></div>
-      Item 1
-    </li>
-  </ul>
+    <div class="buttons">
+        <button onclick="changeColor('red')">Vermelho</button>
+        <button onclick="changeColor('green')">Verde</button>
+        <button onclick="changeColor('blue')">Azul</button>
+        <button onclick="changeColor('orange')">Laranja</button>
+    </div>
+    <canvas id="myCanvas" width="128" height="128"></canvas>
 
-  <!-- Botão para iniciar o carregamento -->
-  <button id="iniciarCarregamento">Iniciar Carregamento</button>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
 
-  <script>
-    // Função para atualizar a barra de carregamento
-    function atualizarBarra(valor) {
-      const barra = document.querySelector('.barra-carregamento');
-      const porcentagem = ((5000 - valor) / 5000) * 100; // Calcula a porcentagem completa
-      barra.style.width = `${porcentagem}%`; // Atualiza a largura da barra
-    }
+        // Carrega a imagem
+        const img = new Image();
+        img.src = 'https://cdn-icons-png.flaticon.com/128/786/786346.png'; // Sua imagem
+        img.crossOrigin = "Anonymous"; // Permite manipulação de pixels (CORS)
+        img.onload = () => {
+            ctx.drawImage(img, 0, 0, 128, 128);
+        };
 
-    // Adiciona o evento de clique ao botão
-    document.getElementById('iniciarCarregamento').addEventListener('click', function () {
-      let valor = 5000;
+        const colors = {
+            red: { r: 255, g: 0, b: 0 },
+            green: { r: 0, g: 255, b: 0 },
+            blue: { r: 0, g: 0, b: 255 },
+            orange: { r: 255, g: 165, b: 0 }
+        };
 
-      const loop = setInterval(() => {
-        if (valor >= 0) {
-          atualizarBarra(valor); // Atualiza a barra
-          valor -= 10; // Decrementa o valor
-        } else {
-          clearInterval(loop); // Para o loop quando chegar a 0
+        function changeColor(colorName) {
+            ctx.drawImage(img, 0, 0, 128, 128);
+            const imageData = ctx.getImageData(0, 0, 128, 128);
+            const data = imageData.data;
+            const color = colors[colorName];
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                const a = data[i + 3];
+
+                if (r < 50 && g < 50 && b < 50 && a > 0) {
+                    data[i] = color.r;
+                    data[i + 1] = color.g;
+                    data[i + 2] = color.b;
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
         }
-      }, 10); // Intervalo de 10ms
-    });
-  </script>
+    </script>
 </body>
 </html>

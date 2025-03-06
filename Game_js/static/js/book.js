@@ -3,6 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function generateDynamicLeaves(abilities) {
+    let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+    if (sucata >0){
+      const sucataDisplay = document.createElement('p');
+      sucataDisplay.id = 'sucataDisplay';
+      sucataDisplay.textContent = `Sucata: ${sucata}`;
+      const coinsRunesContainer = document.getElementsByClassName('coins-runes')[0];
+      if (coinsRunesContainer) {
+        coinsRunesContainer.appendChild(sucataDisplay);
+  }
+    }
+    console.log(sucata);
     const book = document.getElementById('book');
     // Remove folhas dinâmicas anteriores (se houver)
     const prevLeaves = book.querySelectorAll('.leaf.dynamic');
@@ -24,6 +35,7 @@ function generateDynamicLeaves(abilities) {
   
     // --- Cria as folhas de habilidades ---
     const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+    let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
     abilities.forEach((ability, index) => {
       const purchasedAbility = purchasedAbilities.find(a => a.name === ability.name);
       const level = purchasedAbility ? purchasedAbility.level : 0;
@@ -37,7 +49,7 @@ function generateDynamicLeaves(abilities) {
       frontPage.className = 'page front';
       frontPage.innerHTML = `<h1>${ability.name}</h1>
       <p>${ability.description}</p>
-        <button onclick="purchaseAbility('${ability.name}', '${ability.description}')">
+        <button onclick="purchaseAbility('${ability.name}', '${ability.description}')" style="margin-top: auto;">
           ${level > 0 ? 'Atualizar' : 'Comprar'} (${cost} Runas)
         </button>`;
       
@@ -46,25 +58,36 @@ function generateDynamicLeaves(abilities) {
       try {
         backPage.innerHTML = `<h1>Era uma vez...</h1><p>${abilities[index+1].legend}</p>`;
       } catch (error) {
-        backPage.innerHTML = `<h1>Era uma vez uma historia que nunca existiu</h1><h1>Mas agora existe</h1><h1>Fim</h1>`;
+        if (sucata>10 || paisagem>0){
+          backPage.innerHTML = `<h1>Voce acha tudo feio?</h1><p>Se esforce para melhorar!</p>`;
+        }else{
+          backPage.innerHTML = `<h1>Era uma vez uma historia que nunca existiu</h1><h1>Mas agora existe</h1><h1>Fim</h1>`;
+        }
       }
       leaf.appendChild(frontPage);
       leaf.appendChild(backPage);
       book.appendChild(leaf);
     });
   
-    /* --- Cria a capa de trás ---
-    const backCover = document.createElement('div');
-    backCover.className = 'leaf dynamic cover back-cover';
-    const backCoverPage = document.createElement('div');
-    backCoverPage.className = 'page front';
-    backCoverPage.className = '<h1>Voce da conta de chegar mais longe ?</h1>';
-    const backCoverBackPage = document.createElement('div');
-    backCoverBackPage.className = 'page back';
-    backCoverBackPage.innerHTML = '<h1>Fim</h1>';
-    backCover.appendChild(backCoverPage);
-    backCover.appendChild(backCoverBackPage);
-    book.appendChild(backCover);*/
+    if (sucata>10 || paisagem > 0){
+      if (paisagem>0){
+        valor=Math.ceil(10 * Math.pow(1.3, paisagem));
+      }else{
+        valor=10;
+      }
+    const blackCover = document.createElement('div');
+    blackCover.className = 'leaf dynamic cover black-cover';
+    const blackCoverPage = document.createElement('div');
+    blackCoverPage.className = 'page front';
+    blackCoverPage.innerHTML = `<h1>Paisagem</h1>
+    <button onclick="comprapaizagem(${valor})" style="margin-top: auto;">${paisagem > 0 ? 'Atualizar' : 'Comprar'} (${valor} Runas e sucatas)</button>`;
+    const blackCoverBackPage = document.createElement('div');
+    blackCoverBackPage.className = 'page back';
+    blackCoverBackPage.innerHTML = `<h1>Era uma vez uma historia que nunca existiu</h1><h1>Mas agora existe</h1><h1>Fim</h1>`;
+    blackCover.appendChild(blackCoverPage);
+    blackCover.appendChild(blackCoverBackPage);
+    book.appendChild(blackCover);
+    }
   }
 
 let currentLeaf = 0;
@@ -154,6 +177,24 @@ function purchaseAbility(abilityName, descricao) {
     window.location.reload(); 
   } else {
     alert('Runas insuficientes!');
+  }
+}
+function comprapaizagem(valor) {
+  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
+  let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  if (runes >= valor || sucata >= valor) {
+    runes -= valor;
+    sucata -= valor;
+    localStorage.setItem('runes', JSON.stringify(runes));
+    localStorage.setItem('sucata', JSON.stringify(sucata));
+    document.getElementById('runesDisplay').textContent = `Runas: ${runes}`;
+    document.getElementById('sucataDisplay').textContent = `Sucata: ${sucata}`;
+    localStorage.setItem('pagination', currentLeaf);
+    let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
+    localStorage.setItem('paisagem', JSON.stringify(paisagem+1));
+    window.location.reload(); 
+  }else {
+    alert('Runas ou Sucatas insuficientes!');
   }
 }
 

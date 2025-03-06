@@ -6,15 +6,21 @@ body {
   color: #eee;
   overflow: hidden;
 }
-
-/* Tela de Menu */
+.botoes{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 30%;
+  animation: fad;
+}
 #menuOverlay {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  background: linear-gradient(135deg, #000 0%, #330000 100%);
+  background: linear-gradient(135deg, rgb(8, 8, 8) 0%, #330000 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -30,7 +36,7 @@ body {
   overflow-y: auto;
 }
 #abilitiesList::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 #abilitiesList::-webkit-scrollbar-track {
@@ -51,7 +57,7 @@ body {
   overflow-y: auto;
 }
 #historyList::-webkit-scrollbar {
-  width: 10px;
+  width: 5px;
 }
 
 #historyList::-webkit-scrollbar-track {
@@ -91,7 +97,15 @@ body {
   font-size: 18px;
   margin: 5px 0;
 }
-
+#menuOverlay p2 {
+  width: 300px;
+  align-items: center;
+  font-size: 110%;
+  display: flex;
+  gap: 3px;
+  margin-bottom: 5px;
+  justify-content: center;
+}
 #menuOverlay form {
   display: flex;
   flex-wrap: wrap;
@@ -126,7 +140,6 @@ body {
 }
 
 #menuOverlay button#startButton {
-  margin-top: 30px;
   padding: 15px 30px;
   background: #ff192c;
   color: #fff;
@@ -142,7 +155,6 @@ body {
 }
 
 #menuOverlay button#customizeButton {
-  margin-top: 20px;
   padding: 10px 20px;
   background: #ff192c; /* Adjusted color */
   color: #fff;
@@ -163,6 +175,9 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
 }
 
 #statusContainer h2, #statusContainer h3 {

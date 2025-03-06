@@ -155,12 +155,18 @@ button:hover {
   .front {
     right: 0;
     z-index: 1;
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
   }
   /* Página de verso: posicionada à esquerda e rotacionada */
   .back {
     left: 0;
     transform: rotateY(180deg);
     background-color: #333;
+    display: flex; 
+    flex-direction: column; 
+    height: 100%;
     z-index: 1;
   }
   /* Efeito hover para indicar área clicável */

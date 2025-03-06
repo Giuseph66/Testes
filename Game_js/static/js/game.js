@@ -15,6 +15,7 @@ const ctx = canvas.getContext('2d');
 // ========= Variáveis Globais =========
 let coins = JSON.parse(localStorage.getItem('coins')) || 0;
 let runes = JSON.parse(localStorage.getItem('runes')) || 0;
+let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
 let gameOver = false;
 let fly=false;
 let dencidade=false;
@@ -112,7 +113,7 @@ function drawCooldownBars() {
     const maxCooldown = cooldowns[ability][1];
     const abilityElement = document.getElementById(ability.toLowerCase()+"Carrega");
     if (cooldown > 0) {
-      //console.log(cooldown,maxCooldown)
+      console.log(cooldown,maxCooldown)
       if (abilityElement) {
           const porcentagem = ((maxCooldown - cooldown) / maxCooldown) * 100; 
           abilityElement.style.display = 'block';
@@ -129,6 +130,36 @@ function drawCooldownBars() {
 
 // ========= Estrutura das Salas =========
 const rooms = {};
+
+const imgShield = new Image();
+imgShield.src = 'static/images/escudo.png';
+imgShield.onload = () => console.log('imgShield loaded');
+imgShield.onerror = () => console.log('imgShield failed to load');
+
+const imgImpulse = new Image();
+imgImpulse.src = 'static/images/pulso.png';
+imgImpulse.onload = () => console.log('imgImpulse loaded');
+imgImpulse.onerror = () => console.log('imgImpulse failed to load');
+
+const imgLightning = new Image();
+imgLightning.src = 'static/images/raio.png';
+imgLightning.onload = () => console.log('imgLightning loaded');
+imgLightning.onerror = () => console.log('imgLightning failed to load');
+
+const imgInvisible = new Image();
+imgInvisible.src = 'static/images/homem-invisivel.png';
+imgInvisible.onload = () => console.log('imgInvisible loaded');
+imgInvisible.onerror = () => console.log('imgInvisible failed to load');
+
+const imgMagnet = new Image();
+imgMagnet.src = 'static/images/ima.png';
+imgMagnet.onload = () => console.log('imgMagnet loaded');
+imgMagnet.onerror = () => console.log('imgMagnet failed to load');
+
+const imgfoguete = new Image();
+imgfoguete.src = 'static/images/foguete.png';
+imgfoguete.onload = () => console.log('imgfoguete loaded');
+imgfoguete.onerror = () => console.log('imgfoguete failed to load');
 
 // ========= Configuração do Jogador =========
 const player = {
@@ -157,7 +188,7 @@ function generateRoom(roomIndex) {
     platforms: [],
     coins: [],
     runes: [],
-    powerUps: [],
+    powerUps: [], 
     spikes: [],
     enemies: [],
     sucatas: [] // Add sucatas array to the room
@@ -194,11 +225,20 @@ function generateRoom(roomIndex) {
   // Power-ups (0 a 2)
   const numPowerUps = Math.floor(seededRandom() * 3);
   const powerTypes = ['escudo', 'impulso', 'velocidade', 'invisibilidade', 'magnetismo'];
+  let larg;
+  let alt ;
   for (let i = 0; i < numPowerUps; i++) {
     const pType = powerTypes[Math.floor(seededRandom() * powerTypes.length)];
     const pX = roomStartX + 50 + seededRandom() * (ROOM_WIDTH - 100);
     const pY = 220 + seededRandom() * 200;
-    room.powerUps.push({ type: pType, x: pX, y: pY, width: 20, height: 20, collected: false });
+    if (paisagem===1){
+      larg = 30;
+      alt = 30;
+    }else{
+      larg = 20;
+      alt = 20;
+    }
+    room.powerUps.push({ type: pType, x: pX, y: pY, width: larg, height: alt, collected: false });
   }
 
   // Espinhos (1 a 3)
@@ -576,8 +616,8 @@ function checkCollisions() {
     room.sucatas.forEach(sucata => {
       if (
         !sucata.collected &&
-        player.x < sucata.x - scrollOffset + sucata.width &&
-        player.x + player.width > sucata.x - scrollOffset &&
+        player.x < sucata.x + sucata.width &&
+        player.x + player.width > sucata.x &&
         player.y < sucata.y + sucata.height &&
         player.y + player.height > sucata.y
       ) {
@@ -650,8 +690,8 @@ function updateLasers() {
   lasers.forEach(laser => {
     for (let key in rooms) {
       const room = rooms[key];
-
-      // Destruir inimigos com laser e dar runas
+      console.log(laser.width);
+      // Destruir inimigos com laser  e dar runas
       room.enemies = room.enemies.filter(enemy => {
         if (
           laser.x < enemy.x - scrollOffset + enemy.width &&
@@ -688,7 +728,7 @@ function updateLasers() {
     ) {
       generateItem('sucata',rocketEnemy.x,rocketEnemy.y)
       rocketEnemy.active = false;
-      rocketEnemy.x = -1000; 
+      rocketEnemy.x = -2000; 
       updateUI();
     }
 
@@ -742,23 +782,47 @@ function draw() {
         ctx.shadowBlur = 0;
       }
     });
+    // Draw sucatas
+    room.sucatas.forEach(sucata => {
+      if (!sucata.collected) {
+        const offsetY = Math.sin((frameCount + sucata.x) * 0.05) * 3;
+        drawLozenge(sucata.x + sucata.width / 2, sucata.y + offsetY + sucata.height / 2, sucata.width / 2, 'darkgreen');
+        console.log('Sucata no ar')
+      }
+    });
 
     // Power-ups com efeito pulsante
     room.powerUps.forEach(power => {
       if (!power.collected) {
         const pulse = Math.abs(Math.sin(frameCount * 0.1));
         let color;
-        if (power.type === 'escudo') color = `rgba(0,0,255,${0.5 + pulse * 0.5})`;
-        else if (power.type === 'impulso') color = `rgba(0,255,0,${0.5 + pulse * 0.5})`;
-        else if (power.type === 'velocidade') color = `rgba(255,165,0,${0.5 + pulse * 0.5})`;
-        else if (power.type === 'invisibilidade') color = `rgba(255,255,255,${0.5 + pulse * 0.5})`;
-        else if (power.type === 'magnetismo') color = `rgba(255,0,255,${0.5 + pulse * 0.5})`;
-        else color = 'gray';
-        ctx.fillStyle = color;
-        ctx.fillRect(power.x - scrollOffset, power.y, power.width, power.height);
+        let image;
+        if (power.type === 'escudo') { 
+          color = `rgba(0,0,255,${0.5 + pulse * 0.5})`; 
+          image = imgShield; 
+        } else if (power.type === 'impulso') { 
+          color = `rgba(255,0,0,${0.5 + pulse * 0.5})`; 
+          image = imgImpulse; 
+        } else if (power.type === 'velocidade') { 
+          color = `rgba(255,165,0,${0.5 + pulse * 0.5})`; 
+          image = imgLightning; 
+        } else if (power.type === 'invisibilidade') { 
+          color = `rgba(255,255,255,${0.5 + pulse * 0.5})`; 
+          image = imgInvisible; 
+        } else if (power.type === 'magnetismo') { 
+          color = `rgba(255,0,255,${0.5 + pulse * 0.5})`; 
+          image = imgMagnet; 
+        } else {
+          color = 'gray';
+        }
+        if (paisagem === 0) {
+          ctx.fillStyle = color;
+          ctx.fillRect(power.x - scrollOffset, power.y, power.width, power.height);
+        } else if (paisagem === 1) {
+          drawTintedImage(image, power.x - scrollOffset, power.y, power.width, power.height, color);
+        }
       }
     });
-
     // Espinhos
     room.spikes.forEach(spike => {
       ctx.fillStyle = 'darkred';
@@ -777,13 +841,6 @@ function draw() {
       ctx.shadowBlur = 0;
     });
 
-    // Draw sucatas
-    room.sucatas.forEach(sucata => {
-      if (!sucata.collected) {
-        const offsetY = Math.sin((frameCount + sucata.x) * 0.05) * 3;
-        drawLozenge(sucata.x - scrollOffset + sucata.width / 2, sucata.y + offsetY + sucata.height / 2, sucata.width / 2, 'darkgreen');
-      }
-    });
   }
 
   // Desenha o jogador com sombra
@@ -803,7 +860,7 @@ function draw() {
     borderOffset += 4;
   }
   if (activePowers['impulso'] > 0) {
-    ctx.strokeStyle = 'green';
+    ctx.strokeStyle = 'rgb(82, 7, 7)';
     ctx.lineWidth = 3;
     ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
@@ -826,6 +883,7 @@ function draw() {
     ctx.strokeRect(player.x - borderOffset, player.y - borderOffset, player.width + 2 * borderOffset, player.height + 2 * borderOffset);
     borderOffset += 4;
   }
+  
   let semente = parseInt(localStorage.getItem('seed'));
   ctx.fillStyle = 'white';
   ctx.font = "16px Arial";
@@ -835,10 +893,15 @@ function draw() {
   // Draw rocket enemy
   if (rocketEnemy.active) {
     ctx.fillStyle = 'red';
-    ctx.fillText("!!!!",0, rocketEnemy.y);
+    ctx.fillText("!!!! "+ rocketEnemy.x,0, rocketEnemy.y);
     ctx.fillText("-".repeat(canvas.width),0, 300);
-    ctx.fillStyle = 'green';
-    ctx.fillRect(rocketEnemy.x, rocketEnemy.y, rocketEnemy.width, rocketEnemy.height);
+    if (paisagem===0){
+      ctx.fillStyle = 'green';
+      ctx.fillRect(rocketEnemy.x, rocketEnemy.y, rocketEnemy.width, rocketEnemy.height);
+    }else if (paisagem===1){
+      rocketEnemy.height=50;
+      drawTintedImage(imgfoguete,rocketEnemy.x, rocketEnemy.y, rocketEnemy.width, rocketEnemy.height, 'green');
+    }
   }
 
   // Draw lasers
@@ -946,7 +1009,28 @@ function generateItem(type, x, y) {
     rooms[currentRoom].sucatas.push(sucata);
   }
 }
+//=============Paisagem(1)================
+function drawTintedImage(img, x, y, width, height, tintColor) {
+  // Cria um offscreen canvas com as dimensões desejadas
+  const offCanvas = document.createElement('canvas');
+  offCanvas.width = width;
+  offCanvas.height = height;
+  const offCtx = offCanvas.getContext('2d');
 
+  // Desenha a imagem no offscreen canvas
+  offCtx.drawImage(img, 0, 0, width, height);
+  
+  // Altera o modo de composição para que o preenchimento seja aplicado apenas nos pixels existentes
+  offCtx.globalCompositeOperation = 'source-atop';
+  offCtx.fillStyle = tintColor;
+  offCtx.fillRect(0, 0, width, height);
+  
+  // Restaura o modo de composição (opcional, mas recomendado)
+  offCtx.globalCompositeOperation = 'source-over';
+
+  // Desenha o resultado no canvas principal
+  ctx.drawImage(offCanvas, x, y, width, height);
+}
 // ========= Loop Principal =========
 function gameLoop() {
   if (gameOver) {
@@ -1028,8 +1112,8 @@ document.addEventListener('DOMContentLoaded', () => {
       cooldowns.plataformaextra[1] =5000 - 5000 * (player.clone?.level/100 || 1); // Example cooldown duration
     } else if (e.key.toUpperCase() === 'L' && cooldowns.raiolaser[0] === 0) {
       shootLaser();
-      cooldowns.raiolaser[0] =5000 - 5000 * (player.laser?.level/100 || 1); // Example cooldown duration
-      cooldowns.raiolaser[1] =5000 - 5000 * (player.laser?.level/100 || 1); // Example cooldown duration
+      cooldowns.raiolaser[0] =5000 - 5000 * (player.laser?.level/10 || 1); // Example cooldown duration
+      cooldowns.raiolaser[1] =5000 - 5000 * (player.laser?.level/10 || 1); // Example cooldown duration
     } else if (e.key.toUpperCase() === 'M' && cooldowns.mina[0] === 0) {
       placeMine();
       cooldowns.mina[0] =5000 - 5000 * (player.mine?.level/100 || 1); // Example cooldown duration

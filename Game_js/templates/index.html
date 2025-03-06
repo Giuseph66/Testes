@@ -10,7 +10,7 @@
   <div id="menuOverlay">
     <h1>HARRYM</h1>
     <p class="subtitle">A Jornada do Templo - Endless</p>
-    <p>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;"></input></p>
+    <p2>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;font-size: 15px;"></input></p2>
     <div id="statusContainer">
       <h2>Status</h2>
       <p id="extraJumpsStatus">Pulos Extras: 0</p>
@@ -23,8 +23,10 @@
       <p id="runesDisplay" style="display: none;">Runas: 0</p>
       <p id="sucataDisplay" style="display: none;">Sucata: 0</p>
     </div>
-    <button id="customizeButton" onclick="window.location.href='/customize'">Personalizar</button>
-    <button id="startButton">Iniciar</button>
+    <div class="botoes">
+      <button id="customizeButton" onclick="window.location.href='/customize'">Mercado</button>
+      <button id="startButton">Iniciar</button>
+    </div>
   </div>
   <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
   <script>
