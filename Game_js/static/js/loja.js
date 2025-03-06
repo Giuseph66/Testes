@@ -201,7 +201,7 @@ function applyPassiveAbilities() {
     } else if (ability.name === 'Raio Laser') {
       ability.key = 'L';
       player.laser = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
-    } else if (ability.name === 'Escalada') {
+    } else if (ability.name === 'Escala') {
       ability.key = 'E';
       player.canClimb = {id:ability.id, level: ability.level || 1, description: ability.description , key: ability.key };
     } else if (ability.name === 'Espectro') {

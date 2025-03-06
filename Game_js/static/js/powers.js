@@ -16,7 +16,7 @@ function createClone() {
       color: 'rgb(81, 81, 81,1)',
       velocityY: 0,
       velocityX: 0,
-      duration: 3000 + 3000*(player.clone.level*0.3 || 1), // Increase duration with level
+      duration: 3000 + 3000*(player.clone.level/100 || 1), // Increase duration with level
       spawnTime: Date.now(),
       isClone: true 
     };
@@ -30,7 +30,7 @@ window.timeControlActive = false;
 
 function applyTimeControl() {
   if (player.timeControl) {
-    const duration = 5000 + 5000 * (player.timeControl.level * 0.3 || 1); // Duração aumenta com o nível
+    const duration = 5000 + 5000 * (player.timeControl.level/100 || 1); // Duração aumenta com o nível
     GRAVITY = 0.06;
     window.timeControlActive = true;
     player.jumpForce= -4.5;
@@ -113,18 +113,27 @@ function invertYAxis() {
 // Voar
 function applyFlying() {
   if (player.canFly) {
-    const duration = 5000 * (player.canFly.level || 1); // Increase duration with level
+    const duration = 5000+5000 * (player.canFly.level/100 || 1); // Increase duration with level
     player.velocityY -= 10;
+    fly=true;
+    let anterior=GRAVITY
     GRAVITY=0.2;
-    setTimeout(() => { GRAVITY = 0.3;}, duration);
+    setTimeout(() => { GRAVITY = anterior; fly=false;}, duration);
   }
 }
 
 // Raio Laser
 function shootLaser() {
   if (player.laser) {
-    const laser = { x: player.x + player.width, y: player.y + player.height / 2, width: 10, height: 2 };
-    // Add laser to the game (this is just an example, you need to handle it properly in your game logic)
+    const laser = {
+      x: player.facingRight ? player.x + player.width : player.x - canvas.width,
+      y: player.y + player.height / 2,
+      width: canvas.width,
+      height: 5,
+      direction: player.facingRight ? 1 : -1,
+      duration: 1 + 1 * (player.laser.level/100 || 1) // Increase duration with level
+    };
+    lasers.push(laser);
   }
 }
 
@@ -132,8 +141,8 @@ function shootLaser() {
 function applyClimbing() {
   if (player.canClimb) {
     const duration = 5000 * (player.canClimb.level || 1); // Increase duration with level
-    player.velocityY = -5;
-    setTimeout(() => { player.velocityY = 0; }, duration);
+    dencidade=true;
+    setTimeout(() => { dencidade=false; }, duration);
   }
 }
 

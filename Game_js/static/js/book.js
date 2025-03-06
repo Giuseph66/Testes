@@ -197,9 +197,9 @@ function updateBook() {
     },
     {   
         id: 7,
-        name: 'Escalada', 
-        description: 'Permite ao jogador escalar paredes.',
-        legend: 'Fiação de Arachne - A tecelã amaldiçoada pela deusa da sabedoria deixou seu último fio. Quem o toca ganha pés de aranha, mas ouve sussurros de desafios impossíveis nas paredes.'
+        name: 'Escala', 
+        description: 'Permite ao jogador mudar sua dencidade.',
+        legend: 'Um artefato antigo que concede o dom de alterar a densidade. Com ele, é possível tornar-se leve como o vento ou pesado como uma montanha. Dizem que aqueles que o dominam desafiam as leis do mundo, mas poucos conseguem equilibrar seu poder sem se perder.'
     },
     {   
         id: 8,

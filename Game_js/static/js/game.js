@@ -8,6 +8,7 @@ function seededRandom() {
 }
 
 let clones = [];
+let lasers = [];
 // ========= Configuração do Canvas =========
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
@@ -15,9 +16,17 @@ const ctx = canvas.getContext('2d');
 let coins = JSON.parse(localStorage.getItem('coins')) || 0;
 let runes = JSON.parse(localStorage.getItem('runes')) || 0;
 let gameOver = false;
+let fly=false;
+let dencidade=false;
 let mundo_invertido = false;
 window.timeControlActive = false;
 window.Inverter = false;
+const ceu = {
+  width: canvas.width,
+  height: 300,
+  x: 0,
+  y: 0
+};
 let activePowers = {
   escudo: 0,
   impulso: 0,
@@ -30,7 +39,7 @@ let activePowers = {
   mundoInvertido: 0,
   voar: 0,
   raioLaser: 0,
-  escalada: 0,
+  escala: 0,
   espectro: 0,
   espadaSagrada: 0,
   bumerangue: 0,
@@ -71,7 +80,7 @@ controledotempo: [0,0] ,
 mundoinvertido: [0,0] ,
 voar: [0,0] ,
 raiolaser: [0,0] ,
-escalada: [0,0] ,
+escala: [0,0] ,
 espectro: [0,0] ,
 espadasagrada: [0,0] ,
 efeitobumerangue: [0,0] ,
@@ -133,7 +142,8 @@ const player = {
   jumpForce: -10,
   color: 'red',
   maxAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1,
-  remainingAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1
+  remainingAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1,
+  facingRight: true // Add this property to control the direction
 };
 
 // ========= Física e Teclado =========
@@ -149,7 +159,8 @@ function generateRoom(roomIndex) {
     runes: [],
     powerUps: [],
     spikes: [],
-    enemies: []
+    enemies: [],
+    sucatas: [] // Add sucatas array to the room
   };
 
   // Plataforma do chão
@@ -250,6 +261,14 @@ function updateUI() {
   } else {
     runeUI.style.display = 'none';
   }
+  const sucataUI = document.getElementById('sucataUI');
+  let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  if (sucata > 0) {
+    sucataUI.style.display = 'block';
+    document.getElementById('sucataCount').textContent = sucata;
+  } else {
+    sucataUI.style.display = 'none';
+  }
   const powers = ['escudo', 'impulso', 'velocidade', 'invisibilidade', 'magnetismo'];
   powers.forEach(power => {
     const uiElement = document.getElementById(power + 'UI');
@@ -279,6 +298,7 @@ function updatePlayer() {
   }
   // Movimento horizontal (o seu código existente para mover o player)
   if (keys['ArrowLeft']) {
+    player.facingRight = false; // Update direction
     let newX = player.x - player.speed;
     const leftBound = 100;
     if (newX < leftBound) {
@@ -295,6 +315,7 @@ function updatePlayer() {
       player.x = newX;
     }
   } else if (keys['ArrowRight']) {
+    player.facingRight = true; // Update direction
     let newX = player.x + player.speed;
     const rightBound = canvas.width / 2;
     if (newX > rightBound) {
@@ -303,6 +324,25 @@ function updatePlayer() {
       player.x = rightBound;
     } else {
       player.x = newX;
+    }
+  }
+  if (dencidade){
+    if (keys['ArrowUp']){
+      player.height+=0.4;
+      player.width+=0.4;
+      GRAVITY+=0.002;
+      player.jumpForce+=0.002
+    }else if(keys['ArrowDown']){
+      if (player.height>-30){
+        player.height-=0.4;
+        player.width-=0.4;
+        if (player.jumpForce>0){
+          player.jumpForce-=0.02
+        }
+      }
+      if (GRAVITY>0.08){
+        GRAVITY-=0.002;
+      }
     }
   }
 
@@ -371,6 +411,7 @@ function updatePlayer() {
     delete rooms[roomKeys[0]];
   }
   if (mundo_invertido){
+    ceu.y = 300;
     if (player.y>300) {
       airTime += 1 / 60; 
     }else {
@@ -379,6 +420,7 @@ function updatePlayer() {
       rocketEnemyActive = false;
     }
   }else{
+    ceu.y = 0;
     if (player.y<300) {
       airTime += 1 / 60; 
     }else {
@@ -529,6 +571,23 @@ function checkCollisions() {
         }
       }
     });
+
+    // Sucatas
+    room.sucatas.forEach(sucata => {
+      if (
+        !sucata.collected &&
+        player.x < sucata.x - scrollOffset + sucata.width &&
+        player.x + player.width > sucata.x - scrollOffset &&
+        player.y < sucata.y + sucata.height &&
+        player.y + player.height > sucata.y
+      ) {
+        sucata.collected = true;
+        let sucataCount = JSON.parse(localStorage.getItem('sucata')) || 0;
+        sucataCount++;
+        localStorage.setItem('sucata', JSON.stringify(sucataCount));
+        updateUI();
+      }
+    });
   }
 
   // Check collision with rocket enemy
@@ -587,6 +646,57 @@ function updatePowerUp() {
   updateUI();
 }
 
+function updateLasers() {
+  lasers.forEach(laser => {
+    for (let key in rooms) {
+      const room = rooms[key];
+
+      // Destruir inimigos com laser e dar runas
+      room.enemies = room.enemies.filter(enemy => {
+        if (
+          laser.x < enemy.x - scrollOffset + enemy.width &&
+          laser.x + laser.width > enemy.x - scrollOffset &&
+          laser.y < enemy.y + enemy.height &&
+          laser.y + laser.height > enemy.y
+        ) {
+        if (Math.floor(Math.random() * 11)>4){generateItem('rune',enemy.x,enemy.y);}
+          return false; // Remove enemy if hit by laser
+        }
+        return true;
+      });
+
+      // Destruir espinhos com laser
+      room.spikes = room.spikes.filter(spike => {
+        if (
+          laser.x < spike.x - scrollOffset + spike.width &&
+          laser.x + laser.width > spike.x - scrollOffset &&
+          laser.y < spike.y + spike.height &&
+          laser.y + laser.height > spike.y
+        ) {
+          return false; // Remove spike if hit by laser
+        }
+        return true;
+      });
+    }
+
+    // Destruir foguete com laser e dar sucata
+    if (
+      laser.x < rocketEnemy.x + rocketEnemy.width &&
+      laser.x + laser.width > rocketEnemy.x &&
+      laser.y < rocketEnemy.y + rocketEnemy.height &&
+      laser.y + laser.height > rocketEnemy.y
+    ) {
+      generateItem('sucata',rocketEnemy.x,rocketEnemy.y)
+      rocketEnemy.active = false;
+      rocketEnemy.x = -1000; 
+      updateUI();
+    }
+
+    laser.duration -= 1 / 30;
+  });
+  lasers = lasers.filter(laser => laser.duration > 0);
+}
+
 // ========= Função de Desenho =========
 function draw() {
   // Fundo com gradiente vertical
@@ -595,6 +705,8 @@ function draw() {
   bgGradient.addColorStop(1, "#000");
   ctx.fillStyle = bgGradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#0e0e0e91';
+  ctx.fillRect(ceu.x, ceu.y, ceu.width, ceu.height);
 
   // Desenha cada sala
   for (let key in rooms) {
@@ -613,22 +725,20 @@ function draw() {
     room.coins.forEach(coin => {
       if (!coin.collected) {
         const offsetY = Math.sin((frameCount + coin.x) * 0.05) * 5;
-        ctx.fillStyle = 'gold';
+        drawCircle(coin.x - scrollOffset + coin.width / 2, coin.y + offsetY + coin.height / 2, coin.width / 2, 'gold');
         ctx.shadowColor = "rgba(255,215,0,0.7)";
         ctx.shadowBlur = 6;
-        ctx.fillRect(coin.x - scrollOffset, coin.y + offsetY, coin.width, coin.height);
         ctx.shadowBlur = 0;
       }
     });
 
-    // Runas com oscilação e brilho
-    room.runes.forEach(rune => {
+     // Runas com oscilação e brilho
+     room.runes.forEach(rune => {
       if (!rune.collected) {
         const offsetY = Math.sin((frameCount + rune.x) * 0.05) * 3;
-        ctx.fillStyle = 'cyan';
+        drawHexagon(rune.x - scrollOffset + rune.width / 2, rune.y + offsetY + rune.height / 2, rune.width / 2, 'cyan');
         ctx.shadowColor = "rgba(0,255,255,0.7)";
         ctx.shadowBlur = 6;
-        ctx.fillRect(rune.x - scrollOffset, rune.y + offsetY, rune.width, rune.height);
         ctx.shadowBlur = 0;
       }
     });
@@ -666,6 +776,14 @@ function draw() {
       ctx.fillRect(enemy.x - scrollOffset, enemy.y + enemyYOffset, enemy.width, enemy.height);
       ctx.shadowBlur = 0;
     });
+
+    // Draw sucatas
+    room.sucatas.forEach(sucata => {
+      if (!sucata.collected) {
+        const offsetY = Math.sin((frameCount + sucata.x) * 0.05) * 3;
+        drawLozenge(sucata.x - scrollOffset + sucata.width / 2, sucata.y + offsetY + sucata.height / 2, sucata.width / 2, 'darkgreen');
+      }
+    });
   }
 
   // Desenha o jogador com sombra
@@ -677,6 +795,7 @@ function draw() {
 
   // Desenha os indicadores dos poderes ativos (bordas concêntricas)
   let borderOffset = 0;
+  
   if (activePowers['escudo'] > 0) {
     ctx.strokeStyle = 'blue';
     ctx.lineWidth = 3;
@@ -721,8 +840,112 @@ function draw() {
     ctx.fillStyle = 'green';
     ctx.fillRect(rocketEnemy.x, rocketEnemy.y, rocketEnemy.width, rocketEnemy.height);
   }
+
+  // Draw lasers
+  lasers.forEach(laser => {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(laser.x , laser.y, laser.width, laser.height);
+  });
 }
 
+function drawCircle(x, y, radius, color) {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.closePath();
+}
+
+function drawHexagon(x, y, radius, color) {
+  const angle = Math.PI / 3; // 60 degrees in radians
+  ctx.beginPath();
+  for (let i = 0; i < 6; i++) {
+    ctx.lineTo(x + radius * Math.cos(angle * i), y + radius * Math.sin(angle * i));
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function drawLozenge(x, y, radius, color) {
+  const angle = Math.PI / 4; // 45 degrees in radians
+  ctx.beginPath();
+  for (let i = 0; i < 4; i++) {
+    ctx.lineTo(x + radius * Math.cos(angle * i), y + radius * Math.sin(angle * i));
+  }
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function drawShield(x, y, radius, color) {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.closePath();
+  ctx.beginPath();
+  ctx.moveTo(x, y - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.closePath();
+}
+function drawImpulse(x, y, width, height, color) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + width, y - height);
+  ctx.lineTo(x + width, y + height);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function drawSpeed(x, y, width, height, color) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + width, y);
+  ctx.lineTo(x + width / 2, y - height);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+function drawInvisibility(x, y, radius, color) {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.closePath();
+}
+function drawMagnetism(x, y, width, height, color) {
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + width, y);
+  ctx.lineTo(x + width, y + height);
+  ctx.lineTo(x, y + height);
+  ctx.closePath();
+  ctx.fillStyle = color;
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x + width / 2, y);
+  ctx.lineTo(x + width / 2, y + height);
+  ctx.strokeStyle = 'white';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.closePath();
+}
+function generateItem(type, x, y) {
+  if (type === 'coin') {
+    const coin = { x: x, y: y, width: 15, height: 15, collected: false };
+    rooms[currentRoom].coins.push(coin);
+  } else if (type === 'rune') {
+    const rune = { x: x, y: y, width: 20, height: 20, collected: false };
+    rooms[currentRoom].runes.push(rune);
+  } else if (type === 'sucata') {
+    const sucata = { x: x, y: y, width: 20, height: 20, collected: false };
+    rooms[currentRoom].sucatas.push(sucata);
+  }
+}
 
 // ========= Loop Principal =========
 function gameLoop() {
@@ -742,6 +965,7 @@ function gameLoop() {
   checkCollisions();
   checkCanvasCollisions(); // Add this line to check canvas collisions
   updateCooldowns(); // Add this line to update cooldowns
+  updateLasers(); // Add this line to update lasers
   draw();
   drawCooldownBars(); // Add this line to draw cooldown bars
   requestAnimationFrame(gameLoop);
@@ -784,6 +1008,8 @@ document.addEventListener('DOMContentLoaded', () => {
     keys[e.key] = true;
     if (e.key === ' ') {
       if (player.velocityY === 0) {
+        player.velocityY = player.jumpForce;
+      } else if (fly){
         player.velocityY = player.jumpForce;
       } else if (player.remainingAirJumps > 0) {
         player.velocityY = player.jumpForce;
@@ -828,10 +1054,10 @@ document.addEventListener('DOMContentLoaded', () => {
       applyFlying();
       cooldowns.voar[0] =5000 - 5000 * (player.canFly?.level/100 || 1); // Example cooldown duration
       cooldowns.voar[1] =5000 - 5000 * (player.canFly?.level/100 || 1); // Example cooldown duration
-    } else if (e.key.toUpperCase() === 'E' && cooldowns.escalada[0] === 0) {
+    } else if (e.key.toUpperCase() === 'E' && cooldowns.escala[0] === 0) {
       applyClimbing();
-      cooldowns.escalada[0] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
-      cooldowns.escalada[1] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
+      cooldowns.escala[0] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
+      cooldowns.escala[1] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
     } else if (e.key.toUpperCase() === 'S' && cooldowns.espadasagrada[0] === 0) {
       applySacredSword();
       cooldowns.espadasagrada[0] =5000 - 5000 * (player.sacredSword?.level/100 || 1); // Example cooldown duration
@@ -935,7 +1161,7 @@ function applyPassiveAbilities() {
     } else if (ability.name === 'Raio Laser') {
       ability.key = 'L';
       player.laser = { level: ability.level || 1, key: ability.key };
-    } else if (ability.name === 'Escalada') {
+    } else if (ability.name === 'Escala') {
       ability.key = 'E';
       player.canClimb = { level: ability.level || 1, key: ability.key };
     } else if (ability.name === 'Espectro') {
