@@ -35,8 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Exibe moedas e runas
   const coins = JSON.parse(localStorage.getItem('coins')) || 0;
   const runes = JSON.parse(localStorage.getItem('runes')) || 0;
-  document.getElementById('coinsDisplay').textContent = "Moedas: " + coins;
-  document.getElementById('runesDisplay').textContent = "Runas: " + runes;
+  const sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  if (coins>0){
+    document.getElementById('coinsDisplay').style.display = "block";
+    document.getElementById('coinsDisplay').textContent = "Moedas: " + coins;
+  }if (runes>0){
+    document.getElementById('runesDisplay').style.display = "block";
+    document.getElementById('runesDisplay').textContent = "Runas: " + runes;
+  }if (sucata>0){
+    document.getElementById('sucataDisplay').style.display = "block";
+    document.getElementById('sucataDisplay').textContent = "Sucatas: " + sucata;
+  }
   
   // Botão para iniciar o jogo
   document.getElementById('startButton').addEventListener('click', () => {
