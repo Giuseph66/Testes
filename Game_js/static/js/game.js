@@ -62,6 +62,7 @@ let frameCount = 0;
 let passiveAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
 
 let airTime = 0;
+let notairTime = 0;
 let extraJumpCount = 0;
 let rocketEnemyActive = false;
 
@@ -370,18 +371,30 @@ function updatePlayer() {
     if (keys['ArrowUp']){
       player.height+=0.4;
       player.width+=0.4;
-      GRAVITY+=0.002;
-      player.jumpForce+=0.002
+      if (!gravidade_inverte){
+        GRAVITY+=0.002;
+        player.jumpForce-=0.002
+      }else{
+        if (GRAVITY<-0.08){
+          player.jumpForce+=0.002
+          GRAVITY-=0.002;
+        }
+      }
     }else if(keys['ArrowDown']){
       if (player.height>-30){
         player.height-=0.4;
         player.width-=0.4;
-        if (player.jumpForce>0){
-          player.jumpForce-=0.02
+        if (!gravidade_inverte){
+          GRAVITY-=0.002;
+          player.jumpForce+=0.002
+        }else{
+          if (GRAVITY>-0.08){
+            GRAVITY+=0.002;
+          }
+          if (player.jumpForce<0){
+            player.jumpForce-=0.02
+          }
         }
-      }
-      if (GRAVITY>0.08){
-        GRAVITY-=0.002;
       }
     }
   }
@@ -456,7 +469,6 @@ function updatePlayer() {
       airTime += 1 / 60; 
     }else {
       airTime = 0;
-      extraJumpCount = 0;
       rocketEnemyActive = false;
     }
   }else{
@@ -465,15 +477,24 @@ function updatePlayer() {
       airTime += 1 / 60; 
     }else {
       airTime = 0;
-      extraJumpCount = 0;
       rocketEnemyActive = false;
     }
   }
-
+  if (notairTime>10){
+    extraJumpCount=0;
+  }
   if (airTime > 8 || extraJumpCount > 10) {
     rocketEnemyActive = true;
     rocketEnemy.active = true;
-    rocketEnemy.y = player.y; 
+    if (mundo_invertido){
+      if (player.y > 300){
+        rocketEnemy.y = player.y; 
+      }else{rocketEnemy.y = 300- rocketEnemy.height/2;}
+    }else{
+      if (player.y < 300){
+        rocketEnemy.y = player.y;
+      }else{rocketEnemy.y =300 - rocketEnemy.height/2;}
+    }
   }else{
     rocketEnemy.x= -1000;
     rocketEnemy.active = false;
@@ -739,6 +760,7 @@ function updateLasers() {
 
 // ========= Função de Desenho =========
 function draw() {
+  notairTime += 1 / 60; 
   // Fundo com gradiente vertical
   let bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
   bgGradient.addColorStop(0, "#111");
@@ -893,7 +915,7 @@ function draw() {
   // Draw rocket enemy
   if (rocketEnemy.active) {
     ctx.fillStyle = 'red';
-    ctx.fillText("!!!! "+ rocketEnemy.x,0, rocketEnemy.y);
+    ctx.fillText("!!!! "+ rocketEnemy.x,0, rocketEnemy.y + rocketEnemy.height /2);
     ctx.fillText("-".repeat(canvas.width),0, 300);
     if (paisagem===0){
       ctx.fillStyle = 'green';
@@ -1100,6 +1122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
         localStorage.setItem('extraJumps', JSON.stringify(player.remainingAirJumps));
         updateUI();
+        notairTime = 0; 
         extraJumpCount++;
       }
     } else if (e.key.toUpperCase() === 'T' && cooldowns.teletransporte[0] === 0) {

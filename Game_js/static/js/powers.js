@@ -31,14 +31,14 @@ window.timeControlActive = false;
 function applyTimeControl() {
   if (player.timeControl) {
     const duration = 5000 + 5000 * (player.timeControl.level/100 || 1); // Duração aumenta com o nível
-    GRAVITY = 0.06;
+    GRAVITY = invertgravity ? -0.06 : 0.06;
     window.timeControlActive = true;
-    player.jumpForce= -4.5;
+    player.jumpForce= invertgravity ? 4.5 : -4.5;
     rocketEnemy.speed = 1;
     setTimeout(() => {
       rocketEnemy.speed = 8;
-      player.jumpForce = -10;
-      GRAVITY = 0.3;
+      player.jumpForce = invertgravity ? 10 : -10;
+      GRAVITY = invertgravity ? -0.3 : 0.3;
       window.timeControlActive = false;
     }, duration);
   }
@@ -46,11 +46,12 @@ function applyTimeControl() {
 
 
 //mundo invertido
+let gravidade_inverte=false;
 function applyInvertedWorld() {
   if (player.invertedWorld) {
-function invertYAxis() {
-  const canvasHeight = canvas.height;
+    function invertYAxis() {
   mundo_invertido = !mundo_invertido;
+  const canvasHeight = canvas.height;
 
   // Invert player position and velocity
   player.y = canvasHeight - player.y - player.height;
@@ -113,6 +114,7 @@ function invertYAxis() {
 function invertgravity() {
   GRAVITY *= -1;
   player.jumpForce *= -1;
+    gravidade_inverte=!gravidade_inverte;
 }
 if (Math.floor(Math.random() * 2) == 0) {
   invertgravity();
@@ -126,10 +128,10 @@ if (Math.floor(Math.random() * 2) == 0) {
 function applyFlying() {
   if (player.canFly) {
     const duration = 5000+5000 * (player.canFly.level/100 || 1); // Increase duration with level
-    player.velocityY -= 10;
+    player.velocityY -= gravidade_inverte ? -10 : 10;
     fly=true;
     let anterior=GRAVITY
-    GRAVITY=0.2;
+    GRAVITY= gravidade_inverte ? -0.2 : 0.2;
     setTimeout(() => { GRAVITY = anterior; fly=false;}, duration);
   }
 }

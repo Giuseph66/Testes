@@ -182,7 +182,7 @@ function purchaseAbility(abilityName, descricao) {
 function comprapaizagem(valor) {
   let runes = JSON.parse(localStorage.getItem('runes')) || 0;
   let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
-  if (runes >= valor || sucata >= valor) {
+  if (runes >= valor && sucata >= valor) {
     runes -= valor;
     sucata -= valor;
     localStorage.setItem('runes', JSON.stringify(runes));
