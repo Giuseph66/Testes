@@ -2,8 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
   // Exibe moedas e runas do usuário
   const coinsDisplay = document.getElementById('coinsDisplay');
   const runesDisplay = document.getElementById('runesDisplay');
-  let coins = JSON.parse(localStorage.getItem('coins')) || 0;
-  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
+  let coins = localStorage.getItem('coins') || 0;
+  if (coins!=0) {
+    const bytes  = CryptoJS.AES.decrypt(coins, "Jesus_Ateu");
+    coins = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+  let runes = localStorage.getItem('runes') || 0;
+  if (runes!=0) {
+  const bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+  runes = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+
   coinsDisplay.textContent = "Moedas: " + coins;
   runesDisplay.textContent = "Runas: " + runes;
 
@@ -23,12 +30,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const cost = 50 * jumpCount; // Defina o custo dos pulos extras
     if (coins >= cost) {
       coins -= cost;
-      localStorage.setItem('coins', JSON.stringify(coins));
+      localStorage.setItem('coins', CryptoJS.AES.encrypt(JSON.stringify(coins), "Jesus_Ateu").toString());
       coinsDisplay.textContent = "Moedas: " + coins;
-      let currentJumps = JSON.parse(localStorage.getItem('extraJumps')) || 1;
+      let currentJumps = localStorage.getItem('extraJumps') || 1;
+      if (currentJumps != 1) {
+        const bytes  = CryptoJS.AES.decrypt(currentJumps, "Jesus_Ateu");
+        currentJumps =Number(bytes.toString(CryptoJS.enc.Utf8));}
       currentJumps += jumpCount;
-      localStorage.setItem('extraJumps', JSON.stringify(currentJumps));
-      alert("Pulos extras atualizados: " + (currentJumps - 1));
+      localStorage.setItem('extraJumps', CryptoJS.AES.encrypt(currentJumps.toString(), "Jesus_Ateu").toString());
+      alert("Pulos extras atualizados: " + (currentJumps));
       e.target.reset();
       totalCostDisplay.textContent = "Custo: 0 moedas";
     } else {
@@ -41,11 +51,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const maxJumpCount = Math.floor(coins / 50);
     if (maxJumpCount > 0) {
       coins -= maxJumpCount * 50;
-      localStorage.setItem('coins', JSON.stringify(coins));
+      localStorage.setItem('coins', CryptoJS.AES.encrypt(JSON.stringify(coins), "Jesus_Ateu").toString());
       coinsDisplay.textContent = "Moedas: " + coins;
-      let currentJumps = JSON.parse(localStorage.getItem('extraJumps')) || 1;
+      let currentJumps = localStorage.getItem('extraJumps') || 1;
+  if (currentJumps != 1) {
+  const bytes  = CryptoJS.AES.decrypt(currentJumps, "Jesus_Ateu");
+  currentJumps = Number(bytes.toString(CryptoJS.enc.Utf8));}
       currentJumps += maxJumpCount;
-      localStorage.setItem('extraJumps', JSON.stringify(currentJumps));
+      localStorage.setItem('extraJumps', CryptoJS.AES.encrypt(currentJumps.toString(), "Jesus_Ateu").toString());
       alert("Pulos extras atualizados: " + (currentJumps - 1));
       totalCostDisplay.textContent = "Custo: 0 moedas";
     } else {
@@ -125,8 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function purchaseAbility(abilityName) {
-  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+  let runes = localStorage.getItem('runes') || 0;
+  if (runes!=0) {
+  const bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+  runes = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0) {
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   const ability = purchasedAbilities.find(a => a.name === abilityName);
   let cost = 10;
 
@@ -136,7 +155,7 @@ function purchaseAbility(abilityName) {
 
   if (runes >= cost) {
     runes -= cost;
-    localStorage.setItem('runes', JSON.stringify(runes));
+    localStorage.setItem('runes',  CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());
     document.getElementById('runesDisplay').textContent = `Runas: ${runes}`;
 
     if (ability) {
@@ -145,7 +164,7 @@ function purchaseAbility(abilityName) {
       purchasedAbilities.push({ name: abilityName, level: 1 });
     }
 
-    localStorage.setItem('abilities', JSON.stringify(purchasedAbilities));
+    localStorage.setItem('abilities', CryptoJS.AES.encrypt(JSON.stringify(purchasedAbilities), "Jesus_Ateu").toString());
     alert(`Habilidade "${abilityName}" comprada com sucesso!`);
     updateUI();
     applyPassiveAbilities();
@@ -158,8 +177,10 @@ function updateUI() {
   const abilitiesUI = document.getElementById('abilitiesUI');
   const activeAbilitiesList = document.getElementById('activeAbilitiesList');
   const powerInfoList = document.getElementById('powerInfoList');
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
-
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0) {
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   if (purchasedAbilities.length > 0) {
     abilitiesUI.style.display = 'block';
     activeAbilitiesList.innerHTML = '';
@@ -180,7 +201,10 @@ function updateUI() {
 }
 
 function applyPassiveAbilities() {
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0) {
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   player=[];
   purchasedAbilities.forEach(ability => {
     if (ability.name === 'Teletransporte') {
@@ -255,8 +279,10 @@ function displayActiveAbilities() {
     return;
   }
   activeAbilitiesList.innerHTML = '';
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
-
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0) {
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   purchasedAbilities.forEach(ability => {
     const li = document.createElement('li');
     li.textContent = `${ability.name} (Nível ${ability.level})`;
@@ -270,8 +296,10 @@ function displayPowerInfo() {
     return;
   }
   powerInfoList.innerHTML = '';
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
-
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0) {
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   purchasedAbilities.forEach(ability => {
     const li = document.createElement('li');
     li.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;

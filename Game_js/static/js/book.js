@@ -3,7 +3,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function generateDynamicLeaves(abilities) {
-    let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+    let sucata = localStorage.getItem('sucata') || 0;
+    if (sucata!=0){
+    const bytes  = CryptoJS.AES.decrypt(sucata, "Jesus_Ateu");
+    sucata = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
     if (sucata >0){
       const sucataDisplay = document.createElement('p');
       sucataDisplay.id = 'sucataDisplay';
@@ -34,8 +37,15 @@ function generateDynamicLeaves(abilities) {
     book.appendChild(frontCover);
   
     // --- Cria as folhas de habilidades ---
-    const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
-    let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
+    let purchasedAbilities = localStorage.getItem('abilities') || [];
+    if (purchasedAbilities.length > 0){
+      console.log(purchasedAbilities);
+    const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+    purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+    let paisagem = localStorage.getItem('paisagem') || 0;
+    if (paisagem!=0){
+    const bytes  = CryptoJS.AES.decrypt(paisagem, "Jesus_Ateu");
+    paisagem = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
     abilities.forEach((ability, index) => {
       const purchasedAbility = purchasedAbilities.find(a => a.name === ability.name);
       const level = purchasedAbility ? purchasedAbility.level : 0;
@@ -153,15 +163,20 @@ function setupLeafNavigation() {
 
 function purchaseAbility(abilityName, descricao) {
   console.log('Habilidade:', abilityName);
-  console.log('Descrição:', descricao);
-  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
-  const purchasedAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+  console.log('Descrição:',descricao);
+  let runes = localStorage.getItem('runes') || 0;
+  if (runes!=0){
+  const bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+  runes = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+  let purchasedAbilities = localStorage.getItem('abilities') || [];
+  if (purchasedAbilities.length > 0){
+  const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
+  purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   const ability = purchasedAbilities.find(a => a.name === abilityName);
-  let cost = ability ? Math.ceil(10 * Math.pow(1.3, ability.level)) : 10;
-
+  let cost = ability ? Math.ceil(10 * Math.pow(1.3, ability.level)) : 1;
   if (runes >= cost) {
     runes -= cost;
-    localStorage.setItem('runes', JSON.stringify(runes));
+    localStorage.setItem('runes', CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());
     document.getElementById('runesDisplay').textContent = `Runas: ${runes}`;
 
     if (ability) {
@@ -170,28 +185,37 @@ function purchaseAbility(abilityName, descricao) {
       purchasedAbilities.push({ name: abilityName, level: 1 , description:descricao});
     }
 
-    localStorage.setItem('abilities', JSON.stringify(purchasedAbilities));
+    localStorage.setItem('abilities', CryptoJS.AES.encrypt(JSON.stringify(purchasedAbilities), "Jesus_Ateu").toString());
     //alert(`Habilidade "${abilityName}" ${ability ? 'atualizada' : 'comprada'} com sucesso!`);
     applyPassiveAbilities();
-    localStorage.setItem('pagination', currentLeaf);
+    localStorage.setItem('pagination', CryptoJS.AES.encrypt(currentLeaf.toString(), "Jesus_Ateu").toString());
     window.location.reload(); 
   } else {
     alert('Runas insuficientes!');
   }
 }
 function comprapaizagem(valor) {
-  let runes = JSON.parse(localStorage.getItem('runes')) || 0;
-  let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  let runes = localStorage.getItem('runes') || 0;
+  if (runes!=0){
+  const bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+  runes = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+  let sucata = localStorage.getItem('sucata') || 0;
+  if (sucata!=0){
+  const bytes  = CryptoJS.AES.decrypt(sucata, "Jesus_Ateu");
+  sucata = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   if (runes >= valor && sucata >= valor) {
     runes -= valor;
     sucata -= valor;
-    localStorage.setItem('runes', JSON.stringify(runes));
-    localStorage.setItem('sucata', JSON.stringify(sucata));
-    document.getElementById('runesDisplay').textContent = `Runas: ${runes}`;
-    document.getElementById('sucataDisplay').textContent = `Sucata: ${sucata}`;
-    localStorage.setItem('pagination', currentLeaf);
-    let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
-    localStorage.setItem('paisagem', JSON.stringify(paisagem+1));
+    localStorage.setItem('runes', CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());
+    localStorage.setItem('sucata', CryptoJS.AES.encrypt(JSON.stringify(sucata), "Jesus_Ateu").toString());
+    document.getElementById('runesDisplay').textContent`Runas: ${runes}`;
+    document.getElementById('sucataDisplay').textContent = `${sucata}`;
+    localStorage.setItem('pagination', CryptoJS.AES.encrypt(currentLeaf.toString(), "Jesus_Ateu").toString());
+    let paisagem = localStorage.getItem('paisagem') || 0;
+    if (paisagem!=0){
+    const bytes  = CryptoJS.AES.decrypt(paisagem, "Jesus_Ateu");
+    paisagem = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+    localStorage.setItem('paisagem', CryptoJS.AES.encrypt(JSON.stringify(paisagem+1), "Jesus_Ateu").toString());
     window.location.reload(); 
   }else {
     alert('Runas ou Sucatas insuficientes!');
@@ -323,7 +347,10 @@ function updateBook() {
 ];
   generateDynamicLeaves(abilities);
   setupLeafNavigation(); 
-  const pagination = JSON.parse(localStorage.getItem('pagination'));
+  let pagination = localStorage.getItem('pagination') || 0;
+  if (pagination!=0){
+  const bytes  = CryptoJS.AES.decrypt(pagination, "Jesus_Ateu");
+  pagination = Number(bytes.toString(CryptoJS.enc.Utf8));}
   if (pagination > 0) {
     goToPage(pagination);
   }

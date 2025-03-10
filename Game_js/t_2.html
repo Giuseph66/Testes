@@ -1,70 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mudar Cor Preta da Imagem</title>
-    <style>
-        canvas {
-            border: 1px solid black;
-            display: block;
-            margin: 20px auto;
-        }
-        .buttons {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Coleta de Dados Básicos com IP</title>
 </head>
 <body>
-    <div class="buttons">
-        <button onclick="changeColor('red')">Vermelho</button>
-        <button onclick="changeColor('green')">Verde</button>
-        <button onclick="changeColor('blue')">Azul</button>
-        <button onclick="changeColor('orange')">Laranja</button>
-    </div>
-    <canvas id="myCanvas" width="128" height="128"></canvas>
-
-    <script>
-        const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Carrega a imagem
-        const img = new Image();
-        img.src = 'https://cdn-icons-png.flaticon.com/128/786/786346.png'; // Sua imagem
-        img.crossOrigin = "Anonymous"; // Permite manipulação de pixels (CORS)
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0, 128, 128);
-        };
-
-        const colors = {
-            red: { r: 255, g: 0, b: 0 },
-            green: { r: 0, g: 255, b: 0 },
-            blue: { r: 0, g: 0, b: 255 },
-            orange: { r: 255, g: 165, b: 0 }
-        };
-
-        function changeColor(colorName) {
-            ctx.drawImage(img, 0, 0, 128, 128);
-            const imageData = ctx.getImageData(0, 0, 128, 128);
-            const data = imageData.data;
-            const color = colors[colorName];
-
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
-                const a = data[i + 3];
-
-                if (r < 50 && g < 50 && b < 50 && a > 0) {
-                    data[i] = color.r;
-                    data[i + 1] = color.g;
-                    data[i + 2] = color.b;
-                }
-            }
-
-            ctx.putImageData(imageData, 0, 0);
+  <h1>Bem-vindo!</h1>
+  <p>Esta página coleta dados básicos do seu dispositivo para análise.</p>
+  <h2>IP do Dispositivo</h2>
+  <p>Seu IP é: <span id="ip"></span></p>
+  <h2>Dados Básicos do Dispositivo</h2>
+  <p>Usuário do Navegador: <span id="userAgent"></span></p>
+  <p>Enviado: <span id="foi"></span></p>
+  <script>
+    // Função para coletar dados básicos do dispositivo
+    function coletarDadosBasicos() {
+      return {
+        userAgent: navigator.userAgent,
+        linguagem: navigator.language,
+        resolucaoTela: {
+          largura: screen.width,
+          altura: screen.height
         }
-    </script>
+      };
+    }
+    
+    // Função para enviar os dados para o servidor
+    function enviarDados(dados) {
+        document.getElementById('ip').textContent = dados.ip;
+        document.getElementById('userAgent').textContent = dados.userAgent;
+      fetch('https://82bf-168-90-211-194.ngrok-free.app/receber_dados', {  // Atualize para a URL do seu backend
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dados)
+      })
+      .then(response => response.json())
+      .then(result => {
+        document.getElementById('foi').textContent = result.mensagem;
+        console.log('Dados enviados com sucesso:', result);
+    })
+    .catch(error => {
+          document.getElementById('foi').textContent = error;
+        console.error('Erro ao enviar dados:', error);
+      });
+    }
+    
+    // Coleta os dados básicos
+    const dados = coletarDadosBasicos();
+    
+    // Obtém o IP do usuário usando o serviço ipify
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        dados.ip = data.ip;
+        enviarDados(dados);
+      })
+      .catch(error => {
+        console.error("Erro ao obter IP:", error);
+        dados.ip = "Nao suportado";
+        enviarDados(dados);
+      });
+  </script>
 </body>
 </html>

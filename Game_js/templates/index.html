@@ -12,6 +12,10 @@
     <p class="subtitle">A Jornada do Templo - Endless</p>
     <p2>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;font-size: 15px;"></input></p2>
     <div id="statusContainer">
+      <div class="top" id="recordsChanged">
+        <img src="{{ url_for('static', filename='images/top.png') }}" alt="Recordes globais" class="top-image">
+        <span class="tooltip">Recordes globais</span>
+      </div>
       <h2>Status</h2>
       <p id="extraJumpsStatus">Pulos Extras: 0</p>
       <h3>Habilidades</h3>
@@ -28,6 +32,7 @@
       <button id="startButton">Iniciar</button>
     </div>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {

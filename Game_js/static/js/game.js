@@ -1,5 +1,6 @@
 // ========= Sistema de Seed =========
 // Defina uma seed padrão ou use uma que venha do localStorage// Recupera a seed do localStorage (convertendo para número, se necessário)
+const startTime = new Date();
 let seed = parseInt(localStorage.getItem('seed'));
 // Função seededRandom() usando LCG
 function seededRandom() {
@@ -13,9 +14,18 @@ let lasers = [];
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 // ========= Variáveis Globais =========
-let coins = JSON.parse(localStorage.getItem('coins')) || 0;
-let runes = JSON.parse(localStorage.getItem('runes')) || 0;
-let paisagem = JSON.parse(localStorage.getItem('paisagem')) || 0;
+let coins = localStorage.getItem('coins') || 0;
+if (coins!=0){
+  const bytes  = CryptoJS.AES.decrypt(coins, "Jesus_Ateu");
+  coins = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+let runes = localStorage.getItem('runes') || 0;
+if (runes!=0){
+const bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+runes = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+let paisagem = localStorage.getItem('paisagem') || 0;
+if (paisagem!=0){
+const bytes  = CryptoJS.AES.decrypt(paisagem, "Jesus_Ateu");
+paisagem = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
 let gameOver = false;
 let fly=false;
 let dencidade=false;
@@ -59,7 +69,10 @@ let scrollOffset = 0;
 let currentRoom = 0;
 const ROOM_WIDTH = canvas.width;
 let frameCount = 0;
-let passiveAbilities = JSON.parse(localStorage.getItem('abilities')) || [];
+let passiveAbilities = localStorage.getItem('abilities') || [];
+if (passiveAbilities.length>0){
+const bytes  = CryptoJS.AES.decrypt(passiveAbilities, "Jesus_Ateu");
+passiveAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
 
 let airTime = 0;
 let notairTime = 0;
@@ -161,7 +174,13 @@ const imgfoguete = new Image();
 imgfoguete.src = 'static/images/foguete.png';
 imgfoguete.onload = () => console.log('imgfoguete loaded');
 imgfoguete.onerror = () => console.log('imgfoguete failed to load');
-
+let pulo =localStorage.getItem('extraJumps') || 1;
+if (pulo!=1){
+const bytes  = CryptoJS.AES.decrypt(pulo, "Jesus_Ateu");
+pulo =Number(bytes.toString(CryptoJS.enc.Utf8));}
+if (pulo == 0 ){
+  pulo = 1;
+}
 // ========= Configuração do Jogador =========
 const player = {
   x: 50, // Always start the game from the beginning
@@ -173,8 +192,8 @@ const player = {
   speed: 3,
   jumpForce: -10,
   color: 'red',
-  maxAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1,
-  remainingAirJumps: JSON.parse(localStorage.getItem('extraJumps')) || 1,
+  maxAirJumps: pulo,
+  remainingAirJumps: pulo,
   facingRight: true // Add this property to control the direction
 };
 
@@ -303,7 +322,10 @@ function updateUI() {
     runeUI.style.display = 'none';
   }
   const sucataUI = document.getElementById('sucataUI');
-  let sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  let sucata = localStorage.getItem('sucata') || 0;
+    if (sucata!=0){
+    const bytes  = CryptoJS.AES.decrypt(sucata, "Jesus_Ateu");
+    sucata = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   if (sucata > 0) {
     sucataUI.style.display = 'block';
     document.getElementById('sucataCount').textContent = sucata;
@@ -542,7 +564,7 @@ function checkCollisions() {
         ) {
           coin.collected = true;
           coins += 10;
-          localStorage.setItem('coins', JSON.stringify(coins));
+          localStorage.setItem('coins',CryptoJS.AES.encrypt(JSON.stringify(coins), "Jesus_Ateu").toString());
           updateUI();
         } else if (activePowers['magnetismo'] > 0) {
           const playerCenterX = player.x + player.width / 2;
@@ -554,7 +576,7 @@ function checkCollisions() {
           if (Math.sqrt(dx * dx + dy * dy) < 100) {
             coin.collected = true;
             coins += 10;
-            localStorage.setItem('coins', JSON.stringify(coins));
+            localStorage.setItem('coins',CryptoJS.AES.encrypt(JSON.stringify(coins), "Jesus_Ateu").toString());
             updateUI();
           }
         }
@@ -572,7 +594,7 @@ function checkCollisions() {
       ) {
         rune.collected = true;
         runes++;
-        localStorage.setItem('runes', JSON.stringify(runes));
+        localStorage.setItem('runes', CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());
         updateUI();
       }
     });
@@ -643,9 +665,12 @@ function checkCollisions() {
         player.y + player.height > sucata.y
       ) {
         sucata.collected = true;
-        let sucataCount = JSON.parse(localStorage.getItem('sucata')) || 0;
+        let sucataCount = localStorage.getItem('sucata') || 0;
+    if (sucataCount!=0){
+    const bytes  = CryptoJS.AES.decrypt(sucataCount, "Jesus_Ateu");
+    sucataCount = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
         sucataCount++;
-        localStorage.setItem('sucata', JSON.stringify(sucataCount));
+        localStorage.setItem('sucata', CryptoJS.AES.encrypt(JSON.stringify(sucataCount), "Jesus_Ateu").toString());
         updateUI();
       }
     });
@@ -1057,10 +1082,12 @@ function drawTintedImage(img, x, y, width, height, tintColor) {
 function gameLoop() {
   if (gameOver) {
     let distancia = Math.floor(player.x + scrollOffset);
+    let demorou = Math.floor((Date.now() - startTime) / 1000).toLocaleString();
     coins += distancia;
-    localStorage.setItem('coins', JSON.stringify(coins));
-    localStorage.setItem('distanceTraveled', distancia);
-    localStorage.setItem('coinsEarned', distancia);
+    localStorage.setItem('coins', CryptoJS.AES.encrypt(JSON.stringify(coins), "Jesus_Ateu").toString());
+    localStorage.setItem('distanceTraveled', CryptoJS.AES.encrypt(distancia.toString(), "Jesus_Ateu").toString());
+    localStorage.setItem('coinsEarned', CryptoJS.AES.encrypt(distancia.toString(), "Jesus_Ateu").toString());
+    localStorage.setItem('demorou', CryptoJS.AES.encrypt(demorou.toString(), "Jesus_Ateu").toString());
     window.location.href = '/game_over';
     return;
   }
@@ -1120,7 +1147,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (player.remainingAirJumps > 0) {
         player.velocityY = player.jumpForce;
         player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
-        localStorage.setItem('extraJumps', JSON.stringify(player.remainingAirJumps));
+        localStorage.setItem('extraJumps',CryptoJS.AES.encrypt(JSON.stringify(player.remainingAirJumps), "Jesus_Ateu").toString());
         updateUI();
         notairTime = 0; 
         extraJumpCount++;

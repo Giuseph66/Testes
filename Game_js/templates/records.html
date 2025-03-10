@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/records.css') }}" />
+  </head>
+  <body>
+    <h1>Records</h1>
+    <div style="display: flex;flex-direction: column;">
+      <button onclick="window.location.href='/'">Voltar</button>
+      <table border="1">
+      <tr>
+        <th>Nome</th>
+        <th>Distância</th>
+        <th>Demorou</th>
+        <th>Data e Hora</th>
+        <th>Seed</th>
+        <th>Habilidades</th>
+        <th>Pontos</th>
+      </tr>
+      {% for record in records %}
+        <tr>
+          <td>{{ record.nome }}</td>
+          <td>{{ record.distancia }} MP</td>
+          <td><time datetime="{{ record.demorou }}" id="timeDisplay">{{ record.demorou }}</time></td>
+          <td>{{ record.data_hora }}</td>
+          <td>{{ record.seed }}</td>
+          <td>
+            {% for habilidades in record.habilidades %}
+              <li>{{ habilidades['name'] }}</li>
+            {% endfor %}
+          </td>
+          <td>
+              <li>Moedas: {{ record.pontos.coins }}</li>
+              {% if record.pontos.runes > 0 %}
+                <li>Runas: {{ record.pontos.runes }}</li>
+              {% endif %}
+              {% if record.pontos.sucata > 0 %}
+              <li>Sucatas: {{ record.pontos.sucata }}</li>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <script>
+        function secondsToHMS(seconds) {
+          seconds = Number(seconds);
+          const h = Math.floor(seconds / 3600);
+          const m = Math.floor((seconds % 3600) / 60);
+          const s = seconds % 60;
+          const hDisplay = h > 0 ? h + "h " : "";
+          const mDisplay = m > 0 ? m + "m " : "";
+          const sDisplay = s + "s";
+          return hDisplay + mDisplay + sDisplay;
+        }
+        
+        const timeElement = document.getElementById("timeDisplay");
+        const seconds = parseInt(timeElement.getAttribute("datetime"), 10);
+        timeElement.innerHTML = secondsToHMS(seconds);
+      </script>
+  </body>
+</html>

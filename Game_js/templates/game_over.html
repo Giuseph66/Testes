@@ -3,55 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Game Over - HARRYM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/game_over.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #330000, #000000);
-      color: #eee;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h1 {
-      font-family: 'Bangers', cursive;
-      font-size: 72px;
-      color: #e63946;
-      margin: 0;
-      text-shadow: 2px 2px 4px #000;
-    }
-    h2.subtitle {
-      font-size: 20px;
-      margin: 10px 0 40px 0;
-      color: #f1faee;
-    }
-    .gameover {
-      font-size: 64px;
-      color: #e63946;
-      margin: 20px 0;
-      text-shadow: 3px 3px 6px #000;
-    }
-    .info {
-      font-size: 20px;
-      margin-bottom: 30px;
-    }
-    button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 4px;
-      background: #e63946;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #d62828;
-    }
+  
   </style>
 </head>
 <body>
@@ -61,27 +16,14 @@
   <div class="info">Você chegou até: <span id="distance">0 MP</span></div>
   <div class="info">Moedas adicionadas: <span id="coins">0</span></div>
   <button id="reset" onclick="voltarMenu()">Voltar ao Menu</button>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const distance = localStorage.getItem('distanceTraveled') || 0;
-      const coins = localStorage.getItem('coinsEarned') || 0;
-      const seed = localStorage.getItem('seed') || 0;
-      const momento = new Date().toLocaleString();
-      const historicoExistente = JSON.parse(localStorage.getItem('historico')) || [];
-      document.getElementById('distance').textContent = distance + " MP";
-      document.getElementById('coins').textContent = coins;
-      historicoExistente.push({ distance, momento, seed });
-      localStorage.setItem('historico', JSON.stringify(historicoExistente));
-    });
-
-    function voltarMenu() {
-      window.location.href = '/';
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('reset').focus();
-    });
-  </script>
+  <h3>Deseja fazer parte do Rank ?</h3>
+  <div class="fim">
+    <div class="nome"><br>Nome: <br></div>
+    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" onchange="enviarDados()" required>
+    <button id="enviar" onclick="enviarDados()">Enviar</button>
+    <span id="avisanome"></span>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script src="{{ url_for('static', filename='js/game_over.js') }}"></script>
 </body>
 </html>

@@ -155,10 +155,10 @@ body {
 }
 
 #menuOverlay button#customizeButton {
-  padding: 10px 20px;
-  background: #ff192c; /* Adjusted color */
+  padding: 15px 30px;
+  background: #ff192c;
   color: #fff;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -204,4 +204,41 @@ body {
   border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.top {
+  display: flex;
+  position: relative;
+  height: 1px;
+  width: 100%;
+}
+
+.top-image {
+  margin-left: auto;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  filter: invert(100%);
+}
+
+.tooltip {
+  visibility: hidden;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%; /* Position the tooltip above the image */
+  left: 93%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  width: 120px;
+}
+
+.top:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }

@@ -7,27 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
   seedDisplay.style.width= `${tamanho}%`;
 
   
-  const extraJumps = JSON.parse(localStorage.getItem('extraJumps')) || 0;
+  let extraJumps = localStorage.getItem('extraJumps') || 0;
+  if (extraJumps!=0){
+    const bytes  = CryptoJS.AES.decrypt(extraJumps, "Jesus_Ateu");
+    extraJumps = Number(bytes.toString(CryptoJS.enc.Utf8));}
   document.getElementById('extraJumpsStatus').textContent = "Pulos Extras: " + extraJumps;
   
   // Exibe habilidades customizadas, se houver
   const abilitiesList = document.getElementById('abilitiesList');
-  const newAbilities = JSON.parse(localStorage.getItem('abilities')) || {};
-  if (!newAbilities) {
+  let newAbilities = localStorage.getItem('abilities') || [];
+  if (newAbilities.length>0){
+    const bytes  = CryptoJS.AES.decrypt(newAbilities, "Jesus_Ateu");
+    newAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    for (let key in newAbilities) {
+      let li = document.createElement('li');
+      li.textContent = key + " - " + newAbilities[key].name;
+      abilitiesList.appendChild(li);
+    }
+    }else{
     abilitiesList.innerHTML = '';
-  }else{
-  for (let key in newAbilities) {
-    let li = document.createElement('li');
-    li.textContent = key + " - " + newAbilities[key].name;
-    abilitiesList.appendChild(li);
-  }
 }
   // Exibe histórico do jogo, se houver
   const historyList = document.getElementById('historyList');
-  const gameHistory = JSON.parse(localStorage.getItem('historico')) || [];
-  //console.log(gameHistory);
-  gameHistory.sort((a, b) => b.distance-a.distance);
+  let gameHistory = localStorage.getItem('historico') || [];
   if (gameHistory.length > 0){
+    const bytes  = CryptoJS.AES.decrypt(gameHistory, "Jesus_Ateu");
+    gameHistory = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+    gameHistory.sort((a, b) => b.distance-a.distance);
     gameHistory.forEach(jogo => {
       //console.log(jogo);
       const li = document.createElement('li');
@@ -37,9 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // Exibe moedas e runas
-  const coins = JSON.parse(localStorage.getItem('coins')) || 0;
-  const runes = JSON.parse(localStorage.getItem('runes')) || 0;
-  const sucata = JSON.parse(localStorage.getItem('sucata')) || 0;
+  let coins = localStorage.getItem('coins') || 0;
+  if (coins!=0){
+  let bytes  = CryptoJS.AES.decrypt(coins, "Jesus_Ateu");
+  coins = bytes.toString(CryptoJS.enc.Utf8);}
+  let runes = localStorage.getItem('runes') || 0;
+  if (runes!=0){
+  let bytes  = CryptoJS.AES.decrypt(runes, "Jesus_Ateu");
+  runes = bytes.toString(CryptoJS.enc.Utf8);}
+  let sucata = localStorage.getItem('sucata') || 0;
+  if (sucata!=0){
+  let bytes  = CryptoJS.AES.decrypt(sucata, "Jesus_Ateu");
+  sucata = bytes.toString(CryptoJS.enc.Utf8);}
   if (coins>0){
     document.getElementById('coinsDisplay').style.display = "block";
     document.getElementById('coinsDisplay').textContent = "Moedas: " + coins;
@@ -58,4 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('seed', seed);
     window.location.href = '/game';
   });
+});
+document.getElementById('recordsChanged').addEventListener('click', () => {
+  window.location.href = '/records';
 });
