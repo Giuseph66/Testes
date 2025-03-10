@@ -1,94 +1,266 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Desenho de Imagens no Canvas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle com Joystick e Botões</title>
   <style>
-    body {
-      background: #111;
-      color: #eee;
-      text-align: center;
+    /* Reset e área de jogo */
+    body, html {
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100%;
     }
-    #gameCanvas {
-      background: #222;
-      margin-top: 20px;
-      border: 2px solid #e63946;
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #f0f0f0;
     }
-    /* Ocultamos as tags <img> para não exibi-las na tela */
-    .hidden-img {
-      display: none;
+    /* Personagem (bloco) */
+    #character {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background: red;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    /* Botão de fullscreen para desktop */
+    #fullscreenBtn {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    /* Container do joystick – exibido em dispositivos de toque */
+    #joystickContainer {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 150px;
+      height: 150px;
+      background: rgba(200, 200, 200, 0.5);
+      border-radius: 50%;
+      touch-action: none;
+    }
+    /* "Stick" do joystick */
+    #joystick {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: rgba(100, 100, 100, 0.8);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      touch-action: none;
+    }
+    /* Botão de ação (simula a tecla espaço: pulo + fullscreen) */
+    #actionButton {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #f00;
+      font-size: 16px;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    /* Exibe controles de toque em dispositivos com apontador "coarse" */
+    @media (pointer: coarse) {
+      #joystickContainer, #actionButton {
+        display: block;
+      }
+      #fullscreenBtn {
+        position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      font-size: 12px;
+      color: #000000;
+      border: 2px solid #000000;
+      cursor: pointer;
+      align-items: center;
+      text-align: center;
+      }
+    }
+    /* Em desktops, exibe apenas o botão fullscreen e oculta os controles de toque */
+    @media (pointer: fine) {
+      #joystickContainer, #actionButton {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Exemplo de Inserção de Imagens no Canvas</h1>
-  
-  <!-- Canvas onde desenharemos -->
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
-
-  <!-- Imagens (podem estar na mesma pasta ou em outro caminho) -->
-  <!-- Ajuste o src para o caminho correto dos seus arquivos -->
-  <img id="imgShield" class="hidden-img" src="static/images/escudo.png" alt="Escudo">
-  <img id="imgImpulse" class="hidden-img" src="static/images/pulso.png" alt="Batimento Cardíaco">
-  <img id="imgLightning" class="hidden-img" src="static/images/raio.png" alt="Raio">
-  <img id="imgInvisible" class="hidden-img" src="static/images/homem-invisivel.png" alt="Homem Invisível">
-  <img id="imgMagnet" class="hidden-img" src="static/images/ima.png" alt="Ímã">
+  <div id="gameArea">
+    <div id="character"></div>
+  </div>
+  <!-- Botão para fullscreen (desktop) -->
+  <button id="fullscreenBtn">Fullscreen</button>
+  <!-- Container do joystick (mobile) -->
+  <div id="joystickContainer">
+    <div id="joystick"></div>
+  </div>
+  <!-- Botão de ação para mobile -->
+  <button id="actionButton">SPACE</button>
 
   <script>
-    // Obtém o contexto do canvas
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
+    // Variável de deslocamento para movimentos (passo)
+    const step = 10;
+    const character = document.getElementById('character');
 
-    // Referências às imagens no DOM
-    const imgShield = document.getElementById('imgShield');
-    const imgImpulse = document.getElementById('imgImpulse');
-    const imgLightning = document.getElementById('imgLightning');
-    const imgInvisible = document.getElementById('imgInvisible');
-    const imgMagnet = document.getElementById('imgMagnet');
+    // Função auxiliar para obter valor numérico de uma propriedade CSS
+    function getStyleValue(element, style) {
+      return parseInt(window.getComputedStyle(element)[style]) || 0;
+    }
 
-    function drawShield(x, y, width, height) {
-      drawTintedImage(imgShield, x, y, width, height, 'blue');
+    // Funções de movimento
+    function moveUp() {
+      let top = getStyleValue(character, 'top');
+      character.style.top = (top - step) + 'px';
     }
-    function drawImpulse(x, y, width, height) {
-      drawTintedImage(imgImpulse, x, y, width, height, 'red');
+    function moveDown() {
+      let top = getStyleValue(character, 'top');
+      character.style.top = (top + step) + 'px';
     }
-    function drawLightning(x, y, width, height) {
-      drawTintedImage(imgLightning, x, y, width, height, 'yellow');
+    function moveLeft() {
+      let left = getStyleValue(character, 'left');
+      character.style.left = (left - step) + 'px';
     }
-    function drawInvisibleMan(x, y, width, height) {
-      drawTintedImage(imgInvisible, x, y, width, height , 'white');
+    function moveRight() {
+      let left = getStyleValue(character, 'left');
+      character.style.left = (left + step) + 'px';
     }
-    function drawMagnet(x, y, width, height) {
-      drawTintedImage(imgMagnet, x, y, width, height, 'magenta');
-    }
-    function drawTintedImage(img, x, y, width, height, tintColor) {
-      ctx.drawImage(img, x, y, width, height);
-      ctx.globalCompositeOperation = 'source-atop';
-      ctx.fillStyle = tintColor;
-      ctx.fillRect(x, y, width, height);
-      ctx.globalCompositeOperation = 'source-over';
-    }
-    
-    window.addEventListener('load', () => {
-      // Limpa o canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Desenha cada imagem com dimensões diferentes
-      drawShield(50, 50, 100, 100);
-      drawImpulse(200, 50, 100, 100);
-      drawLightning(350, 50, 100, 100);
-      drawInvisibleMan(500, 50, 100, 100);
-      drawMagnet(650, 50, 100, 100);
+    // Função para simular o pulo (ação da tecla espaço)
+    function jump() {
+      let originalTop = getStyleValue(character, 'top');
+      character.style.top = (originalTop - 50) + 'px';
+      setTimeout(() => {
+        character.style.top = originalTop + 'px';
+      }, 200);
+    }
 
-      // Você pode desenhar mais de uma vez, ou em posições diferentes
-      drawShield(50, 200, 60, 60);
-      drawImpulse(200, 200, 60, 60);
-      drawLightning(350, 200, 60, 60);
-      drawInvisibleMan(500, 200, 60, 60);
-      drawMagnet(650, 200, 60, 60);
+    // Função para alternar o modo de tela cheia
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          alert(`Erro ao tentar ativar tela cheia: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    // Eventos do teclado para desktops
+    document.addEventListener('keydown', function(e) {
+      switch(e.code) {
+        case 'ArrowUp':
+          moveUp();
+          break;
+        case 'ArrowDown':
+          moveDown();
+          break;
+        case 'ArrowLeft':
+          moveLeft();
+          break;
+        case 'ArrowRight':
+          moveRight();
+          break;
+        case 'Space':
+          jump();
+          break;
+      }
+    });
+    // Botão fullscreen para desktop
+    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullScreen);
+    // Botão de ação para mobile: executa pulo e ativa tela cheia
+    document.getElementById('actionButton').addEventListener('click', function() {
+      jump();
+    });
+
+    // --- Lógica do Joystick ---
+    const joystickContainer = document.getElementById('joystickContainer');
+    const joystick = document.getElementById('joystick');
+
+    let dragging = false;
+    let containerRect, centerX, centerY;
+    const maxDistance = 50; // distância máxima de deslocamento do stick
+    let moveInterval;
+
+    // Retorna o stick para o centro
+    function resetJoystick() {
+      joystick.style.left = '50%';
+      joystick.style.top = '50%';
+    }
+
+    // Inicia um intervalo que move o personagem de acordo com a direção
+    function startMoving(dx, dy) {
+      clearInterval(moveInterval);
+      moveInterval = setInterval(() => {
+        // Se o deslocamento horizontal for significativo
+        if (dx < -0.3) moveLeft();
+        else if (dx > 0.3) moveRight();
+        // Se o deslocamento vertical for significativo
+        if (dy < -0.3) moveUp();
+        else if (dy > 0.3) moveDown();
+      }, 100);
+    }
+    // Para de mover
+    function stopMoving() {
+      clearInterval(moveInterval);
+    }
+
+    // Trata o movimento do joystick
+    function handleMove(e) {
+      containerRect = joystickContainer.getBoundingClientRect();
+      centerX = containerRect.left + containerRect.width / 2;
+      centerY = containerRect.top + containerRect.height / 2;
+      
+      let deltaX = e.clientX - centerX;
+      let deltaY = e.clientY - centerY;
+      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+      
+      // Limita o deslocamento ao raio máximo
+      if (distance > maxDistance) {
+        const angle = Math.atan2(deltaY, deltaX);
+        deltaX = Math.cos(angle) * maxDistance;
+        deltaY = Math.sin(angle) * maxDistance;
+      }
+      // Atualiza a posição do stick (em porcentagem)
+      joystick.style.left = (50 + (deltaX / containerRect.width) * 100) + '%';
+      joystick.style.top = (50 + (deltaY / containerRect.height) * 100) + '%';
+      
+      // Normaliza os valores para -1 a 1 e inicia o movimento
+      const dx = deltaX / maxDistance;
+      const dy = deltaY / maxDistance;
+      startMoving(dx, dy);
+    }
+
+    // Eventos do joystick para toque e mouse
+    joystickContainer.addEventListener('pointerdown', function(e) {
+      dragging = true;
+      handleMove(e);
+    });
+    window.addEventListener('pointermove', function(e) {
+      if (!dragging) return;
+      handleMove(e);
+    });
+    window.addEventListener('pointerup', function(e) {
+      dragging = false;
+      stopMoving();
+      resetJoystick();
     });
   </script>
 </body>
