@@ -18,8 +18,9 @@
   <button id="reset" onclick="voltarMenu()">Voltar ao Menu</button>
   <h3>Deseja fazer parte do Rank ?</h3>
   <div class="fim">
-    <div class="nome"><br>Nome: <br></div>
-    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" onchange="enviarDados()" required>
+    <div class="nome"><p>Nome: <p> <p>Senha:</p> </div>
+    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+    <input type="password" id="senha" name="senha" placeholder="Digite sua senha" onchange="enviarDados()" required>
     <button id="enviar" onclick="enviarDados()">Enviar</button>
     <span id="avisanome"></span>
   </div>

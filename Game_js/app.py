@@ -15,6 +15,7 @@ cursor.execute("""
 CREATE TABLE IF NOT EXISTS record (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     nome TEXT,
+    senha TEXT NOT NULL,
     distancia INTEGER NOT NULL,
     data_hora DATETIME NOT NULL,
     ip_rede TEXT NOT NULL,
@@ -49,13 +50,13 @@ def records():
         {
             "id": row[0],
             "nome": row[1],
-            "distancia": int(row[2]),
-            "data_hora": row[3],
-            "ip_rede": row[4],
-            "seed": row[5],
-            "demorou": int(row[6]),
-            "habilidades": json.loads(row[7]),
-            "pontos": json.loads(row[8])
+            "distancia": int(row[3]),
+            "data_hora": row[4],
+            "ip_rede": row[5],
+            "seed": row[6],
+            "demorou": int(row[7]),
+            "habilidades": json.loads(row[8]),
+            "pontos": json.loads(row[9])
         }
         for row in records
     ]
@@ -71,6 +72,7 @@ def receber_dados():
     try:
         print(dados)
         nome = dados.get('nome').upper()
+        senha= dados.get('senha')
         distancia = dados.get('distance')
         demorou = float(dados.get('tempo'))
         momento = dados.get('momento')
@@ -82,23 +84,26 @@ def receber_dados():
         result = cursor.execute("SELECT * FROM record WHERE nome = ? ", (nome,)).fetchall()
         if result:
             for row in result:
-                #id, name, distancia_banco, data_hora, ip, seed_banco, habilidades_banco, pontos_banco = row
-                if int(distancia) > int(row[2]):
-                    cursor.execute("UPDATE record SET distancia = ?, habilidades = ?, pontos = ? , demorou =? WHERE id = ?", 
-                                   (distancia, habilidades, pontos,demorou, row[0]))
-                    banco.commit()
-                    print(f"Registro {row[0]} atualizado de {row[2]} para {distancia}")
-                if ip_rede != row[4] and ip_rede != "Nao suportado":
-                    cursor.execute("UPDATE record SET ip_rede = ? WHERE id = ?", (ip_rede, row[0]))
-                    banco.commit()
-                    print(f"Registro {row[0]} atualizado de {row[4]} para {ip_rede}")
+                if row[2]==str(senha):
+                    #id, name, distancia_banco, data_hora, ip, seed_banco, habilidades_banco, pontos_banco = row
+                    if int(distancia) > int(row[3]):
+                        cursor.execute("UPDATE record SET distancia = ?, habilidades = ?, pontos = ? , demorou =? WHERE id = ?", 
+                                        (distancia, habilidades, pontos,demorou, row[0]))
+                        banco.commit()
+                        print(f"Registro {row[0]} atualizado de {row[3]} para {distancia}")
+                    if ip_rede != row[5] and ip_rede != "Nao suportado":
+                        cursor.execute("UPDATE record SET ip_rede = ? WHERE id = ?", (ip_rede, row[0]))
+                        banco.commit()
+                        print(f"Registro {row[0]} atualizado de {row[5]} para {ip_rede}")
+                else:
+                    return jsonify({"mensagem": "senha incorreta",'status':300}), 300
         else:
-            cursor.execute("INSERT INTO record (nome, distancia, data_hora, ip_rede, seed, habilidades, pontos,demorou) VALUES (?, ?, ?, ?,?, ?, ?, ?)",
-                           (nome, distancia, momento, ip_rede, seed, habilidades, pontos,demorou))
+            cursor.execute("INSERT INTO record (nome,senha, distancia, data_hora, ip_rede, seed, habilidades, pontos,demorou) VALUES (?,?, ?, ?, ?,?, ?, ?, ?)",
+                            (nome,senha, distancia, momento, ip_rede, seed, habilidades, pontos,demorou))
             banco.commit()
             print(f"Usuario : {nome} adicionado com sucesso")
-
         return jsonify({"mensagem": "Dados recebidos com sucesso",'status':200}), 200
+
     except Exception as e:
         return jsonify({"erro": str(e),'status':500}), 500
 
