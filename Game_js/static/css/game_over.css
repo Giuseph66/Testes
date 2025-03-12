@@ -23,6 +23,11 @@ h2.subtitle {
 }
 .nome{
   margin-left: 10px;
+  display: flex;
+}
+.nome p{
+  margin: 0;
+  margin-right: 17%;
 }
 input{
   margin: 10px;
@@ -35,6 +40,9 @@ text-align: center;
 align-items: center;
 border: 2px solid #bbbbbb;
 
+}
+.fim{
+  display: block;
 }
 .gameover {
   font-size: 64px;

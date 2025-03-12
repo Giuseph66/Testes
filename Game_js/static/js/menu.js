@@ -5,7 +5,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let tamanho = (String(seed).length * 3.5)+3.5;
   console.log(tamanho);
   seedDisplay.style.width= `${tamanho}%`;
-
+  let coin= localStorage.getItem('coins');
+  function isNumeric(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+  }
+  try{
+    if (coin !== null) {
+      if (isNumeric(coin)) {
+        console.log(coin)
+    localStorage.clear()}}
+  }catch (e){
+    console.log(e)
+    localStorage.clear()
+  }
   
   let extraJumps = localStorage.getItem('extraJumps') || 0;
   if (extraJumps!=0){
