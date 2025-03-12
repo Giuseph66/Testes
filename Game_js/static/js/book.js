@@ -208,14 +208,12 @@ function comprapaizagem(valor) {
     sucata -= valor;
     localStorage.setItem('runes', CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());
     localStorage.setItem('sucata', CryptoJS.AES.encrypt(JSON.stringify(sucata), "Jesus_Ateu").toString());
-    document.getElementById('runesDisplay').textContent`Runas: ${runes}`;
-    document.getElementById('sucataDisplay').textContent = `${sucata}`;
     localStorage.setItem('pagination', CryptoJS.AES.encrypt(currentLeaf.toString(), "Jesus_Ateu").toString());
     let paisagem = localStorage.getItem('paisagem') || 0;
     if (paisagem!=0){
-    const bytes  = CryptoJS.AES.decrypt(paisagem, "Jesus_Ateu");
-    paisagem = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
-    localStorage.setItem('paisagem', CryptoJS.AES.encrypt(JSON.stringify(paisagem+1), "Jesus_Ateu").toString());
+      const bytes  = CryptoJS.AES.decrypt(paisagem, "Jesus_Ateu");
+      paisagem = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
+      localStorage.setItem('paisagem', CryptoJS.AES.encrypt(JSON.stringify(paisagem+1), "Jesus_Ateu").toString());
     window.location.reload(); 
   }else {
     alert('Runas ou Sucatas insuficientes!');
@@ -270,7 +268,7 @@ function updateBook() {
         id: 8,
         name: 'Espectro', 
         description: 'Transforma o jogador em um espectro invencível.',
-        legend: 'Véu do Além - Tecido com os últimos suspiros de guerreiros mortos, concede invulnerabilidade... ao custo de sentir todas as dores acumuladas no tecido durante os 13 segundos de uso.'
+        legend: 'Véu do Além - Tecido com os últimos suspiros de guerreiros mortos, concede invulnerabilidade... ao custo de sentir todas as dores acumuladas no tecido.'
     },
     {   
         id: 9,

@@ -24,6 +24,19 @@
     <button id="enviar" onclick="enviarDados()">Enviar</button>
     <span id="avisanome"></span>
   </div>
+  <div id="modalOverlay" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <h2>Conta Cadastrada</h2>
+      <p>Verificamos que você já tem uma conta cadastrada.<br>
+      Gostaria de resgatar seu histórico de jogo?<br>
+      (Caso aceite todos os dados atuais serão substituídos pelo anterior.)<br>
+      (Caso negue todos os dados anteriores serão substituídos pelo de agora.(Backup))</p>
+      <div class="modal-buttons">
+        <button id="modalNoButton">Não</button>
+        <button id="modalYesButton">Sim</button>
+      </div>
+    </div>
+  </div>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="{{ url_for('static', filename='js/game_over.js') }}"></script>
 </body>

@@ -127,7 +127,7 @@ function drawCooldownBars() {
     const maxCooldown = cooldowns[ability][1];
     const abilityElement = document.getElementById(ability.toLowerCase()+"Carrega");
     if (cooldown > 0) {
-      console.log(cooldown,maxCooldown)
+      //console.log(cooldown,maxCooldown)
       if (abilityElement) {
           const porcentagem = ((maxCooldown - cooldown) / maxCooldown) * 100; 
           abilityElement.style.display = 'block';
@@ -1192,6 +1192,10 @@ document.addEventListener('DOMContentLoaded', () => {
       applyClimbing();
       cooldowns.escala[0] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
       cooldowns.escala[1] =5000 - 5000 * (player.canClimb?.level/100 || 1); // Example cooldown duration
+    } else if (e.key.toUpperCase() === 'X' && cooldowns.espectro[0] === 0) {
+      applySpectralForma();
+      cooldowns.espectro[0] =5000 - 5000 * (player.spectralForm?.level/100 || 1); // Example cooldown duration
+      cooldowns.espectro[1] =5000 - 5000 * (player.spectralForm?.level/100 || 1); // Example cooldown duration
     } else if (e.key.toUpperCase() === 'S' && cooldowns.espadasagrada[0] === 0) {
       applySacredSword();
       cooldowns.espadasagrada[0] =5000 - 5000 * (player.sacredSword?.level/100 || 1); // Example cooldown duration
@@ -1299,7 +1303,7 @@ function applyPassiveAbilities() {
       ability.key = 'E';
       player.canClimb = { level: ability.level || 1, key: ability.key };
     } else if (ability.name === 'Espectro') {
-      ability.key = 'E'; // Se desejar uma tecla diferente, altere aqui
+      ability.key = 'X'; // Se desejar uma tecla diferente, altere aqui
       player.spectralForm = { level: ability.level || 1, key: ability.key };
     } else if (ability.name === 'Espada Sagrada') {
       ability.key = 'S';

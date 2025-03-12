@@ -156,7 +156,7 @@ function shootLaser() {
 // Escalada
 function applyClimbing() {
   if (player.canClimb) {
-    const duration = 5000 * (player.canClimb.level || 1); // Increase duration with level
+    const duration = 5000 +5000 * (player.canClimb.level/100 || 1); // Increase duration with level
     dencidade=true;
     setTimeout(() => { dencidade=false; }, duration);
   }
@@ -164,11 +164,10 @@ function applyClimbing() {
 
 // Espectro
 function applySpectralForm() {
-  if (player.spectralForm) {
-    const duration = 5000 * (player.spectralForm.level || 1); // Increase duration with level
-    player.invincible = true;
-    setTimeout(() => { player.invincible = false; }, duration);
-  }
+  const duration = 500+5000 * (player.spectralForm.level/100 || 1); // Increase duration with level
+  activePowers['invisibilidade'] += duration;
+  updateUI();
+  console.log("Aplicando forma espectral")
 }
 
 // Espada Sagrada

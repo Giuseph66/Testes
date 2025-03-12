@@ -12,9 +12,15 @@
     <p class="subtitle">A Jornada do Templo - Endless</p>
     <p2>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;font-size: 15px;"></input></p2>
     <div id="statusContainer">
-      <div class="top" id="recordsChanged">
-        <img src="{{ url_for('static', filename='images/top.png') }}" alt="Recordes globais" class="top-image">
-        <span class="tooltip">Recordes globais</span>
+      <div class="top" >
+        <div class="mendigo" id="mendigo">
+          <img src="{{ url_for('static', filename='images/mendigo.png') }}" alt="mendigo" class="image mendigoIMG">
+          <span class="tooltip mendigotop">Doar uma moeda para um mendigo :)</span>
+        </div>
+        <div class="visu" id="recordsChanged">
+          <img src="{{ url_for('static', filename='images/top.png') }}" alt="Recordes globais" class="image topIMG">
+          <span class="tooltip toop">Recordes globais</span>
+        </div>
       </div>
       <h2>Status</h2>
       <p id="extraJumpsStatus">Pulos Extras: 0</p>
@@ -32,6 +38,19 @@
       <button id="startButton">Iniciar</button>
     </div>
   </div>
+  <div id="modalOverlay" class="modal-overlay" style="display: none;">
+    <div class="modal" id="modal">
+      <span class="close">&times;</span>
+      <h2>você é uma pessoa incrível !!!</h2>
+      <p>Muito obrigado por jogar meu joguinho<br>Se você gostou, por favor, compartilhe com seus amigos</p>
+      <div class="modal-buttons">
+        <label for="valor">Quanto queres me doar ?</label>
+        <input type="number" id="valor" placeholder="1" value="1" onchange="pix()"required> 
+        <button onclick="pix()">Pix</button>
+      </div>
+    </div>
+  </div>
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
   <script>

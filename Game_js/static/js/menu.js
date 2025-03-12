@@ -89,3 +89,63 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('recordsChanged').addEventListener('click', () => {
   window.location.href = '/records';
 });
+
+document.getElementById('mendigo').addEventListener('click', () => {
+  var modal = document.getElementById('modalOverlay');
+  var span = document.getElementsByClassName('close')[0];
+  modal.style.display = 'flex';
+  span.onclick = function() {
+      modal.style.display = 'none'; 
+  }
+  window.onclick = function(event) {
+      if (event.target == modal) {
+          modal.style.display = 'none';
+      }
+  }
+});
+
+function pix(){
+  var modal = document.getElementById('modal');
+  const valor = document.getElementById('valor').value;
+  fetch('/pix', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(valor)
+  })
+  .then(response => response.json())
+  .then(result => {
+      if (result.status === 200 ){
+        let div_pix = document.getElementById('pix');
+        if (!div_pix){
+          div_pix = document.createElement('div');
+          div_pix.id = 'pix';
+        }
+        let imgElement = document.getElementById('qrImage');
+        if (!imgElement) {
+          imgElement = document.createElement('img');
+          imgElement.id = 'qrImage';
+        }
+        imgElement.src = result.img_url;
+        let copia_cola = document.getElementById('copia_cola');
+        if (!copia_cola) {
+          copia_cola = document.createElement('button');
+          copia_cola.className=''
+          copia_cola.id = 'copia_cola';
+          copia_cola.innerHTML = 'Copiar';
+          copia_cola.onclick = function() {
+            navigator.clipboard.writeText(result.pqp);
+            copia_cola.innerHTML = 'Copiado';
+          }
+        }
+        div_pix.appendChild(imgElement);
+        div_pix.appendChild(copia_cola);
+        modal.appendChild(div_pix);
+      }
+    })
+    .catch(error => {
+      console.error('Erro ao enviar dados:', error);
+    
+    });
+}

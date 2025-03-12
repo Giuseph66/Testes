@@ -213,14 +213,19 @@ body {
   width: 100%;
 }
 
-.top-image {
-  margin-left: auto;
+.image {
   width: 50px;
   height: 50px;
   cursor: pointer;
   filter: invert(100%);
 }
-
+.mendigoIMG{
+  margin-right: auto;
+}
+.topIMG{    
+  position: relative;
+  left: 83%;
+}
 .tooltip {
   visibility: hidden;
   background-color: #555;
@@ -231,14 +236,107 @@ body {
   position: absolute;
   z-index: 1;
   bottom: 125%; /* Position the tooltip above the image */
-  left: 93%;
-  margin-left: -60px;
   opacity: 0;
   transition: opacity 0.3s;
   width: 120px;
 }
-
-.top:hover .tooltip {
+.toop{
+  left: 93%;
+  margin-right: -60px;
+}
+.mendigo {
+  width: 50%;
+}
+.visu{
+  width: 50%;
+}
+.mendigo:hover .tooltip {
   visibility: visible;
   opacity: 1;
+}
+.visu:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal {
+  background: #222;
+  border: 2px solid #e63946;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  max-width: 90%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+.modal h2 {
+  font-family: 'Bangers', cursive;
+  font-size: 32px;
+  color: #e63946;
+  margin: 0 0 20px;
+}
+.modal p {
+  font-size: 18px;
+  color: #f1faee;
+  margin-bottom: 30px;
+}
+.modal-buttons label{
+  display: flex;
+  align-items: center;
+}
+.modal-buttons input{
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 4px;
+  background: none;
+  color: #eee;
+  text-align: center;
+  align-items: center;
+  border: 2px solid #bbbbbb;
+  width: 15%;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+button {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 4px;
+  background: #e63946;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button:hover {
+  background: #d62828;
+}
+.modal span {
+  position: relative;
+  cursor: pointer;
+  margin-left: 100%;
+}
+#qrImage{
+  width: 35%;
+}
+#pix{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
