@@ -1,168 +1,100 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <title>Modal de Resgate de Histórico</title>
-  <style>
-    /* CSS base fornecido */
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(180deg, #330000, #000000);
-      color: #eee;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h1 {
-      font-family: 'Bangers', cursive;
-      font-size: 72px;
-      color: #e63946;
-      margin: 0;
-      text-shadow: 2px 2px 4px #000;
-    }
-    h2.subtitle {
-      font-size: 20px;
-      margin: 10px 0 40px 0;
-      color: #f1faee;
-    }
-    .nome {
-      margin-left: 10px;
-      display: flex;
-    }
-    .nome p {
-      margin: 0;
-      margin-right: 17%;
-    }
-    input {
-      margin: 10px;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 4px;
-      background: none;
-      color: #eee;
-      text-align: center;
-      align-items: center;
-      border: 2px solid #bbbbbb;
-    }
-    .fim {
-      display: block;
-    }
-    .gameover {
-      font-size: 64px;
-      color: #e63946;
-      margin: 20px 0;
-      text-shadow: 3px 3px 6px #000;
-    }
-    .info {
-      font-size: 20px;
-      margin-bottom: 30px;
-    }
-    button {
-      margin: 10px;
-      padding: 15px 30px;
-      font-size: 18px;
-      border: none;
-      border-radius: 4px;
-      background: #e63946;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #d62828;
-    }
-    
-    /* CSS do Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-    .modal {
-      background: #222;
-      border: 2px solid #e63946;
-      border-radius: 8px;
-      padding: 30px;
-      text-align: center;
-      max-width: 90%;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    }
-    .modal h2 {
-      font-family: 'Bangers', cursive;
-      font-size: 32px;
-      color: #e63946;
-      margin: 0 0 20px;
-    }
-    .modal p {
-      font-size: 18px;
-      color: #f1faee;
-      margin-bottom: 30px;
-    }
-    .modal-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-    .modal-buttons button {
-      padding: 10px 20px;
-      font-size: 18px;
-      border: none;
-      border-radius: 4px;
-      background: #e63946;
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .modal-buttons button:hover {
-      background: #d62828;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joystick Virtual</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #282c34;
+            color: white;
+        }
+        #joystickContainer {
+            width: 150px;
+            height: 150px;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+        #output {
+            margin-top: 20px;
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-  <!-- Conteúdo principal (pode ser o jogo) -->
-  <h1 onclick="modal()" style="cursor: pointer;" >Meu Jogo</h1>
-  
-  <!-- Modal Popup -->
-  <div id="modalOverlay" class="modal-overlay" style="display: none;">
-    <div class="modal">
-      <h2>Conta Cadastrada</h2>
-      <p>Verificamos que você já tem uma conta cadastrada.<br>
-      Gostaria de resgatar seu histórico de jogo?<br>
-      (Todos os dados atuais serão substituídos pelo anterior.)</p>
-      <div class="modal-buttons">
-        <button id="modalNoButton">Não</button>
-        <button id="modalYesButton">Sim</button>
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    function modal() {
-        const modalOverlay = document.getElementById('modalOverlay');
-        modalOverlay.style.display = 'flex';
-        
-        document.getElementById('modalNoButton').addEventListener('click', () => {
-          // Se o usuário clicar "Não", simplesmente fecha o modal
-          modalOverlay.style.display = 'none';
+
+    <h2>🕹️ Joystick Virtual</h2>
+    <p>Mova o joystick e veja os valores dos eixos.</p>
+
+    <div id="joystickContainer"></div>
+    <div id="output">X: 0 | Y: 0 | Direção: Nenhuma</div>
+
+    <script>
+        const joystickContainer = document.getElementById('joystickContainer');
+        let moveInterval;
+
+        // Criando o joystick com NippleJS
+        const joystick = nipplejs.create({
+            zone: joystickContainer,
+            mode: 'static',
+            position: { left: '50%', top: '50%' },
+            size: 100,
+            color: 'cyan'
         });
-        
-        document.getElementById('modalYesButton').addEventListener('click', () => {
-          // Se o usuário clicar "Sim", execute a lógica para resgatar o histórico
-          // Por exemplo, chamar uma função que restaure os dados do jogo
-          alert("Resgatando histórico de jogo...");
-          modalOverlay.style.display = 'none';
+
+        function resetJoystick() {
+            clearInterval(moveInterval);
+            document.getElementById("output").innerHTML = "X: 0 | Y: 0 | Direção: Nenhuma";
+        }
+
+        function startMoving(dx, dy) {
+            clearInterval(moveInterval);
+            moveInterval = setInterval(() => {
+                if (dx < -0.3) moveLeft();
+                else if (dx > 0.3) moveRight();
+                if (dy < -0.3) moveUp();
+                else if (dy > 0.3) moveDown();
+            }, 10);
+        }
+
+        function stopMoving() {
+            clearInterval(moveInterval);
+        }
+
+        joystick.on('move', function (evt, data) {
+            let dx = data.vector.x.toFixed(2);
+            let dy = data.vector.y.toFixed(2);
+            let direction = data.direction ? data.direction.angle : "Nenhuma";
+
+            document.getElementById("output").innerHTML = `X: ${dx} | Y: ${dy} | Direção: ${direction}`;
+            startMoving(dx, dy);
         });
-      }
-  </script>
+
+        joystick.on('end', function () {
+            stopMoving();
+            resetJoystick();
+        });
+
+        function moveLeft() {
+            console.log("Movendo para ESQUERDA");
+        }
+
+        function moveRight() {
+            console.log("Movendo para DIREITA");
+        }
+
+        function moveUp() {
+            console.log("Movendo para CIMA");
+        }
+
+        function moveDown() {
+            console.log("Movendo para BAIXO");
+        }
+    </script>
+
 </body>
 </html>

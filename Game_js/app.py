@@ -4,6 +4,7 @@ import sqlite3
 import qrcode
 import crcmod
 import json
+import os 
 
 app = Flask(__name__, template_folder='templates')
 CORS(app)
@@ -89,7 +90,6 @@ def receber_dados():
             for row in result:
                 if row[2]==str(senha):
                     #id, name, distancia_banco, data_hora, ip, seed_banco, habilidades_banco, pontos_banco = 
-                    print(backup)
                     if not backup['altorizar'] or backup['altorizar'] is None:
                         return jsonify({"mensagem": row[10],'status':999}), 999
                     if int(distancia) > int(row[3]):
@@ -154,6 +154,12 @@ def pix():
     crc16codigo_formatado=str(crc16codigo).replace("0x","").upper()
     payload_pronta=f"{payload}{crc16codigo_formatado}"
     qrcode_=qrcode.make(payload_pronta)
+    directory = 'static/images'
+    for filename in os.listdir(directory):
+        if filename.endswith('.png') and 'qr_code_de_' in filename:
+            apagar = os.path.join(directory, filename)
+            os.remove(apagar)
+            print(f'Removido: {apagar}')
     qrcode_.save(f"static/images/qr_code_de_{valor}.png")
     return jsonify({"mensagem": "Dados recebidos com sucesso","status":200,"img_url": f"/static/images/qr_code_de_{valor}.png","pqp": payload_pronta}), 200
 if __name__ == '__main__':

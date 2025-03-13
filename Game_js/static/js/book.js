@@ -173,7 +173,7 @@ function purchaseAbility(abilityName, descricao) {
   const bytes  = CryptoJS.AES.decrypt(purchasedAbilities, "Jesus_Ateu");
   purchasedAbilities = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));}
   const ability = purchasedAbilities.find(a => a.name === abilityName);
-  let cost = ability ? Math.ceil(10 * Math.pow(1.3, ability.level)) : 1;
+  let cost = ability ? Math.ceil(10 * Math.pow(1.3, ability.level)) : 10;
   if (runes >= cost) {
     runes -= cost;
     localStorage.setItem('runes', CryptoJS.AES.encrypt(JSON.stringify(runes), "Jesus_Ateu").toString());

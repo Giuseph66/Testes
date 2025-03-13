@@ -2,6 +2,9 @@ function useTeletransporte() {
   if (player.teleport) {
     const distance = 100 + ((player.teleport.level*0.3)*100 || 1); // Increase distance with level
     player.x += distance;
+    if (rocketEnemy) {
+      rocketEnemy.x -=1000;
+    }
   }
 }
 
@@ -56,7 +59,7 @@ function applyInvertedWorld() {
   // Invert player position and velocity
   player.y = canvasHeight - player.y - player.height;
   player.velocityY = -player.velocityY;
-
+  
   // Invert positions of platforms
   for (let key in rooms) {
     rooms[key].platforms.forEach(platform => {
@@ -163,7 +166,7 @@ function applyClimbing() {
 }
 
 // Espectro
-function applySpectralForm() {
+function applySpectralForma() {
   const duration = 500+5000 * (player.spectralForm.level/100 || 1); // Increase duration with level
   activePowers['invisibilidade'] += duration;
   updateUI();

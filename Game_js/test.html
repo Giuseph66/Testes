@@ -1,267 +1,82 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Controle com Joystick e Botões</title>
-  <style>
-    /* Reset e área de jogo */
-    body, html {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-    }
-    #gameArea {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      background: #f0f0f0;
-    }
-    /* Personagem (bloco) */
-    #character {
-      position: absolute;
-      width: 50px;
-      height: 50px;
-      background: red;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-    /* Botão de fullscreen para desktop */
-    #fullscreenBtn {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    /* Container do joystick – exibido em dispositivos de toque */
-    #joystickContainer {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 150px;
-      height: 150px;
-      background: rgba(200, 200, 200, 0.5);
-      border-radius: 50%;
-      touch-action: none;
-    }
-    /* "Stick" do joystick */
-    #joystick {
-      position: absolute;
-      width: 60px;
-      height: 60px;
-      background: rgba(100, 100, 100, 0.8);
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      touch-action: none;
-    }
-    /* Botão de ação (simula a tecla espaço: pulo + fullscreen) */
-    #actionButton {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #f00;
-      font-size: 16px;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    /* Exibe controles de toque em dispositivos com apontador "coarse" */
-    @media (pointer: coarse) {
-      #joystickContainer, #actionButton {
-        display: block;
-      }
-      #fullscreenBtn {
-        position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      font-size: 12px;
-      color: #000000;
-      border: 2px solid #000000;
-      cursor: pointer;
-      align-items: center;
-      text-align: center;
-      }
-    }
-    /* Em desktops, exibe apenas o botão fullscreen e oculta os controles de toque */
-    @media (pointer: fine) {
-      #joystickContainer, #actionButton {
-        display: none;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Adivinhação</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #282c34;
+            color: white;
+            text-align: center;
+            padding-top: 50px;
+        }
+        .game-container {
+            background: #3a3f4b;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    </style>
 </head>
 <body>
-  <div id="gameArea">
-    <div id="character"></div>
-  </div>
-  <!-- Botão para fullscreen (desktop) -->
-  <button id="fullscreenBtn">Fullscreen</button>
-  <!-- Container do joystick (mobile) -->
-  <div id="joystickContainer">
-    <div id="joystick"></div>
-  </div>
-  <!-- Botão de ação para mobile -->
-  <button id="actionButton">SPACE</button>
 
-  <script>
-    // Variável de deslocamento para movimentos (passo)
-    const step = 10;
-    const character = document.getElementById('character');
+    <div class="container">
+        <div class="game-container">
+            <h2>🎯 Jogo da Adivinhação 🎯</h2>
+            <p>Digite um número entre <b>1 e 100</b></p>
+            <input type="number" id="userInput" class="form-control w-50 mx-auto" min="1" max="100">
+            <button class="btn btn-primary mt-2" onclick="checkGuess()">Tentar</button>
+            <p id="message" class="mt-3"></p>
+            <p id="attemptsLeft">Tentativas restantes: <b>10</b></p>
+            <button class="btn btn-warning mt-2" onclick="restartGame()">🔄 Reiniciar</button>
+        </div>
+    </div>
 
-    // Função auxiliar para obter valor numérico de uma propriedade CSS
-    function getStyleValue(element, style) {
-      return parseInt(window.getComputedStyle(element)[style]) || 0;
-    }
+    <script>
+        let numeroSecreto = Math.floor(Math.random() * 100) + 1;
+        let tentativas = 10;
 
-    // Funções de movimento
-    function moveUp() {
-      let top = getStyleValue(character, 'top');
-      character.style.top = (top - step) + 'px';
-    }
-    function moveDown() {
-      let top = getStyleValue(character, 'top');
-      character.style.top = (top + step) + 'px';
-    }
-    function moveLeft() {
-      let left = getStyleValue(character, 'left');
-      character.style.left = (left - step) + 'px';
-    }
-    function moveRight() {
-      let left = getStyleValue(character, 'left');
-      character.style.left = (left + step) + 'px';
-    }
+        function checkGuess() {
+            let userGuess = parseInt(document.getElementById("userInput").value);
+            let message = document.getElementById("message");
+            let attemptsLeft = document.getElementById("attemptsLeft");
 
-    // Função para simular o pulo (ação da tecla espaço)
-    function jump() {
-      let originalTop = getStyleValue(character, 'top');
-      character.style.top = (originalTop - 50) + 'px';
-      setTimeout(() => {
-        character.style.top = originalTop + 'px';
-      }, 200);
-    }
+            if (isNaN(userGuess) || userGuess < 1 || userGuess > 100) {
+                message.innerHTML = "❌ Por favor, insira um número válido entre 1 e 100.";
+                return;
+            }
 
-    // Função para alternar o modo de tela cheia
-    function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-          alert(`Erro ao tentar ativar tela cheia: ${err.message}`);
-        });
-      } else {
-        document.exitFullscreen();
-      }
-    }
+            tentativas--;
 
-    // Eventos do teclado para desktops
-    document.addEventListener('keydown', function(e) {
-      switch(e.code) {
-        case 'ArrowUp':
-          moveUp();
-          break;
-        case 'ArrowDown':
-          moveDown();
-          break;
-        case 'ArrowLeft':
-          moveLeft();
-          break;
-        case 'ArrowRight':
-          moveRight();
-          break;
-        case 'Space':
-          jump();
-          break;
-      }
-    });
-    // Botão fullscreen para desktop
-    document.getElementById('fullscreenBtn').addEventListener('click', toggleFullScreen);
-    // Botão de ação para mobile: executa pulo e ativa tela cheia
-    document.getElementById('actionButton').addEventListener('click', function() {
-      jump();
-    });
+            if (userGuess === numeroSecreto) {
+                message.innerHTML = "🎉 Parabéns! Você acertou! O número era " + numeroSecreto;
+                message.style.color = "lightgreen";
+                disableGame();
+            } else if (tentativas === 0) {
+                message.innerHTML = "😢 Fim de jogo! O número correto era " + numeroSecreto;
+                message.style.color = "red";
+                disableGame();
+            } else {
+                message.innerHTML = userGuess > numeroSecreto ? "📉 O número é menor!" : "📈 O número é maior!";
+                message.style.color = "yellow";
+                attemptsLeft.innerHTML = "Tentativas restantes: <b>" + tentativas + "</b>";
+            }
+        }
 
-    // --- Lógica do Joystick ---
-    const joystickContainer = document.getElementById('joystickContainer');
-    const joystick = document.getElementById('joystick');
+        function disableGame() {
+            document.getElementById("userInput").disabled = true;
+        }
 
-    let dragging = false;
-    let containerRect, centerX, centerY;
-    const maxDistance = 50; // distância máxima de deslocamento do stick
-    let moveInterval;
+        function restartGame() {
+            numeroSecreto = Math.floor(Math.random() * 100) + 1;
+            tentativas = 10;
+            document.getElementById("userInput").disabled = false;
+            document.getElementById("message").innerHTML = "";
+            document.getElementById("attemptsLeft").innerHTML = "Tentativas restantes: <b>10</b>";
+        }
+    </script>
 
-    // Retorna o stick para o centro
-    function resetJoystick() {
-      joystick.style.left = '50%';
-      joystick.style.top = '50%';
-    }
-
-    // Inicia um intervalo que move o personagem de acordo com a direção
-    function startMoving(dx, dy) {
-      clearInterval(moveInterval);
-      moveInterval = setInterval(() => {
-        // Se o deslocamento horizontal for significativo
-        if (dx < -0.3) moveLeft();
-        else if (dx > 0.3) moveRight();
-        // Se o deslocamento vertical for significativo
-        if (dy < -0.3) moveUp();
-        else if (dy > 0.3) moveDown();
-      }, 100);
-    }
-    // Para de mover
-    function stopMoving() {
-      clearInterval(moveInterval);
-    }
-
-    // Trata o movimento do joystick
-    function handleMove(e) {
-      containerRect = joystickContainer.getBoundingClientRect();
-      centerX = containerRect.left + containerRect.width / 2;
-      centerY = containerRect.top + containerRect.height / 2;
-      
-      let deltaX = e.clientX - centerX;
-      let deltaY = e.clientY - centerY;
-      const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-      
-      // Limita o deslocamento ao raio máximo
-      if (distance > maxDistance) {
-        const angle = Math.atan2(deltaY, deltaX);
-        deltaX = Math.cos(angle) * maxDistance;
-        deltaY = Math.sin(angle) * maxDistance;
-      }
-      // Atualiza a posição do stick (em porcentagem)
-      joystick.style.left = (50 + (deltaX / containerRect.width) * 100) + '%';
-      joystick.style.top = (50 + (deltaY / containerRect.height) * 100) + '%';
-      
-      // Normaliza os valores para -1 a 1 e inicia o movimento
-      const dx = deltaX / maxDistance;
-      const dy = deltaY / maxDistance;
-      startMoving(dx, dy);
-    }
-
-    // Eventos do joystick para toque e mouse
-    joystickContainer.addEventListener('pointerdown', function(e) {
-      dragging = true;
-      handleMove(e);
-    });
-    window.addEventListener('pointermove', function(e) {
-      if (!dragging) return;
-      handleMove(e);
-    });
-    window.addEventListener('pointerup', function(e) {
-      dragging = false;
-      stopMoving();
-      resetJoystick();
-    });
-  </script>
 </body>
 </html>

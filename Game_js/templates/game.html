@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>HARRYM - A Jornada do Templo (Endless)</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.9.0/nipplejs.min.js"></script>
 </head>
 <body>
   <div id="ui">
@@ -21,12 +22,16 @@
       <ul id="activeAbilitiesList"></ul>
     </div>
   </div>
+  <div id="joystickContainer"></div>
   <canvas id="gameCanvas" width="800" height="600">
   </canvas>
   <div id="powerInfo">
     <h3>Informações dos Poderes</h3>
     <ul id="powerInfoList"></ul>
   </div>
+  <img src="{{ url_for('static', filename='images/tela_cheia.png') }}" id="tela_cheia" style="position: absolute;width: 20px; bottom: 5px; left: 5px; filter: invert(1);
+  cursor: pointer;" alt="">
+  <button id="pular">SPACE</button>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="{{ url_for('static', filename='js/game.js') }}"></script>
   <script src="{{ url_for('static', filename='js/powers.js') }}"></script>

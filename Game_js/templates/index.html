@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <title>HARRYM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/menu.css') }}">
   <link href="https://fonts.googleapis.com/css2?family=Bangers&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="menuOverlay">
-    <h1>HARRYM</h1>
-    <p class="subtitle">A Jornada do Templo - Endless</p>
+  <div class="zoom-control" style="position: absolute; z-index: 9999;">
+    Zoom: <input type="range" id="zoomRange" min="50" max="150" value="100"> <span id="zoomValue">100%</span>
+  </div>
+  <div class="menu" id="menu">
+    <div id="menuOverlay">
+      <h1>HARRYM</h1>
+      <p class="subtitle">A Jornada do Templo - Endless</p>
     <p2>Seed: <input id="seedDisplay" style="background: rgba(240, 248, 255, 0); color: white; border: none;font-size: 15px;"></input></p2>
     <div id="statusContainer">
       <div class="top" >
@@ -50,7 +55,6 @@
       </div>
     </div>
   </div>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
   <script src="{{ url_for('static', filename='js/menu.js') }}"></script>
   <script>
@@ -58,5 +62,6 @@
       document.getElementById('startButton').focus();
     });
   </script>
+</div>
 </body>
 </html>

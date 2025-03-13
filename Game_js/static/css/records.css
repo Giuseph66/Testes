@@ -50,6 +50,7 @@ body {
     font-size: 16px;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
     text-align: center;
+    max-height: 80px;
     align-items: center;
   }
   
@@ -126,3 +127,13 @@ body {
   button:hover {
     background: #d62828;
   }
+  .habilidades {
+    display: block;
+    max-height: 80px;
+    height: 80px;
+    overflow-y: auto;
+  }
+  
+.habilidades::-webkit-scrollbar {
+  display: none;
+}

@@ -7,6 +7,15 @@ function seededRandom() {
   seed = (seed * 9301 + 49297) % 233280;
   return seed / 233280;
 }
+const joystickContainer = document.getElementById('joystickContainer');
+  let moveInterval;
+const joystick = nipplejs.create({
+    zone: joystickContainer,
+    mode: 'static',
+    position: { left: '50%', top: '50%' },
+    size: 210,
+    color: 'cyan'
+});
 
 let clones = [];
 let lasers = [];
@@ -110,6 +119,18 @@ corda_gancho: [0,0] ,
 eloespiritual: [0,0] ,
 supersopro: [0,0] 
 };
+document.getElementById('tela_cheia').addEventListener('click', () => {
+  toggleFullScreen();
+});
+function toggleFullScreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      console.log(`Erro ao tentar ativar tela cheia: ${err.message}`);
+    });
+  } else {
+    document.exitFullscreen();
+  }
+}
 
 function updateCooldowns() {
   for (let ability in cooldowns) {
@@ -361,67 +382,18 @@ function updatePlayer() {
   }
   // Movimento horizontal (o seu código existente para mover o player)
   if (keys['ArrowLeft']) {
-    player.facingRight = false; // Update direction
-    let newX = player.x - player.speed;
-    const leftBound = 100;
-    if (newX < leftBound) {
-      const roomKeys = Object.keys(rooms).map(Number);
-      const minRoomKey = Math.min(...roomKeys);
-      const allowedMinScroll = minRoomKey * ROOM_WIDTH - 100;
-      let delta = newX - leftBound;
-      if (scrollOffset + delta < allowedMinScroll) {
-        delta = allowedMinScroll - scrollOffset;
-      }
-      scrollOffset += delta;
-      player.x = leftBound;
-    } else {
-      player.x = newX;
-    }
+    moveLeft();
   } else if (keys['ArrowRight']) {
-    player.facingRight = true; // Update direction
-    let newX = player.x + player.speed;
-    const rightBound = canvas.width / 2;
-    if (newX > rightBound) {
-      let delta = newX - rightBound;
-      scrollOffset += delta;
-      player.x = rightBound;
-    } else {
-      player.x = newX;
-    }
+    moveRight();
   }
   if (dencidade){
     if (keys['ArrowUp']){
-      player.height+=0.4;
-      player.width+=0.4;
-      if (!gravidade_inverte){
-        GRAVITY+=0.002;
-        player.jumpForce-=0.002
-      }else{
-        if (GRAVITY<-0.08){
-          player.jumpForce+=0.002
-          GRAVITY-=0.002;
-        }
-      }
+      moveUp();
     }else if(keys['ArrowDown']){
-      if (player.height>-30){
-        player.height-=0.4;
-        player.width-=0.4;
-        if (!gravidade_inverte){
-          GRAVITY-=0.002;
-          player.jumpForce+=0.002
-        }else{
-          if (GRAVITY>-0.08){
-            GRAVITY+=0.002;
-          }
-          if (player.jumpForce<0){
-            player.jumpForce-=0.02
-          }
-        }
-      }
+      moveDown();
     }
   }
-
-  // Atualiza verticalmente com gravidade
+  
   player.velocityY += GRAVITY;
   player.y += player.velocityY;
 
@@ -523,6 +495,67 @@ function updatePlayer() {
   }
 }
 
+// Função para mover o personagem para baixo
+function moveDown(){
+  if (player.height>-30){
+    player.height-=0.4;
+    player.width-=0.4;
+    if (!gravidade_inverte){
+      GRAVITY-=0.002;
+      player.jumpForce+=0.002
+    }else{
+      if (GRAVITY>-0.08){
+        GRAVITY+=0.002;
+      }
+      if (player.jumpForce<0){
+        player.jumpForce-=0.02
+      }
+    }
+  }
+}
+function moveUp(){
+  player.height+=0.4;
+    player.width+=0.4;
+    if (!gravidade_inverte){
+      GRAVITY+=0.002;
+      player.jumpForce-=0.002
+    }else{
+      if (GRAVITY<-0.08){
+        player.jumpForce+=0.002
+        GRAVITY-=0.002;
+      }
+    }
+}
+function moveLeft(){
+  player.facingRight = false; 
+  let newX = player.x - player.speed;
+  const leftBound = 100;
+  if (newX < leftBound) {
+    const roomKeys = Object.keys(rooms).map(Number);
+    const minRoomKey = Math.min(...roomKeys);
+    const allowedMinScroll = minRoomKey * ROOM_WIDTH - 100;
+    let delta = newX - leftBound;
+    if (scrollOffset + delta < allowedMinScroll) {
+      delta = allowedMinScroll - scrollOffset;
+    }
+    scrollOffset += delta;
+    player.x = leftBound;
+  } else {
+    player.x = newX;
+  }
+}
+function moveRight(){
+  player.facingRight = true; 
+  let newX = player.x + player.speed;
+  const rightBound = canvas.width / 2;
+  if (newX > rightBound) {
+    let delta = newX - rightBound;
+    scrollOffset += delta;
+    player.x = rightBound;
+  } else {
+    player.x = newX;
+  }
+}
 // ========= Atualização dos Inimigos =========
 function updateEnemies() {
   for (let key in rooms) {
@@ -723,7 +756,7 @@ function updatePowerUp() {
     if (activePowers[type] > 0) {
       activePowers[type]--;
       if (type === 'impulso') {
-        player.jumpForce = activePowers[type] > 0 ? -15 : -10;
+        player.jumpForce = activePowers[type] > 0 ? gravidade_inverte ?  15: -15 : -10;
       } else if (type === 'velocidade') {
         player.speed = activePowers[type] > 0 ? 5 : 3;
       }
@@ -1133,25 +1166,11 @@ function updateClones() {
   }
 }
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
-  // Set up key events once, using the functions from powers.js:
   document.addEventListener('keydown', (e) => {
     keys[e.key] = true;
     if (e.key === ' ') {
-      if (player.velocityY === 0) {
-        player.velocityY = player.jumpForce;
-      } else if (fly){
-        player.velocityY = player.jumpForce;
-      } else if (player.remainingAirJumps > 0) {
-        player.velocityY = player.jumpForce;
-        player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
-        localStorage.setItem('extraJumps',CryptoJS.AES.encrypt(JSON.stringify(player.remainingAirJumps), "Jesus_Ateu").toString());
-        updateUI();
-        notairTime = 0; 
-        extraJumpCount++;
-      }
+      pular();
     } else if (e.key.toUpperCase() === 'T' && cooldowns.teletransporte[0] === 0) {
       useTeletransporte();
       cooldowns.teletransporte[0] = 5000 - 5000 * (player.teleport?.level/100 || 1); // Example cooldown duration
@@ -1238,8 +1257,36 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('keyup', (e) => {
     keys[e.key] = false;
   });
+  setTimeout(() => {
+    toggleFullScreen();
+}, 100);
+  joystick.on('move', function (evt, data) {
+    let dx = data.vector.x.toFixed(2);
+    let dy = data.vector.y.toFixed(2);
+    startMoving(dx, dy);
+  });
+  
+  joystick.on('end', function () {
+    stopMoving();
+  });
+  
+  const pularButton = document.getElementById('pular');
+  pularButton.addEventListener('touchstart', pular); // Adiciona evento de toque para dispositivos móveis
 
-  // Inicializa a UI e Inicia o Loop
+  function pular() {
+    if (player.velocityY === 0) {
+      player.velocityY = player.jumpForce;
+    } else if (fly){
+      player.velocityY = player.jumpForce;
+    } else if (player.remainingAirJumps > 0) {
+      player.velocityY = player.jumpForce;
+      player.remainingAirJumps = Math.max(player.remainingAirJumps - 1, 0);
+      localStorage.setItem('extraJumps',CryptoJS.AES.encrypt(JSON.stringify(player.remainingAirJumps), "Jesus_Ateu").toString());
+      updateUI();
+      notairTime = 0; 
+      extraJumpCount++;
+    }
+  }
   updateUI();
   applyPassiveAbilities();
   gameLoop();
@@ -1274,11 +1321,20 @@ function displayPowerInfo() {
     carrega.style.zIndex = "99"; // Coloca acima do texto
     li.innerHTML = `<strong>${ability.name} (${ability.level})</strong>: ${ability.description} <br> <em>Ativar com a tecla: ${ability.key}</em>`;
     li.style.position = "relative";
+    li.style.cursor='pointer';
+    li.onclick=() =>simula_tecla(ability.key)
     li.appendChild(carrega);
     powerInfoList.appendChild(li);
   });
 }
-
+function simula_tecla(tecla){
+    const event = new KeyboardEvent('keydown', {
+      key: tecla,
+      bubbles: true,
+      cancelable: true
+    });
+    document.dispatchEvent(event);
+  };
 function applyPassiveAbilities() {
   passiveAbilities.forEach(ability => {
     if (ability.name === 'Teletransporte') {
@@ -1347,3 +1403,34 @@ function applyPassiveAbilities() {
   displayPowerInfo();
 }
 
+
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+if (isMobile()) {
+  const tela_cheia = document.getElementById('tela_cheia');
+  tela_cheia.style.width=30+'px';
+  tela_cheia.style.bottom=10+'px';
+  tela_cheia.style.left=10+'px';
+  document.getElementById('pular').style.display='block';
+  document.getElementById('joystickContainer').style.display='block';
+}else{
+  document.getElementById('joystickContainer').style.display='none';
+  document.getElementById('pular').style.display='none';
+}
+function startMoving(dx, dy) {
+  clearInterval(moveInterval);
+    moveInterval = setInterval(() => {
+        if (dx < -0.3) moveLeft();
+        else if (dx > 0.3) moveRight();
+        if (dencidade){
+          if (dy < -0.3) moveDown();
+          else if (dy > 0.3) moveUp();
+        }
+    }, 5);
+    }
+
+    function stopMoving() {
+      clearInterval(moveInterval);
+  }

@@ -23,10 +23,10 @@
         <tr>
           <td>{{ record.nome }}</td>
           <td>{{ record.distancia }} MP</td>
-          <td><time datetime="{{ record.demorou }}" id="timeDisplay">{{ record.demorou }}</time></td>
+          <td><time datetime="{{ record.demorou }}" class="timeDisplay">{{ record.demorou }}</time></td>
           <td>{{ record.data_hora }}</td>
           <td>{{ record.seed }}</td>
-          <td>
+          <td class="habilidades">
             {% for habilidades in record.habilidades %}
               <li>{{ habilidades['name'] }}</li>
             {% endfor %}
@@ -56,9 +56,12 @@
           return hDisplay + mDisplay + sDisplay;
         }
         
-        const timeElement = document.getElementById("timeDisplay");
-        const seconds = parseInt(timeElement.getAttribute("datetime"), 10);
-        timeElement.innerHTML = secondsToHMS(seconds);
+        // Seleciona todos os elementos <time> com a classe "timeDisplay"
+        const timeElements = document.querySelectorAll(".timeDisplay");
+        timeElements.forEach(timeElement => {
+          const seconds = parseInt(timeElement.getAttribute("datetime"), 10);
+          timeElement.innerHTML = secondsToHMS(seconds);
+        });
       </script>
   </body>
 </html>

@@ -148,4 +148,75 @@ function pix(){
       console.error('Erro ao enviar dados:', error);
     
     });
+
+  }
+  const zoomRange = document.getElementById('zoomRange');
+  const zoomValue = document.getElementById('zoomValue');
+  const elemento = document.getElementById('menu');
+
+  zoomRange.addEventListener('input', () => {
+    const zoomPercent = zoomRange.value;
+    zoomValue.textContent = zoomPercent + '%';
+    const scaleValue = zoomPercent / 100;
+    elemento.style.transform =  `scale(${scaleValue}) `;
+    const translateY = ((100 - zoomPercent) * 3)*-1; // ajuste esse valor conforme necessário
+    elemento.style.top=`${translateY}px`;
+  });
+
+  function isMobile() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+  }
+
+  if (isMobile()) {
+    if (getCookie("visitado")) {
+      console.log("Bem-vindo de volta!");
+    } else {
+      setCookie("visitado", "true", 1); 
+      alert("Vire a tela do dispositivo para melhor visualização")
+      console.log("Bem-vindo à sua primeira visita!");
+    }
+
+    document.getElementById('zoomRange').value = 80;
+    adjustZoom();
+  }
+  
+function adjustZoom() {
+  const zoomRange = document.getElementById('zoomRange');
+  const zoomValue = document.getElementById('zoomValue');
+  const elemento = document.getElementById('menu');
+  const zoomPercent = zoomRange.value;
+  zoomValue.textContent = zoomPercent + '%';
+  const scaleValue = zoomPercent / 100;
+  elemento.style.transform = 'scale(' + scaleValue + ')';
+  const translateY = ((100 - zoomPercent) * 3)*-1; // ajuste esse valor conforme necessário
+  elemento.style.top=`${translateY}px`;
+}
+
+// Função para obter o valor de um cookie
+function getCookie(nome) {
+  const nomeEQ = nome + "=";
+  const ca = document.cookie.split(';');
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i].trim();
+    if (c.indexOf(nomeEQ) === 0) return c.substring(nomeEQ.length, c.length);
+  }
+  return null;
+}
+
+// Função para definir um cookie
+function setCookie(nome, valor, dias) {
+  let expires = "";
+  if (dias) {
+    const data = new Date();
+    data.setTime(data.getTime() + (dias * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + data.toUTCString();
+  }
+  document.cookie = nome + "=" + (valor || "") + expires + "; path=/";
+}
+
+if (getCookie("visitado")) {
+  console.log("Bem-vindo de volta!");
+} else {
+  setCookie("visitado", "true", 365); 
+  console.log("Bem-vindo à sua primeira visita!");
 }
